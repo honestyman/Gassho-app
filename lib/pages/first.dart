@@ -1,72 +1,41 @@
 
-
 import 'package:flutter/material.dart';
-import 'package:flutter_app/pages/account_delete.dart';
-import 'package:flutter_app/pages/account_edit.dart';
-import 'package:flutter_app/pages/account_setting.dart';
-import 'package:flutter_app/pages/audio_page.dart';
-import 'package:flutter_app/pages/change_password.dart';
-import 'package:flutter_app/pages/give_page.dart';
-import 'package:flutter_app/pages/mypage.dart';
-import 'package:flutter_app/pages/notification.dart';
-import 'package:flutter_app/pages/search_page.dart';
-import 'package:flutter_app/pages/settings_page.dart';
-import 'package:flutter_app/pages/subscription_page.dart';
-import 'package:flutter_app/pages/video_page.dart';
-import 'package:flutter_app/pages/send_data.dart';
+import 'package:flutter_app/pages/questionnaire_page.dart';
 
 void main() {
-  runApp(const HomeApp());
+  runApp(
+    const MaterialApp(
+      home: PlanPage(),
+    ),
+  );
 }
 
-class HomeApp extends StatelessWidget {
-  const HomeApp({super.key});
-
+class PlanPage extends StatelessWidget{
+  const PlanPage({super.key});
+  
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      routes: {
-        AudioPlayPage.routeName: (context) => const AudioPlayPage(),
-        VideoPlayPage.routeName: (context) => const VideoPlayPage(),
-        GivePage.routeName: (context) => const GivePage(),
-        SearchApp.routeName: (context) => const SearchApp(),
-        MyPageApp.routeName: (context) => const MyPageApp(),
-        SettingsPageApp.routeName: (context) => const SettingsPageApp(),
-        AccountSettingApp.routeName: (context) => const AccountSettingApp(),
-        AccountEditApp.routeName: (context) => const AccountEditApp(),
-        AccountDeleteApp.routeName: (context) => const AccountDeleteApp(),
-        ChangePasswordApp.routeName: (context) => const ChangePasswordApp(),
-        NotificationApp.routeName: (context) => const NotificationApp(),
-        SubscriptionPage.routeName: (context) => const SubscriptionPage(),
-      },
-      home: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("assets/images/main_back.png"),
-            fit: BoxFit.cover,
-          ),
+  Widget build(BuildContext context){
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("assets/images/back.png"),
+          fit: BoxFit.cover,
         ),
-        child: const Scaffold(
-          backgroundColor: Colors.transparent,
-          body: DataList(
-            datas: [
-              Data(
-                  name: 'こころをととのえる',
-                  type: '動画',
-                  time: '10分',
-                  picture: 'main1.png'),
-              Data(
-                  name: '深い集中力', type: '音声', time: '10分', picture: 'main2.png'),
-            ],
-          )
-          ),
-        
       ),
+      child: const Scaffold(
+        backgroundColor: Colors.transparent,
+        body: PlanList(
+          plans: [
+            Plan(name_1: '月額プラン', name_2: '980円', name_3: ''),
+            Plan(name_1: '年額プラン', name_2: '9,800円', name_3: '11,760円'),
+          ],
+          ),
+     ),
     );
   }
 }
 
-class TitleSection extends StatelessWidget {
+class TitleSection extends StatelessWidget{
   const TitleSection({
     super.key,
     required this.name,
@@ -74,150 +43,183 @@ class TitleSection extends StatelessWidget {
   final String name;
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(20, 45, 0, 13),
-      child: Text(
-        name,
-        textAlign: TextAlign.left,
-        style: const TextStyle(
-            fontWeight: FontWeight.w400,
-            color: Colors.white,
-            fontSize: 16,
-            letterSpacing: -2,
-            fontFamily: 'Noto Sans CJK JP'),
-      ),
+  Widget build(BuildContext context){
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 93.5),
+          child: Text(
+                name,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  fontSize: 18 ,
+                  fontFamily: 'Noto Sans CJK JP'
+                ),
+          )
+        ),
+        const Padding(
+          padding: EdgeInsets.only(top: 23.5),
+          child: Text(
+                '瞑想・マインドフルネスおよび\nリラックス・睡眠のための豊富なコンテンツ',
+                textAlign: TextAlign.center,
+                style: TextStyle( 
+                  fontWeight: FontWeight.w400,
+                  color: Colors.white,
+                  fontSize: 16,
+                  letterSpacing: -2,
+                  fontFamily: 'Noto Sans CJK JP'
+                ),
+          )
+        ),
+      ],
     );
   }
 }
 
-class Data {
-  const Data(
-      {required this.name,
-      required this.type,
-      required this.time,
-      required this.picture});
+class Plan {
+  const Plan({required this.name_1, required this.name_2, required this.name_3});
 
-  final String name;
-  final String type;
-  final String time;
-  final String picture;
+  final String name_1;
+  final String name_2;
+  final String name_3;
 }
 
-typedef CartChangedCallback = Function(Data data, bool inChecked);
+typedef CartChangedCallback = Function(Plan plan, bool inChecked);
 
-class DataListItem extends StatelessWidget {
-  const DataListItem({
-    super.key,
-    required this.data,
-  });
+class PlanListItem extends StatelessWidget {
+  PlanListItem({
+    required this.plan,
+    required this.inChecked,
+    required this.onCartChanged,
+  }) : super(key: ObjectKey(plan));
 
-  final Data data;
+  final Plan plan;
+  final bool inChecked;
+  final CartChangedCallback onCartChanged;
+
+  Color _getbackColor(BuildContext context) {
+    // The theme depends on the BuildContext because different
+    // parts of the tree can have different themes.
+    // The BuildContext indicates where the build is
+    // taking place and therefore which theme to use.
+
+    return inChecked //
+        ? Colors.yellow.shade700
+        : Colors.white60;
+  }
+  
+  Border? _getBorder(BuildContext context) {
+    if (!inChecked) return null;
+
+    return  Border.all(
+      width: 2,
+      color:Colors.yellow.shade700
+      // color: Colors.black54,
+      // decoration: TextDecoration.lineThrough,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialButton(
-        onPressed: () {
-          if (data.type == '音声') {
-            // Navigator.pushNamed(context, AudioPlayPage.routeName,
-            //     arguments: SendDatas(data.name, data.time));
-            // Navigator.of(context).pushNamed('/audio');
-          } else {
-            // Navigator.pushNamed(context, VideoPlayPage.routeName,
-            //     arguments: SendDatas(data.name, data.time));
-          }
-        },
-        child: Container(
-          width: 354,
-          height: 113,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Colors.black.withOpacity(0.3)),
-          margin: const EdgeInsets.only(
-            left: 18,
-            top: 0,
-            bottom: 8,
-            right: 18,
-          ),
-          child: Row(
-            children: [
-              Container(
-                margin: const EdgeInsets.all(6),
-                width: 100,
-                height: 100,
-                child: Image.asset("assets/images/${data.picture}"),
-              ),
-              Expanded(
-                  child: Container(
-                margin: const EdgeInsets.only(
-                  left: 16,
-                  top: 25.2,
+       onPressed: () {
+         onCartChanged(plan,inChecked);
+       },
+      child: Container(
+        height: 66,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
+            border:_getBorder(context),
+            // border:Border.all(
+            //   width: 2,
+            //   color: Colors.yellow.shade700
+            // ),
+           color: Colors.white.withOpacity(0.5)
+        ),
+        margin: const EdgeInsets.only(
+          left: 18,
+          top: 8,
+          bottom: 8,
+          right: 18,
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Container(
+                margin: const EdgeInsets.only(left: 20.3),
+                child: Text(
+                  plan.name_1,
+                  textAlign: TextAlign.left,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'Noto Sans CJK JP',
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  softWrap: true,
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      data.type,
-                      softWrap: true,
-                      textAlign: TextAlign.left,
-                      style: const TextStyle(
-                          color: Color.fromRGBO(138, 86, 172, 1),
-                          fontFamily: 'Noto Sans CJK JP',
-                          fontWeight: FontWeight.w400,
-                          fontSize: 12,
-                          letterSpacing: -1),
-                    ),
-                    Text(
-                      data.name,
-                      softWrap: true,
-                      textAlign: TextAlign.left,
-                      style: const TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'Noto Sans CJK JP',
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
-                          letterSpacing: -1),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Image.asset("assets/images/clock.png"),
-                          Container(
-                            margin: const EdgeInsets.only(left: 5),
-                            child: Text(
-                              data.time,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'Noto Sans CJK JP',
-                                fontWeight: FontWeight.w400,
-                                fontSize: 12,
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              )),
-              Container(
-                margin: const EdgeInsets.only(
-                    left: 12.3, top: 45.7, right: 12.3, bottom: 50.3),
-                width: 17,
-                height: 17,
-                child: Image.asset("assets/images/play.png"),
+              )
+            ),
+            Container(
+                margin: const EdgeInsets.only(right: 16),
+                child: Text(
+                  plan.name_3,
+                  textAlign: TextAlign.right,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'Noto Sans CJK JP',
+                    fontSize: 13,
+                    fontWeight: FontWeight.w400,
+                    decoration: TextDecoration.lineThrough,
+                    decorationColor: Colors.white,
+                    decorationStyle: TextDecorationStyle.solid
+                     
+                  ),
+                  softWrap: true,
+                )
               ),
-            ],
-          ),
-        ));
+            Container(
+                margin: const EdgeInsets.only(right: 10),
+                child: Text(
+                  plan.name_2,
+                  textAlign: TextAlign.right,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'Noto Sans CJK JP',
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                    letterSpacing: -1
+                  ),
+                  softWrap: true,
+                )
+              ),
+            
+            Padding(
+              padding: const EdgeInsets.only(right:13),
+              child:  CircleAvatar(
+                radius: 10,
+                foregroundColor: Colors.white,
+                backgroundColor: _getbackColor(context),
+                child: const Icon(
+                  Icons.check,
+                  size: 15,
+                  ),
+              ),
+              ),  
+          ],
+        ),
+        
+      )
+    );
   }
 }
 
-class DataList extends StatefulWidget {
-  const DataList({required this.datas, super.key});
+class PlanList extends StatefulWidget {
+  const PlanList({required this.plans, super.key});
 
-  final List<Data> datas;
+  final List<Plan> plans;
 
   // The framework calls createState the first time
   // a widget appears at a given location in the tree.
@@ -226,147 +228,331 @@ class DataList extends StatefulWidget {
   // the State object instead of creating a new State object.
 
   @override
-  State<DataList> createState() => _DataListState();
+  State<PlanList> createState() => _PlanListState();
 }
 
-class _DataListState extends State<DataList> {
+class _PlanListState extends State<PlanList> {
+  final _shoppingCart = <Plan>{};
+
+  void _handleCartChanged(Plan plan, bool inChecked) {
+    setState(() {
+      // When a user changes what's in the cart, you need
+      // to change _shoppingCart inside a setState call to
+      // trigger a rebuild.
+      // The framework then calls build, below,
+      // which updates the visual appearance of the app.
+      var len=_shoppingCart.length;
+      if (!inChecked) {
+        if(len==0){
+          _shoppingCart.add(plan);
+        }else{
+          _shoppingCart.clear();
+          _shoppingCart.add(plan);
+        }
+      } else {
+        _shoppingCart.remove(plan);
+      }
+    });
+  }
+  
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return ListView(
+      // backgroundColor: Colors.transparent, 
       children: [
+        const TitleSection(name: '7日間制限なしの\n無料アクセス'),
         Container(
-          margin: const EdgeInsets.only(top: 45),
-          child: const Center(
-            child: ImageIcon(
-              AssetImage("assets/images/mainicon.png"),
-              color: Colors.black,
-              size: 80,
-            ),
+          margin: const EdgeInsets.only(
+            left: 22,
+            top: 40,
+            bottom: 40,
+            right: 18,
           ),
-        ),
-        const TitleSection(name: '今日の瞑想'),
-        Expanded(
-          child: SingleChildScrollView(
-            child: Column(
-              children: widget.datas.map((data) {
-                return DataListItem(
-                  data: data,
-                );
-              }).toList(),
-            ),
-          ),
-        ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Container(
-              height: 75,
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20)),
-                color: Colors.white,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    width: 25,
+                    height: 25,
+                    margin: const EdgeInsets.all(0),
+                    decoration: BoxDecoration(
+                      color: const Color.fromRGBO(145, 107, 186, 1),
+                      borderRadius: BorderRadius.circular(8)
+                    ),
+                    child: const ImageIcon(
+                        AssetImage("assets/images/image_icon1.png"),
+                        // color:Color.fromRGBO(196, 174, 216, 1),
+                        color: Colors.white60,
+                      ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(
+                      left: 23,
+                      top: 0,
+                      bottom: 0,
+                      right: 0,
+                    ),
+                    child: const Text(
+                      '高野山真言宗の別格本山 金剛三昧院（こんごう\nさんまいいん）のご住職・僧侶が監修・制作',
+                      softWrap: true,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'Noto Sans CJK JP',
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        letterSpacing: -1.5,
+                      ),
+                    ),
+                  ) 
+                ],
               ),
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(0, 7.4, 0, 20.5),
+              Padding(
+                padding: const EdgeInsets.only(top: 19),
                 child: Row(
                   children: [
-                    SizedBox(
-                      width: 97.5,
-                      child: MaterialButton(
-                        onPressed: () {},
-                        child: const Column(children: [
-                          Icon(
-                            Icons.home,
-                            color: Colors.black,
-                          ),
-                          Text(
-                            'ホーム',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontFamily: 'Noto Sans CJK JP',
-                                fontSize: 10,
-                                fontWeight: FontWeight.w400),
-                          )
-                        ]),
+                    Container(
+                      width: 25,
+                      height: 25,
+                      margin: const EdgeInsets.all(0),
+                      decoration: BoxDecoration(
+                        color: const Color.fromRGBO(69, 174, 160, 1),
+                        borderRadius: BorderRadius.circular(8)
                       ),
+                      child: const ImageIcon(
+                          AssetImage("assets/images/image_icon2.png"),
+                          color: Colors.white60,
+                        ),
                     ),
-                    SizedBox(
-                      width: 97.5,
-                      child: MaterialButton(
-                        onPressed: () {
-                          Navigator.of(context).pushNamed('/search');
-                        },
-                        child: const Column(children: [
-                          Icon(
-                            Icons.search,
-                            color: Colors.black45,
-                          ),
-                          Text(
-                            'さがす',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontFamily: 'Noto Sans CJK JP',
-                                fontSize: 10,
-                                fontWeight: FontWeight.w400),
-                          )
-                        ]),
+                    Container(
+                      margin: const EdgeInsets.only(
+                        left: 23,
+                        top: 0,
+                        bottom: 0,
+                        right: 0,
                       ),
-                    ),
-                    Expanded(
-                        child: SizedBox(
-                      width: 97.5,
-                      child: MaterialButton(
-                        onPressed: () {
-                          Navigator.of(context).pushNamed('/mypage');
-                        },
-                        child: const Column(children: [
-                          ImageIcon(
-                            AssetImage("assets/images/mypage.png"),
-                            // color:Color.fromRGBO(196, 174, 216, 1),
-                            color: Colors.black45,
-                          ),
-                          Text(
-                            'マイページ',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontFamily: 'Noto Sans CJK JP',
-                                fontSize: 10,
-                                fontWeight: FontWeight.w400),
-                          )
-                        ]),
+                      child: const Text(
+                        '金剛三昧院は、源頼朝公の菩提を弔うために妻 北条\n政子の請願により建立。平成16年に、高野山金剛峯\n寺と共に世界遺産登録を受けた、由緒ある寺院',
+                        softWrap: true,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'Noto Sans CJK JP',
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          letterSpacing: -1.5,
+                        ),
                       ),
-                    )),
-                    SizedBox(
-                      width: 97.5,
-                      child: MaterialButton(
-                        onPressed: () {
-                          Navigator.of(context).pushNamed('/setting');
-                        },
-                        child: const Column(children: [
-                          Icon(
-                            Icons.settings_rounded,
-                            color: Colors.black45,
-                          ),
-                          Text(
-                            '設定',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontFamily: 'Noto Sans CJK JP',
-                                fontSize: 10,
-                                fontWeight: FontWeight.w400),
-                          )
-                        ]),
-                      ),
-                    )
+                    ) 
                   ],
                 ),
               ),
+              
+            ],
+          ),
+        
+        ),
+        Column(
+         children: widget.plans.map((plan){
+          return PlanListItem(
+            plan: plan,
+            inChecked: _shoppingCart.contains(plan),
+            onCartChanged: _handleCartChanged,
+          );
+        }).toList(), 
+        ),
+
+        const Padding(
+          padding: EdgeInsets.only(top: 20),
+          child: Text(
+                'お申込み後、7日間は無料でご利用いただけます。\n7日後にお支払いが開始されますが、\nそれまではキャンセルが可能です',
+                textAlign: TextAlign.center,
+                style: TextStyle( 
+                  fontWeight: FontWeight.w400,
+                  color: Colors.white,
+                  fontSize: 12,
+                  // letterSpacing: -2,
+                  fontFamily: 'Noto Sans CJK JP'
+                ),
+          )
+        ),
+        Container(
+          height: 47,
+          margin: const EdgeInsets.only(
+            left: 20,
+            top: 21,
+            bottom: 82,
+            right: 20,
+          ),
+          child: ElevatedButton(
+            onPressed:() {
+              // Navigator.of(context).pushNamed("/register");
+              showAlertDialog_1(context);
+            },
+           style: ElevatedButton.styleFrom(
+              backgroundColor: const Color.fromRGBO(138, 86, 172, 1),
             ),
-          ],
+            child: const Text(
+              '申込みをする',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Noto Sans JP'
+              ),
+            )
+            ),
         )
+        
       ],
     );
+
   }
+}
+
+showAlertDialog_1(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (_) => Center( // Aligns the container to center
+      child: Container( // A simplified version of dialog. 
+        width: 244,
+        height: 111,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5),
+          color: const Color.fromRGBO(43, 43, 55, 1),
+        ),
+        child: Column(
+          children: [
+            const Padding(
+              padding: EdgeInsets.only(top:15),
+              child: Text(
+                '完了しました。',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Noto Sans CJK JP',
+                  fontSize:14 ,
+                ),
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.only(top:5),
+              child: Text(
+                '申し込みが完了しました。',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: 'Noto Sans CJK JP',
+                  fontSize:13 ,
+                  letterSpacing: -1
+                ),
+              ),
+            ),
+            Expanded(
+              child: Container(
+                width: 244,
+                margin: const EdgeInsets.only(top: 15),
+                decoration: const BoxDecoration(
+                  border:Border(
+                    top: BorderSide(
+                      color: Colors.white30,
+                      width: 0.5
+                    )
+                  )
+                ),
+                child: TextButton(
+                  onPressed: (){
+                    Navigator.of(context, rootNavigator: true).pop(false);
+                     showAlertDialog_2(context);
+                  },
+                  child: const Text(
+                    'OK',
+                    textAlign: TextAlign.center,
+                     style: TextStyle(
+                       color: Color.fromRGBO(95, 134, 222, 1),
+                       fontWeight: FontWeight.bold
+                     ),
+                  )
+                ),
+              ),
+            )
+          ],
+        ),
+        )
+      )
+ );
+}
+
+showAlertDialog_2(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (_) => Center( // Aligns the container to center
+      child: Container( // A simplified version of dialog. 
+        width: 244,
+        height: 111,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5),
+          color: const Color.fromRGBO(43, 43, 55, 1),
+        ),
+        child: Column(
+          children: [
+            const Padding(
+              padding: EdgeInsets.only(top:15),
+              child: Text(
+                'ありがとうございます！',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Noto Sans CJK JP',
+                  fontSize:14 ,
+                  letterSpacing: -1
+                ),
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.only(top:5),
+              child: Text(
+                '是非『合掌』をご利用ください',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: 'Noto Sans CJK JP',
+                  fontSize:13 ,
+                  letterSpacing: -1
+                ),
+              ),
+            ),
+            Expanded(
+              child: Container(
+                width: 244,
+                margin: const EdgeInsets.only(top: 15),
+                decoration: const BoxDecoration(
+                  border:Border(
+                    top: BorderSide(
+                      color: Colors.white30,
+                      width: 0.5
+                    )
+                  )
+                ),
+                child: TextButton(
+                  onPressed: (){},
+                    child: MaterialButton(
+                      onPressed: (){
+                        // Navigator.of(context).pushNamed('/questionnaire');
+                        Navigator.of(context, rootNavigator: true).pop(false);
+                        Navigator.push(context, MaterialPageRoute(
+                        builder: (context) => const QuestionnairesApp())
+                      );
+                      },
+                      child: Image.asset("assets/images/hands.png"),
+                    )
+                ),
+              ),
+            )
+          ],
+        ),
+        )
+      )
+ );
 }

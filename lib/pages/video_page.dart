@@ -30,14 +30,34 @@ class VideoPlayPage extends StatefulWidget{
 }
 
 class _VideoPlayPageState extends State<VideoPlayPage> {
+  
   late VideoPlayerController videoPlayerController;
+  // videoPlayerController=VideoPlayerController.asset(dataSource)
+  
   late ChewieController chewieController;
+  // ignore: non_constant_identifier_names, prefer_typing_uninitialized_variables
+  var file_name;
 
+  bool loaded=false;
+
+  // @override
+  // void initState() {
+  //    super.initState();
+  // }
+
+ 
   @override
-  void initState() {
-     super.initState();
-    videoPlayerController = VideoPlayerController.asset("assets/video/mov_bbb.mp4");
-    
+  void dispose() {
+    videoPlayerController.dispose();
+    chewieController.dispose();
+ 
+    super.dispose();
+  }
+
+  Widget _playView(){
+     final file=ModalRoute.of(context)?.settings.arguments as SendDatas;
+     videoPlayerController = VideoPlayerController.asset("assets/video/${file.filename}");
+
     chewieController = ChewieController(
       videoPlayerController: videoPlayerController,
       aspectRatio: 3 / 2,
@@ -55,24 +75,13 @@ class _VideoPlayPageState extends State<VideoPlayPage> {
         color: Colors.black,
       ),
     );
-  }
- 
-  @override
-  void dispose() {
-    videoPlayerController.dispose();
-    chewieController.dispose();
- 
-    super.dispose();
-  }
-
-  Widget _playView(){
     chewieController.play();
     return Chewie(controller: chewieController);
   }
 
   Future<List<Item>> getTab(int id) async{
     
-    String url="http://localhost:5000/api/items/tab?id=${id}";
+    String url="http://localhost:5000/api/items/tab?id=$id";
     final response=await http.get(Uri.parse(url));
     var reasonData=json.decode(response.body);
     List<Item> tabs=[];
@@ -210,7 +219,7 @@ class _VideoPlayPageState extends State<VideoPlayPage> {
                                 foregroundColor: Colors.white,
                                 child: IconButton(
                                   onPressed: (){
-                                    Navigator.of(context).pushNamed('/');
+                                    Navigator.pop(context,true);
                                   },
                                    icon: const ImageIcon(
                                     AssetImage("assets/images/cancel.png")
@@ -226,7 +235,7 @@ class _VideoPlayPageState extends State<VideoPlayPage> {
                                 foregroundColor: Colors.white,
                                 child: IconButton(
                                   onPressed: (){
-                                    
+                                    addDownload(args.id);
                                   },
                                    icon: const ImageIcon(
                                     AssetImage("assets/images/download.png")
@@ -281,61 +290,69 @@ class _VideoPlayPageState extends State<VideoPlayPage> {
                               ],
                             ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(top:18, bottom: 18),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                width: 70,
-                                height: 32,
-                                margin: const EdgeInsets.only(left: 4, right: 4),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15),
-                                  color: Colors.white30.withOpacity(0.2)
-                                ),
-                                child: const Center(
-                                  child: Text(
-                                    '#タグ01',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 12,
-                                      fontFamily: 'Noto Sans CJK JP'
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                width: 70,
-                                height: 32,
-                                margin: const EdgeInsets.only(left: 4, right: 4),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15),
-                                  color: Colors.white30.withOpacity(0.2)
-                                ),
-                                child: const Center(
-                                  child: Text(
-                                    '#タグ02',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 12,
-                                      fontFamily: 'Noto Sans CJK JP'
-                                    ),
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
                       ],
                     ),
-                    const SingleChildScrollView(
+                    Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top:10, left: 18, right: 18),
+                      child: FutureBuilder(
+                        future: getTab(args.id),
+                        builder: (BuildContext ctx, AsyncSnapshot snapshot) {
+                          if (snapshot.data == null) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          } else {
+                            return Column( 
+                              children: [
+                                Expanded(
+                                  child: Container(
+                                    transformAlignment: Alignment.center,
+                                    child: GridView.builder(
+                                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 4,
+                                        childAspectRatio: 70/32
+                                        ),
+                                      itemCount: snapshot.data.length,
+                                      
+                                      itemBuilder: (ctx, index) =>
+                                       Container(
+                                          margin: const EdgeInsets.only(left: 4, right: 4),
+                                          // padding: const EdgeInsets.all(10),
+                                          height: 30,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(15),
+                                            color: Colors.white30.withOpacity(0.2)
+                                          ), 
+                                            child: Center(
+                                              child: Text(
+                                                snapshot.data[index].name,  
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 12,
+                                                  fontFamily: 'Noto Sans CJK JP'
+                                                ),
+                                              ),
+                                            ),      
+                                        ),
+   
+                                      ),
+                                  ),
+                                ),
+                              ],
+                            ); 
+                          }
+                        },
+                      ),
+                    ),
+                  ),
+                     SingleChildScrollView(
                       child: SizedBox(
                         width: 354,
                         height: 114,
                         child: Text(
-                          '説明が入ります説明が入ります説明が入ります説明が入ります\n説明が入ります説明が入ります説明が入ります説明が入ります',
-                          style: TextStyle(
+                          args.description,
+                          style: const TextStyle(
                             color: Colors.white,
                             fontFamily: 'Noto Sans JP',
                             fontSize: 14,
@@ -361,7 +378,7 @@ class _VideoPlayPageState extends State<VideoPlayPage> {
                                   radius: 16,
                                   child: IconButton(
                                     onPressed: (){
-                                      
+                                      addLike(args.id);
                                     },
                                     icon: const ImageIcon(
                                       AssetImage("assets/images/like.png")
@@ -416,6 +433,7 @@ class _VideoPlayPageState extends State<VideoPlayPage> {
                 Container(
                   width: 354,
                   height: 44,
+                  margin: const EdgeInsets.only(bottom: 24),
                   decoration:BoxDecoration(
                     color: const Color.fromRGBO(138, 86, 172, 1),
                     borderRadius: BorderRadius.circular(5),

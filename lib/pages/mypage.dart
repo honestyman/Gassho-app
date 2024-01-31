@@ -51,7 +51,7 @@ class _MyPageAppState extends State<MyPageApp> {
                         margin: const EdgeInsets.only(left: 17.8, right: 17.8),
                         child: MaterialButton(
                           onPressed: () {
-                            
+                            Navigator.of(context).pushNamed('/likepage');
                           },
                           child: const Row(
                             children: [
@@ -99,7 +99,7 @@ class _MyPageAppState extends State<MyPageApp> {
                         margin: const EdgeInsets.only(left: 17.8, right: 17.8),
                         child: MaterialButton(
                           onPressed: () {
-                            
+                            Navigator.of(context).pushNamed('/playpage');
                           },
                           child: const Row(
                             children: [
@@ -147,7 +147,7 @@ class _MyPageAppState extends State<MyPageApp> {
                         margin: const EdgeInsets.only(left: 17.8, right: 17.8),
                         child: MaterialButton(
                           onPressed: () {
-                            
+                            Navigator.of(context).pushNamed('/downloadpage');
                           },
                           child: const Row(
                             children: [

@@ -50,7 +50,7 @@ class _GivePageState extends State<GivePage> {
                           foregroundColor: Colors.white,
                           child: IconButton(
                             onPressed: (){
-                              Navigator.of(context).pushNamed('/');
+                              Navigator.pop(context,true);
                             },
                              icon: const ImageIcon(
                               AssetImage("assets/images/cancel.png")

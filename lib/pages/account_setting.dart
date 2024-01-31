@@ -1,6 +1,9 @@
+import 'dart:io';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
-
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart' as http;
 
 void main() {
   runApp(
@@ -17,6 +20,115 @@ class AccountSettingApp extends StatefulWidget{
 }
 
 class _AccountSettingAppState extends State<AccountSettingApp> {
+
+  // ignore: non_constant_identifier_names
+  showAlertDialog(BuildContext context) async{
+  // ignore: use_build_context_synchronously
+  showDialog(
+    context: context,
+    builder: (_) => Center( // Aligns the container to center
+      child: Container( // A simplified version of dialog. 
+        width: 244,
+        height: 111,
+        padding: const EdgeInsets.only(bottom: 5),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5),
+          color: const Color.fromRGBO(43, 43, 55, 1),
+        ),
+        child: Column(
+          children: [
+            const Padding(
+              padding: EdgeInsets.only(top:20, left: 20, right: 20),
+              child: Text(
+                '本当にアカウント\nを削除しますか？',
+                style: TextStyle(
+                  decoration: TextDecoration.none,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Noto Sans CJK JP',
+                  fontSize:14 ,
+                ),
+              ),
+            ),
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(top: 15),
+                    decoration: const BoxDecoration(
+                      border:Border(
+                        top: BorderSide(
+                          color: Colors.white30,
+                          width: 0.5
+                        )
+                      )
+                    ),
+                    child: TextButton(
+                      onPressed: (){
+                        deleteAccount();
+                        exit(0);                        // showAlertDialog_2(context);
+                      },
+                      child: const Text(
+                        '確認',
+                        textAlign: TextAlign.center,
+                         style: TextStyle(
+                           color: Color.fromRGBO(95, 134, 222, 1),
+                           fontWeight: FontWeight.bold
+                         ),
+                      )
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(top: 15),
+                    decoration: const BoxDecoration(
+                      border:Border(
+                        top: BorderSide(
+                          color: Colors.white30,
+                          width: 0.5
+                        )
+                      )
+                    ),
+                    child: TextButton(
+                      onPressed: (){
+                        // Navigator.of(content).pop(false);
+                        // Navigator.of(context, rootNavigator: true).pop(false);
+                        Navigator.of(context, rootNavigator: true).pop(false);
+                      },
+                      child: const Text(
+                        'キャンセル',
+                        textAlign: TextAlign.center,
+                         style: TextStyle(
+                           color: Color.fromRGBO(95, 134, 222, 1),
+                           fontWeight: FontWeight.bold
+                         ),
+                      )
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+        )
+      )
+    );
+  }
+
+  Future<void> deleteAccount() async {
+    const storage = FlutterSecureStorage();
+    String? email=await storage.read(key: 'email');
+    String url="http://localhost:5000/api/users/delete?email=$email";
+    final response = await http.delete(
+        Uri.parse(url),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        });
+      if (response.statusCode == 200) { 
+        // ignore: use_build_context_synchronously
+        storage.deleteAll();
+      } 
+  }
   @override
   Widget build(BuildContext context){
     return MaterialApp(
@@ -126,8 +238,8 @@ class _AccountSettingAppState extends State<AccountSettingApp> {
                           margin: const EdgeInsets.only(left: 17.8, right: 17.8),
                           child: MaterialButton(
                             onPressed: () {
-                              Navigator.of(context).pushNamed('/account_delete');
-                              
+                              // Navigator.of(context).pushNamed('/account_delete');
+                              showAlertDialog(context);
                             },
                             child: const Row(
                               children: [
@@ -185,7 +297,7 @@ class _AccountSettingAppState extends State<AccountSettingApp> {
                               width: 97.5,
                               child: MaterialButton(
                                 onPressed: () {
-                                  Navigator.of(context).pushNamed('/home');
+                                  Navigator.of(context).pushNamed('/');
                                 },
                                 child: const Column(
                                   children: [
@@ -236,7 +348,7 @@ class _AccountSettingAppState extends State<AccountSettingApp> {
                                 width: 97.5,
                                 child: MaterialButton(
                                 onPressed: () {
-                                  
+                                  Navigator.of(context).pushNamed('/mypage');
                                 },
                                 child: const Column(
                                   children: [

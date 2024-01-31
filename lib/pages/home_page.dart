@@ -1,5 +1,7 @@
 
 
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -7,13 +9,19 @@ import 'package:flutter_app/pages/account_delete.dart';
 import 'package:flutter_app/pages/account_edit.dart';
 import 'package:flutter_app/pages/account_setting.dart';
 import 'package:flutter_app/pages/audio_page.dart';
+import 'package:flutter_app/pages/catetory_search.dart';
 import 'package:flutter_app/pages/change_password.dart';
+import 'package:flutter_app/pages/content_search.dart';
+import 'package:flutter_app/pages/download_page.dart';
 import 'package:flutter_app/pages/give_page.dart';
+import 'package:flutter_app/pages/like_page.dart';
 import 'package:flutter_app/pages/mypage.dart';
 import 'package:flutter_app/pages/notification.dart';
+import 'package:flutter_app/pages/play_page.dart';
 import 'package:flutter_app/pages/search_page.dart';
 import 'package:flutter_app/pages/settings_page.dart';
 import 'package:flutter_app/pages/subscription_page.dart';
+import 'package:flutter_app/pages/tab_search.dart';
 import 'package:flutter_app/pages/video_page.dart';
 import 'package:flutter_app/pages/send_data.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -26,6 +34,7 @@ void main() {
 
 class HomeApp extends StatelessWidget {
   const HomeApp({super.key});
+  static const routeName='/home'; 
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +52,12 @@ class HomeApp extends StatelessWidget {
         ChangePasswordApp.routeName: (context) => const ChangePasswordApp(),
         NotificationApp.routeName: (context) => const NotificationApp(),
         SubscriptionPage.routeName: (context) => const SubscriptionPage(),
+        LikePageApp.routeName:(context) => const LikePageApp(),
+        PlayPageApp.routeName:(context) => const PlayPageApp(), 
+        DownloadPageApp.routeName:(context) => const DownloadPageApp(), 
+        ContentSearchPage.routeName:(context) => const ContentSearchPage(),
+        CategorySearchPage.routeName:(context) =>const CategorySearchPage(),    
+        TabSearchPage.routeName:(context) =>const TabSearchPage(),    
       },
       home: Container(
         decoration: const BoxDecoration(
@@ -115,7 +130,7 @@ class DataListItem extends StatelessWidget {
                 margin: const EdgeInsets.all(6),
                 width: 100,
                 height: 100,
-                child: Image.asset("assets/images/${imageUrl}"),
+                child: Image.asset("assets/images/$imageUrl"),
               ),
               Expanded(
                   child: Container(
@@ -269,6 +284,7 @@ class _DataListState extends State<DataList> {
                                   Navigator.pushNamed(context, AudioPlayPage.routeName,
                                       arguments: SendDatas(snapshot.data[index].id, snapshot.data[index].title, snapshot.data[index].time, snapshot.data[index].description, snapshot.data[index].filename));
                                 }else{
+                                  addPlays(snapshot.data[index].id);
                                   Navigator.pushNamed(context, VideoPlayPage.routeName,
                                       arguments: SendDatas(snapshot.data[index].id, snapshot.data[index].title, snapshot.data[index].time, snapshot.data[index].description, snapshot.data[index].filename));
                                 }

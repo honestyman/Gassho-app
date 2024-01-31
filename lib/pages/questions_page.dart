@@ -57,7 +57,7 @@ class _HomePageState extends State<HomePage> {
     if(token!=null){
       // ignore: use_build_context_synchronously
       Navigator.push(context,
-          MaterialPageRoute(builder: (context) => new HomeApp()));
+          MaterialPageRoute(builder: (context) => const HomeApp()));
     }
   }
 

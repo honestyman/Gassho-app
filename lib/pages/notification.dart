@@ -1,5 +1,9 @@
+import 'dart:convert';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart' as http;
 
 
 void main() {
@@ -19,6 +23,23 @@ class NotificationApp extends StatefulWidget{
 
 class _NotificationAppState extends State<NotificationApp> {
   bool light=true;  
+  
+ Future<void> setNotifiaction() async {
+    String url="http://localhost:5000/api/users/notification";
+    const storage = FlutterSecureStorage();
+    String? email=await storage.read(key: 'email');
+    // ignore: unused_local_variable
+    final response = await http.post(
+        Uri.parse(url),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'email':email.toString(),
+          'notification':light.toString(),
+        }),
+      );
+  }
 
   @override
   Widget build(BuildContext context){
@@ -118,6 +139,7 @@ class _NotificationAppState extends State<NotificationApp> {
                                     onChanged: (bool value){
                                       setState((){
                                         light=value;
+                                        setNotifiaction();
                                       });
                                     }
                                     ) 
@@ -127,8 +149,7 @@ class _NotificationAppState extends State<NotificationApp> {
                         ),
                         const SizedBox(
                           height: 14,
-                        ),
-                        
+                        ),  
                       ],
                     ),
                   ),
@@ -154,7 +175,7 @@ class _NotificationAppState extends State<NotificationApp> {
                               width: 97.5,
                               child: MaterialButton(
                                 onPressed: () {
-                                  Navigator.of(context).pushNamed('/home');
+                                  Navigator.of(context).pushNamed('/');
                                 },
                                 child: const Column(
                                   children: [
@@ -205,7 +226,7 @@ class _NotificationAppState extends State<NotificationApp> {
                                 width: 97.5,
                                 child: MaterialButton(
                                 onPressed: () {
-                                  
+                                  Navigator.of(context).pushNamed('/mypage');
                                 },
                                 child: const Column(
                                   children: [

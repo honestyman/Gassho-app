@@ -1,5 +1,9 @@
 
+import 'dart:convert';
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart' as http;
 
 
 void main() {
@@ -21,6 +25,106 @@ class _ChangePasswordAppState extends State<ChangePasswordApp> {
 
   final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  TextEditingController presentPassword = TextEditingController();
+  TextEditingController newPassword = TextEditingController();
+
+  Future<void> changePassword() async {
+    String url="http://localhost:5000/api/user/changepassword";
+    const storage = FlutterSecureStorage();
+    String? email=await storage.read(key: 'email');
+    final response = await http.post(
+        Uri.parse(url),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'email':email.toString(),
+          'presentPassword':presentPassword.text,
+          'newPassword': newPassword.text,
+        }),
+      );
+      if (response.statusCode == 200) { 
+        // ignore: use_build_context_synchronously
+        showDialog(
+          context: context,
+          builder: (_) => Center( // Aligns the container to center
+            child: Container( // A simplified version of dialog. 
+              width: 244,
+              height: 111,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                color: const Color.fromRGBO(43, 43, 55, 1),
+              ),
+              child: Column(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.only(top:20),
+                    child: Text(
+                      'パスワードが正確に変更されました！',
+                      style: TextStyle(
+                        decoration: TextDecoration.none,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Noto Sans CJK JP',
+                        fontSize:14 ,
+                        letterSpacing: -1
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                      margin: const EdgeInsets.only(top: 15),
+                      decoration: const BoxDecoration(
+                        border:Border(
+                          top: BorderSide(
+                            color: Colors.white30,
+                            width: 0.5
+                          )
+                        )
+                      ),
+                      child: TextButton(
+                        onPressed: (){
+                          Navigator.of(context, rootNavigator: true).pop(false);
+                          Navigator.of(context).pushNamed('/setting');
+                          // showAlertDialog_2(context);
+                        },
+                        child: const Text(
+                          'OK',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Color.fromRGBO(95, 134, 222, 1),
+                            fontWeight: FontWeight.bold
+                          ),
+                        )
+                      ),
+                    ),
+                  )
+                ],
+              ),
+              )
+            )
+        );
+      } else {
+        var error = String.fromCharCodes(response.bodyBytes);
+        final string=jsonDecode(error);
+        // ignore: use_build_context_synchronously
+        showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Error'),
+          content: Text(string),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+      } 
+  }
+  
   @override
   Widget build(BuildContext context){
     return MaterialApp(
@@ -112,6 +216,7 @@ class _ChangePasswordAppState extends State<ChangePasswordApp> {
                                           ),
                                         ),
                                         TextFormField(
+                                          controller: presentPassword,
                                           obscureText: true,
                                           decoration: InputDecoration(
                                             isDense: true,
@@ -156,6 +261,7 @@ class _ChangePasswordAppState extends State<ChangePasswordApp> {
                                           ),
                                         ),
                                         TextFormField(
+                                          controller: newPassword,
                                           obscureText: true,
                                           decoration: InputDecoration(
                                             isDense: true,
@@ -185,7 +291,8 @@ class _ChangePasswordAppState extends State<ChangePasswordApp> {
                                     ),
                                     child: ElevatedButton(
                                       onPressed:() {
-                                        showAlertDialog(context);
+                                        // showAlertDialog(context);
+                                        changePassword();
                                       },
                                     style: ElevatedButton.styleFrom(
                                         backgroundColor: const Color.fromRGBO(138, 86, 172, 1),
@@ -230,7 +337,7 @@ class _ChangePasswordAppState extends State<ChangePasswordApp> {
                               width: 97.5,
                               child: MaterialButton(
                                 onPressed: () {
-                                  Navigator.of(context).pushNamed('/home');
+                                  Navigator.of(context).pushNamed('/');
                                 },
                                 child: const Column(
                                   children: [
@@ -281,7 +388,7 @@ class _ChangePasswordAppState extends State<ChangePasswordApp> {
                                 width: 97.5,
                                 child: MaterialButton(
                                 onPressed: () {
-                                  
+                                  Navigator.of(context).pushNamed('/mypage'); 
                                 },
                                 child: const Column(
                                   children: [
@@ -370,97 +477,98 @@ class TitleSection extends StatelessWidget{
   }
 }
 
-showAlertDialog(BuildContext context){
-  showDialog(
-    context: context,
-    builder: (_) => Center( // Aligns the container to center
-      child: Container( // A simplified version of dialog. 
-        width: 244,
-        height: 111,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5),
-          color: const Color.fromRGBO(43, 43, 55, 1),
-        ),
-        child: Column(
-          children: [
-            const Padding(
-              padding: EdgeInsets.only(top:20),
-              child: Text(
-                'パスワードを変更しますか？',
-                style: TextStyle(
-                  decoration: TextDecoration.none,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Noto Sans CJK JP',
-                  fontSize:14 ,
-                  letterSpacing: -1
+  // ignore: non_constant_identifier_names
+  PasswordError(BuildContext context){
+    showDialog(
+      context: context,
+      builder: (_) => Center( // Aligns the container to center
+        child: Container( // A simplified version of dialog. 
+          width: 244,
+          height: 111,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
+            color: const Color.fromRGBO(43, 43, 55, 1),
+          ),
+          child: Column(
+            children: [
+              const Padding(
+                padding: EdgeInsets.only(top:20),
+                child: Text(
+                  'パスワードを変更しますか？',
+                  style: TextStyle(
+                    decoration: TextDecoration.none,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Noto Sans CJK JP',
+                    fontSize:14 ,
+                    letterSpacing: -1
+                  ),
                 ),
               ),
-            ),
-            Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    margin: const EdgeInsets.only(top: 15),
-                    decoration: const BoxDecoration(
-                      border:Border(
-                        top: BorderSide(
-                          color: Colors.white30,
-                          width: 0.5
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(top: 15),
+                      decoration: const BoxDecoration(
+                        border:Border(
+                          top: BorderSide(
+                            color: Colors.white30,
+                            width: 0.5
+                          )
                         )
-                      )
-                    ),
-                    child: TextButton(
-                      onPressed: (){
-                        // Navigator.of(content).pop(false);
-                        Navigator.of(context).pushNamed('/account_setting');
-                        // showAlertDialog_2(context);
-                      },
-                      child: const Text(
-                        'OK',
-                        textAlign: TextAlign.center,
-                         style: TextStyle(
-                           color: Color.fromRGBO(95, 134, 222, 1),
-                           fontWeight: FontWeight.bold
-                         ),
-                      )
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(top: 15),
-                    decoration: const BoxDecoration(
-                      border:Border(
-                        top: BorderSide(
-                          color: Colors.white30,
-                          width: 0.5
+                      ),
+                      child: TextButton(
+                        onPressed: (){
+                          // Navigator.of(content).pop(false);
+                          Navigator.of(context).pushNamed('/account_setting');
+                          // showAlertDialog_2(context);
+                        },
+                        child: const Text(
+                          'OK',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Color.fromRGBO(95, 134, 222, 1),
+                            fontWeight: FontWeight.bold
+                          ),
                         )
-                      )
+                      ),
                     ),
-                    child: TextButton(
-                      onPressed: (){
-                        // Navigator.of(content).pop(false);
-                        Navigator.of(context, rootNavigator: true).pop(false);
-                      },
-                      child: const Text(
-                        'CANCEL',
-                        textAlign: TextAlign.center,
-                         style: TextStyle(
-                           color: Color.fromRGBO(95, 134, 222, 1),
-                           fontWeight: FontWeight.bold
-                         ),
-                      )
+                    Container(
+                      margin: const EdgeInsets.only(top: 15),
+                      decoration: const BoxDecoration(
+                        border:Border(
+                          top: BorderSide(
+                            color: Colors.white30,
+                            width: 0.5
+                          )
+                        )
+                      ),
+                      child: TextButton(
+                        onPressed: (){
+                          // Navigator.of(content).pop(false);
+                          Navigator.of(context, rootNavigator: true).pop(false);
+                        },
+                        child: const Text(
+                          'CANCEL',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Color.fromRGBO(95, 134, 222, 1),
+                            fontWeight: FontWeight.bold
+                          ),
+                        )
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            )
-          ],
-        ),
+                  ],
+                ),
+              )
+            ],
+          ),
+          )
         )
-      )
- );
-}
+    );
+  }
 
 
 

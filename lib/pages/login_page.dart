@@ -49,38 +49,34 @@ class _LoginPageState extends State<LoginPage> {
       final token = jsonDecode(response.body)['token'];
         await storage.write(key: 'jwt', value: token);
         await storage.write(key: 'email', value: emailController.text);
-      // ignore: use_build_context_synchronously
+        // ignore: use_build_context_synchronously
       Navigator.push(context,
-          MaterialPageRoute(builder: (context) => new HomeApp()));       
-      List<dynamic> listReasons=jsonDecode(reasons!);
-      List<dynamic> listIntroductions=jsonDecode(introductions!);
+          MaterialPageRoute(builder: (context) => const HomeApp()));   
+        if(reasons!=null && introductions!=null){
+          List<dynamic> listReasons=jsonDecode(reasons);
+          List<dynamic> listIntroductions=jsonDecode(introductions);
 
       // ignore: unused_local_variable
-      final reasonData= await http.post(Uri.parse('http://localhost:5000/api/reasons/user_reasons/add'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(<String, String>{
-          'email': emailController.text.toString(),
-          'reasons': jsonEncode(listReasons),
-          'introductions': jsonEncode(listIntroductions),         
-        })
-      );
-      
-      // ignore: use_build_context_synchronously
-      
-      // If the server did return a 201 CREATED response,
-      // then parse the JSON.
-      // return Album.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+          final reasonData= await http.post(Uri.parse('http://localhost:5000/api/reasons/user_reasons/add'),
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8',
+            },
+            body: jsonEncode(<String, String>{
+              'email': emailController.text.toString(),
+              'reasons': jsonEncode(listReasons),
+              'introductions': jsonEncode(listIntroductions),         
+            })
+          );
+        }   
     } else {
-      // If the server did not return a 201 CREATED response,
-      // then throw an exception.
+       var error = String.fromCharCodes(response.bodyBytes);
+      final string=jsonDecode(error);
       // ignore: use_build_context_synchronously
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
           title: const Text('Error'),
-          content: const Text('Invalid email or password'),
+          content: Text(string),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),

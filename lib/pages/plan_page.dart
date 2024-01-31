@@ -1,6 +1,9 @@
-
+import 'dart:convert';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/pages/questionnaire_page.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart' as http;
 
 void main() {
   runApp(
@@ -86,7 +89,7 @@ class Plan {
   final String name_3;
 }
 
-typedef CartChangedCallback = Function(Plan plan, bool inChecked);
+typedef CartChangedCallback = Function(String plan, bool inChecked);
 
 class PlanListItem extends StatelessWidget {
   PlanListItem({
@@ -125,7 +128,7 @@ class PlanListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialButton(
        onPressed: () {
-         onCartChanged(plan,inChecked);
+         onCartChanged(plan.name_1,inChecked);
        },
       child: Container(
         height: 66,
@@ -232,9 +235,106 @@ class PlanList extends StatefulWidget {
 }
 
 class _PlanListState extends State<PlanList> {
-  final _shoppingCart = <Plan>{};
+    final List<String> _shoppingCart = [];
 
-  void _handleCartChanged(Plan plan, bool inChecked) {
+  Future<void> addPlan() async {
+    const url="http://localhost:5000/api/users/plan";
+    const storage = FlutterSecureStorage();
+    String? email=await storage.read(key: 'email');
+    final response = await http.post(
+      Uri.parse(url),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'email': jsonEncode(email),
+        'plan': jsonEncode(_shoppingCart),
+      }),
+    );
+    if (response.statusCode == 200) { 
+      // ignore: use_build_context_synchronously
+    } else {
+      // If the server did not return a 201 CREATED response,
+      // then throw an exception.
+      throw Exception('Failed to create album.');
+    }
+  }
+
+  showAlertDialog_1(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (_) => Center( // Aligns the container to center
+      child: Container( // A simplified version of dialog. 
+        width: 244,
+        height: 111,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5),
+          color: const Color.fromRGBO(43, 43, 55, 1),
+        ),
+        child: Column(
+          children: [
+            const Padding(
+              padding: EdgeInsets.only(top:15),
+              child: Text(
+                '完了しました。',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Noto Sans CJK JP',
+                  fontSize:14 ,
+                ),
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.only(top:5),
+              child: Text(
+                '申し込みが完了しました。',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: 'Noto Sans CJK JP',
+                  fontSize:13 ,
+                  letterSpacing: -1
+                ),
+              ),
+            ),
+            Expanded(
+              child: Container(
+                width: 244,
+                margin: const EdgeInsets.only(top: 15),
+                decoration: const BoxDecoration(
+                  border:Border(
+                    top: BorderSide(
+                      color: Colors.white30,
+                      width: 0.5
+                    )
+                  )
+                ),
+                child: TextButton(
+                  onPressed: (){
+                    addPlan();
+                    Navigator.of(context, rootNavigator: true).pop(false);
+                     showAlertDialog_2(context);
+                  },
+                  child: const Text(
+                    'OK',
+                    textAlign: TextAlign.center,
+                     style: TextStyle(
+                       color: Color.fromRGBO(95, 134, 222, 1),
+                       fontWeight: FontWeight.bold
+                     ),
+                  )
+                ),
+              ),
+            )
+          ],
+        ),
+        )
+      )
+ );
+}
+
+  void _handleCartChanged(String plan, bool inChecked) {
     setState(() {
       // When a user changes what's in the cart, you need
       // to change _shoppingCart inside a setState call to
@@ -357,7 +457,7 @@ class _PlanListState extends State<PlanList> {
          children: widget.plans.map((plan){
           return PlanListItem(
             plan: plan,
-            inChecked: _shoppingCart.contains(plan),
+            inChecked: _shoppingCart.contains(plan.name_1),
             onCartChanged: _handleCartChanged,
           );
         }).toList(), 
@@ -387,8 +487,7 @@ class _PlanListState extends State<PlanList> {
           ),
           child: ElevatedButton(
             onPressed:() {
-              // Navigator.of(context).pushNamed("/register");
-              showAlertDialog_1(context);
+               showAlertDialog_1(context);
             },
            style: ElevatedButton.styleFrom(
               backgroundColor: const Color.fromRGBO(138, 86, 172, 1),
@@ -411,78 +510,79 @@ class _PlanListState extends State<PlanList> {
   }
 }
 
-showAlertDialog_1(BuildContext context) {
-  showDialog(
-    context: context,
-    builder: (_) => Center( // Aligns the container to center
-      child: Container( // A simplified version of dialog. 
-        width: 244,
-        height: 111,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5),
-          color: const Color.fromRGBO(43, 43, 55, 1),
-        ),
-        child: Column(
-          children: [
-            const Padding(
-              padding: EdgeInsets.only(top:15),
-              child: Text(
-                '完了しました。',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Noto Sans CJK JP',
-                  fontSize:14 ,
-                ),
-              ),
-            ),
-            const Padding(
-              padding: EdgeInsets.only(top:5),
-              child: Text(
-                '申し込みが完了しました。',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w400,
-                  fontFamily: 'Noto Sans CJK JP',
-                  fontSize:13 ,
-                  letterSpacing: -1
-                ),
-              ),
-            ),
-            Expanded(
-              child: Container(
-                width: 244,
-                margin: const EdgeInsets.only(top: 15),
-                decoration: const BoxDecoration(
-                  border:Border(
-                    top: BorderSide(
-                      color: Colors.white30,
-                      width: 0.5
-                    )
-                  )
-                ),
-                child: TextButton(
-                  onPressed: (){
-                    Navigator.of(context, rootNavigator: true).pop(false);
-                     showAlertDialog_2(context);
-                  },
-                  child: const Text(
-                    'OK',
-                    textAlign: TextAlign.center,
-                     style: TextStyle(
-                       color: Color.fromRGBO(95, 134, 222, 1),
-                       fontWeight: FontWeight.bold
-                     ),
-                  )
-                ),
-              ),
-            )
-          ],
-        ),
-        )
-      )
- );
-}
+// showAlertDialog_1(BuildContext context) {
+//   showDialog(
+//     context: context,
+//     builder: (_) => Center( // Aligns the container to center
+//       child: Container( // A simplified version of dialog. 
+//         width: 244,
+//         height: 111,
+//         decoration: BoxDecoration(
+//           borderRadius: BorderRadius.circular(5),
+//           color: const Color.fromRGBO(43, 43, 55, 1),
+//         ),
+//         child: Column(
+//           children: [
+//             const Padding(
+//               padding: EdgeInsets.only(top:15),
+//               child: Text(
+//                 '完了しました。',
+//                 style: TextStyle(
+//                   color: Colors.white,
+//                   fontWeight: FontWeight.bold,
+//                   fontFamily: 'Noto Sans CJK JP',
+//                   fontSize:14 ,
+//                 ),
+//               ),
+//             ),
+//             const Padding(
+//               padding: EdgeInsets.only(top:5),
+//               child: Text(
+//                 '申し込みが完了しました。',
+//                 style: TextStyle(
+//                   color: Colors.white,
+//                   fontWeight: FontWeight.w400,
+//                   fontFamily: 'Noto Sans CJK JP',
+//                   fontSize:13 ,
+//                   letterSpacing: -1
+//                 ),
+//               ),
+//             ),
+//             Expanded(
+//               child: Container(
+//                 width: 244,
+//                 margin: const EdgeInsets.only(top: 15),
+//                 decoration: const BoxDecoration(
+//                   border:Border(
+//                     top: BorderSide(
+//                       color: Colors.white30,
+//                       width: 0.5
+//                     )
+//                   )
+//                 ),
+//                 child: TextButton(
+//                   onPressed: (){
+//                     addPlan();
+//                     Navigator.of(context, rootNavigator: true).pop(false);
+//                      showAlertDialog_2(context);
+//                   },
+//                   child: const Text(
+//                     'OK',
+//                     textAlign: TextAlign.center,
+//                      style: TextStyle(
+//                        color: Color.fromRGBO(95, 134, 222, 1),
+//                        fontWeight: FontWeight.bold
+//                      ),
+//                   )
+//                 ),
+//               ),
+//             )
+//           ],
+//         ),
+//         )
+//       )
+//  );
+// }
 
 showAlertDialog_2(BuildContext context) {
   showDialog(
@@ -539,10 +639,9 @@ showAlertDialog_2(BuildContext context) {
                   onPressed: (){},
                     child: MaterialButton(
                       onPressed: (){
-                        // Navigator.of(context).pushNamed('/questionnaire');
                         Navigator.of(context, rootNavigator: true).pop(false);
-                        Navigator.push(context, new MaterialPageRoute(
-                        builder: (context) => new QuestionnairesApp())
+                        Navigator.push(context, MaterialPageRoute(
+                        builder: (context) => const QuestionnairesApp())
                       );
                       },
                       child: Image.asset("assets/images/hands.png"),

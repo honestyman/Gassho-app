@@ -2,6 +2,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 
 void main() {
@@ -19,6 +20,116 @@ class SettingsPageApp extends StatefulWidget{
 }
 
 class _SettingsPageAppState extends State<SettingsPageApp> {
+
+  showAlertDialog(BuildContext context) async{
+  const storage = FlutterSecureStorage();
+  String? email=await storage.read(key: 'email');
+  // ignore: use_build_context_synchronously
+  showDialog(
+    context: context,
+    builder: (_) => Center( // Aligns the container to center
+      child: Container( // A simplified version of dialog. 
+        width: 244,
+        height: 111,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5),
+          color: const Color.fromRGBO(43, 43, 55, 1),
+        ),
+        child: Column(
+          children: [
+            const Padding(
+              padding: EdgeInsets.only(top:15),
+              child: Text(
+                'ログアウトしますか？',
+                style: TextStyle(
+                  decoration: TextDecoration.none,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Noto Sans CJK JP',
+                  fontSize:14 ,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top:5),
+              child: Text(
+                email.toString(),
+                style: const TextStyle(
+                  decoration: TextDecoration.none,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: 'Noto Sans CJK JP',
+                  fontSize:14 ,
+                ),
+              ),
+            ),
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(top: 15),
+                    decoration: const BoxDecoration(
+                      border:Border(
+                        top: BorderSide(
+                          color: Colors.white30,
+                          width: 0.5
+                        )
+                      )
+                    ),
+                    child: TextButton(
+                      onPressed: (){
+                        // Navigator.of(content).pop(false);
+                        Navigator.of(context, rootNavigator: true).pop(false);
+                        // showAlertDialog_2(context);
+                      },
+                      child: const Text(
+                        'キャンセル',
+                        textAlign: TextAlign.center,
+                         style: TextStyle(
+                           color: Color.fromRGBO(95, 134, 222, 1),
+                           fontWeight: FontWeight.bold
+                         ),
+                      )
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(top: 15),
+                    decoration: const BoxDecoration(
+                      border:Border(
+                        top: BorderSide(
+                          color: Colors.white30,
+                          width: 0.5
+                        )
+                      )
+                    ),
+                    child: TextButton(
+                      onPressed: (){
+                        // Navigator.of(content).pop(false);
+                        // Navigator.of(context, rootNavigator: true).pop(false);
+                        storage.deleteAll();
+                        exit(0);
+                      },
+                      child: const Text(
+                        'ログアウト',
+                        textAlign: TextAlign.center,
+                         style: TextStyle(
+                           color: Color.fromRGBO(95, 134, 222, 1),
+                           fontWeight: FontWeight.bold
+                         ),
+                      )
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+        )
+      )
+    );
+  }
+
   @override
   Widget build(BuildContext context){
     return MaterialApp(
@@ -36,7 +147,7 @@ class _SettingsPageAppState extends State<SettingsPageApp> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               
-              const TitleSection(name: ''),
+              const TitleSection(name: '設定'),
               const SizedBox(
                 height: 27.6,
               ),
@@ -197,6 +308,50 @@ class _SettingsPageAppState extends State<SettingsPageApp> {
                               Expanded(
                                 child: Text(
                                   '通知',
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: 'Noto Sans CJK JP',
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                    letterSpacing: -1
+                                  ),
+                                  softWrap: true,
+                                )
+                                ),
+                              Padding(
+                                padding: EdgeInsets.only(right:13),
+                                child:  ImageIcon(
+                                  AssetImage("assets/images/arrow.png"),
+                                  color: Colors.white,
+                                ) 
+                                ),    
+                            ],
+                          ),
+                        ),  
+                      ),
+                      const SizedBox(
+                        height: 14,
+                      ),
+                      Container(
+                        height: 51,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: Colors.white.withOpacity(0.2)
+                        ),
+                        margin: const EdgeInsets.only(left: 17.8, right: 17.8),
+                        child: MaterialButton(
+                          onPressed: () {
+                            // Navigator.of(context).pushNamed('/notification');
+                          },
+                          child: const Row(
+                            children: [
+                              SizedBox(
+                                width: 13,
+                              ),   
+                              Expanded(
+                                child: Text(
+                                  '言語の変更',
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
                                     color: Colors.white,
@@ -462,7 +617,7 @@ class _SettingsPageAppState extends State<SettingsPageApp> {
                                 onPressed: (){
                                   showAlertDialog(context);
                                 },
-                                child: const Text(
+                                child: const Text( 
                                         '退会',
                                         textAlign: TextAlign.left,
                                         style: TextStyle(
@@ -642,112 +797,6 @@ class TitleSection extends StatelessWidget{
       ),
       );
   }
-}
-
-showAlertDialog(BuildContext context){
-  showDialog(
-    context: context,
-    builder: (_) => Center( // Aligns the container to center
-      child: Container( // A simplified version of dialog. 
-        width: 244,
-        height: 111,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5),
-          color: const Color.fromRGBO(43, 43, 55, 1),
-        ),
-        child: Column(
-          children: [
-            const Padding(
-              padding: EdgeInsets.only(top:15),
-              child: Text(
-                'ログアウトしますか？',
-                style: TextStyle(
-                  decoration: TextDecoration.none,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Noto Sans CJK JP',
-                  fontSize:14 ,
-                ),
-              ),
-            ),
-            const Padding(
-              padding: EdgeInsets.only(top:5),
-              child: Text(
-                'samplemail@sample.co.jp',
-                style: TextStyle(
-                  decoration: TextDecoration.none,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w400,
-                  fontFamily: 'Noto Sans CJK JP',
-                  fontSize:12 ,
-                  letterSpacing: -1
-                ),
-              ),
-            ),
-            Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    margin: const EdgeInsets.only(top: 15),
-                    decoration: const BoxDecoration(
-                      border:Border(
-                        top: BorderSide(
-                          color: Colors.white30,
-                          width: 0.5
-                        )
-                      )
-                    ),
-                    child: TextButton(
-                      onPressed: (){
-                        // Navigator.of(content).pop(false);
-                        Navigator.of(context, rootNavigator: true).pop(false);
-                        // showAlertDialog_2(context);
-                      },
-                      child: const Text(
-                        'キャンセル',
-                        textAlign: TextAlign.center,
-                         style: TextStyle(
-                           color: Color.fromRGBO(95, 134, 222, 1),
-                           fontWeight: FontWeight.bold
-                         ),
-                      )
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(top: 15),
-                    decoration: const BoxDecoration(
-                      border:Border(
-                        top: BorderSide(
-                          color: Colors.white30,
-                          width: 0.5
-                        )
-                      )
-                    ),
-                    child: TextButton(
-                      onPressed: (){
-                        // Navigator.of(content).pop(false);
-                        // Navigator.of(context, rootNavigator: true).pop(false);
-                        exit(0);
-                      },
-                      child: const Text(
-                        'ログアウト',
-                        textAlign: TextAlign.center,
-                         style: TextStyle(
-                           color: Color.fromRGBO(95, 134, 222, 1),
-                           fontWeight: FontWeight.bold
-                         ),
-                      )
-                    ),
-                  ),
-                ],
-              ),
-            )
-          ],
-        ),
-        )
-      )
- );
 }
 
 

@@ -78,7 +78,7 @@ class _AudioPlayPageState extends State<AudioPlayPage> {
 
   Future<List<Item>> getTab(int id) async{
     
-    String url="http://localhost:5000/api/items/tab?id=${id}";
+    String url="http://localhost:5000/api/items/tab?id=$id";
     final response=await http.get(Uri.parse(url));
     var reasonData=json.decode(response.body);
     List<Item> tabs=[];
@@ -217,7 +217,7 @@ class _AudioPlayPageState extends State<AudioPlayPage> {
                             foregroundColor: Colors.white,
                             child: IconButton(
                               onPressed: (){
-                                Navigator.of(context).pushNamed('/');
+                                Navigator.pop(context,true);
                               },
                                icon: const ImageIcon(
                                 AssetImage("assets/images/cancel.png")
@@ -287,59 +287,56 @@ class _AudioPlayPageState extends State<AudioPlayPage> {
                   ],
                 ),
                 Expanded(
-                    child: FutureBuilder(
-                      future: getTab(args.id),
-                      builder: (BuildContext ctx, AsyncSnapshot snapshot) {
-                        if (snapshot.data == null) {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        } else {
-                          return Column( 
-                            children: [
-                              Expanded(
-                                child: Container(
-                                  transformAlignment: Alignment.center,
-                                  child: GridView.builder(
-                                    gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 4,
-                                      childAspectRatio: 70/32
-                                      ),
-                                    itemCount: snapshot.data.length,
-                                    
-                                    itemBuilder: (ctx, index) =>
-                                    Wrap(
-                                      children:List.generate(1, 
-                                      (index) => Container(
-                                        margin: const EdgeInsets.only(left: 4, right: 4),
-                                        // padding: const EdgeInsets.all(10),
-                                        height: 30,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(15),
-                                          color: Colors.white30.withOpacity(0.2)
-                                        ), 
-                                          child: Center(
-                                            child: Text(
-                                              snapshot.data[index].name,  
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 12,
-                                                fontFamily: 'Noto Sans CJK JP'
-                                              ),
-                                            ),
-                                          ),      
-                                      ),
-                                      ) 
+                    child: Padding(
+                      padding: const EdgeInsets.only(top:10, left: 18, right: 18),
+                      child: FutureBuilder(
+                        future: getTab(args.id),
+                        builder: (BuildContext ctx, AsyncSnapshot snapshot) {
+                          if (snapshot.data == null) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          } else {
+                            return Column( 
+                              children: [
+                                Expanded(
+                                  child: Container(
+                                    transformAlignment: Alignment.center,
+                                    child: GridView.builder(
+                                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 4,
+                                        childAspectRatio: 70/32
+                                        ),
+                                      itemCount: snapshot.data.length,
                                       
-                                    )
-                                         
-                                    ),
+                                      itemBuilder: (ctx, index) =>   
+                                        Container(
+                                          margin: const EdgeInsets.only(top:8, left: 4, right: 4),
+                                          // padding: const EdgeInsets.all(10),
+                                          height: 30,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(15),
+                                            color: Colors.white30.withOpacity(0.2)
+                                          ), 
+                                            child: Center(
+                                              child: Text(
+                                                snapshot.data[index].name, 
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 12,
+                                                  fontFamily: 'Noto Sans CJK JP'
+                                                ),
+                                              ),
+                                            ),      
+                                        ),   
+                                      ),
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ); 
-                        }
-                      },
+                              ],
+                            ); 
+                          }
+                        },
+                      ),
                     ),
                   ),
                 

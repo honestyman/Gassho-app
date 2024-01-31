@@ -1,8 +1,9 @@
 import 'dart:convert';
-import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_app/pages/login_page.dart';
 import 'package:flutter_app/pages/plan_page.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 void main() {
@@ -32,6 +33,7 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController passwordController = TextEditingController();
 
   Future<void> sendPostRequest() async {
+    const storage = FlutterSecureStorage();
     final response = await http.post(
       Uri.parse(apiUrl),
       headers: <String, String>{
@@ -45,11 +47,26 @@ class _RegisterPageState extends State<RegisterPage> {
     );
     if (response.statusCode == 200) { 
       // ignore: use_build_context_synchronously
+      await storage.write(key: 'email', value: emailController.text);
+      // ignore: use_build_context_synchronously
       Navigator.push(context, MaterialPageRoute(builder: (context) => const PlanPage()));
     } else {
-      // If the server did not return a 201 CREATED response,
-      // then throw an exception.
-      throw Exception('Failed to create album.');
+      final error = String.fromCharCodes(response.bodyBytes);
+        final string=jsonDecode(error);
+        // ignore: use_build_context_synchronously
+        showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Error'),
+          content: Text(string),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
     }
   }
 
@@ -258,8 +275,8 @@ class _RegisterPageState extends State<RegisterPage> {
                               // Navigator.of(context).pushNamed("/login");
                               Navigator.push(
                                   context,
-                                  new MaterialPageRoute(
-                                      builder: (context) => new LoginPage()));
+                                  MaterialPageRoute(
+                                      builder: (context) => const LoginPage()));
                             },
                             child: const Text(
                               'こちらからログイン',
