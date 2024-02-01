@@ -1,4 +1,5 @@
 
+
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -342,7 +343,7 @@ class _SettingsPageAppState extends State<SettingsPageApp> {
                         margin: const EdgeInsets.only(left: 17.8, right: 17.8),
                         child: MaterialButton(
                           onPressed: () {
-                            // Navigator.of(context).pushNamed('/notification');
+                             Navigator.of(context).pushNamed('/change_language');
                           },
                           child: const Row(
                             children: [

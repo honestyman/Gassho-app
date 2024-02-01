@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/pages/home_page.dart';
 import 'package:flutter_app/pages/register_page.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
@@ -42,24 +41,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
 //Applying get request.
   final List<String> _shoppingCart = [];
-
-  @override 
-  void initState() { 
-   getUser();
-    super.initState(); 
-  }
-
-  void getUser() async{
-    const storage = FlutterSecureStorage();
-    // await storage.deleteAll();
-    String? token=await storage.read(key: 'jwt');
-    // String string=token.toString().trim();
-    if(token!=null){
-      // ignore: use_build_context_synchronously
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => const HomeApp()));
-    }
-  }
 
   void writeStorage() {
     const storage = FlutterSecureStorage();

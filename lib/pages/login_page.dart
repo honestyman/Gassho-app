@@ -24,7 +24,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
-
+  bool light=true;
   // String _username, _password;
   final apiUrl = "http://localhost:5000/api/auth/";
   TextEditingController emailController = TextEditingController();
@@ -45,10 +45,14 @@ class _LoginPageState extends State<LoginPage> {
       const storage = FlutterSecureStorage();
       String? reasons=await storage.read(key: 'reasons');
       String? introductions=await storage.read(key: 'introductions');
-      await storage.deleteAll();
+      // await storage.deleteAll();
+      await storage.delete(key: 'reasons');
+      await storage.delete(key: 'introductions');
       final token = jsonDecode(response.body)['token'];
-        await storage.write(key: 'jwt', value: token);
-        await storage.write(key: 'email', value: emailController.text);
+      await storage.write(key: 'jwt', value: token);
+      await storage.write(key: 'email', value: emailController.text);
+      await storage.write(key: 'notification', value: light.toString());
+
         // ignore: use_build_context_synchronously
       Navigator.push(context,
           MaterialPageRoute(builder: (context) => const HomeApp()));   

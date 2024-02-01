@@ -10,6 +10,7 @@ import 'package:flutter_app/pages/account_edit.dart';
 import 'package:flutter_app/pages/account_setting.dart';
 import 'package:flutter_app/pages/audio_page.dart';
 import 'package:flutter_app/pages/catetory_search.dart';
+import 'package:flutter_app/pages/change_language.dart';
 import 'package:flutter_app/pages/change_password.dart';
 import 'package:flutter_app/pages/content_search.dart';
 import 'package:flutter_app/pages/download_page.dart';
@@ -58,6 +59,7 @@ class HomeApp extends StatelessWidget {
         ContentSearchPage.routeName:(context) => const ContentSearchPage(),
         CategorySearchPage.routeName:(context) =>const CategorySearchPage(),    
         TabSearchPage.routeName:(context) =>const TabSearchPage(),    
+        ChangeLanguage.routeName:(context) =>const ChangeLanguage(),    
       },
       home: Container(
         decoration: const BoxDecoration(

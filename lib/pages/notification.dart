@@ -1,9 +1,8 @@
-import 'dart:convert';
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:http/http.dart' as http;
 
 
 void main() {
@@ -16,35 +15,58 @@ class NotificationApp extends StatefulWidget{
   const NotificationApp({super.key});
   static const routeName='/notification';
 
-
   @override
   State<NotificationApp> createState() => _NotificationAppState();
 }
 
 class _NotificationAppState extends State<NotificationApp> {
+  
   bool light=true;  
   
+  @override 
+  void initState() {
+    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) async{
+    //     final args=ModalRoute.of(context)?.settings.arguments as SendNotification;
+    //     light=args.noti;        
+    // }); 
+    super.initState();
+    getNotification(); 
+  }
+  
+  
  Future<void> setNotifiaction() async {
-    String url="http://localhost:5000/api/users/notification";
+    // String url="http://localhost:5000/api/users/notification";
     const storage = FlutterSecureStorage();
-    String? email=await storage.read(key: 'email');
+    await storage.write(key: 'notification', value: light.toString());
     // ignore: unused_local_variable
-    final response = await http.post(
-        Uri.parse(url),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(<String, String>{
-          'email':email.toString(),
-          'notification':light.toString(),
-        }),
-      );
+    // final response = await http.post(
+    //     Uri.parse(url),
+    //     headers: <String, String>{
+    //       'Content-Type': 'application/json; charset=UTF-8',
+    //     },
+    //     body: jsonEncode(<String, String>{
+    //       'email':email.toString(),
+    //       'notification':light.toString(),
+    //     }),
+    //   );
+  }
+  Future<void> getNotification() async {
+    const storage = FlutterSecureStorage();
+    var noti= await storage.read(key: 'notification');
+    setState(() {
+      if(noti.toString()=="true"){
+        light = true;
+      }else{
+        light = false;
+      }  
+    });
+    
+    
   }
 
   @override
   Widget build(BuildContext context){
     return MaterialApp(
-      
       home: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
@@ -105,7 +127,6 @@ class _NotificationAppState extends State<NotificationApp> {
                             color: Colors.white.withOpacity(0.2)
                           ),
                           margin: const EdgeInsets.only(left: 17.8, right: 17.8),
-                          
                             child: Row(
                               children: [
                                 const Padding(
