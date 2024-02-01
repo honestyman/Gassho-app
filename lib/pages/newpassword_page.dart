@@ -1,78 +1,53 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/pages/home_page.dart';
-import 'package:flutter_app/pages/password_forgetpage.dart';
-import 'package:flutter_app/pages/register_page.dart';
-import 'package:http/http.dart' as http;
+import 'package:flutter_app/pages/login_page.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart' as http;
 
 void main() {
   runApp(
     const MaterialApp(
-      home: LoginPage(),
+      home: NewPasswordPage(),
     ),
   );
 }
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class NewPasswordPage extends StatefulWidget {
+  const NewPasswordPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<NewPasswordPage> createState() => _NewPasswordPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _NewPasswordPageState extends State<NewPasswordPage> {
   final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  bool light=true;
   // String _username, _password;
-  final apiUrl = "http://localhost:5000/api/auth/";
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  final apiUrl = "http://localhost:5000/api/auth/new_password";
+  TextEditingController newpasswordController = TextEditingController();
+  TextEditingController confirmpasswordController = TextEditingController();
 
   Future<void> sendPostRequest() async {
+    const storage = FlutterSecureStorage();
+    String? email=await storage.read(key: 'email');
     final response = await http.post(
       Uri.parse(apiUrl),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, String>{
-        'email': emailController.text,
-        'password': passwordController.text,
+        'email': email.toString(),
+        'newpassword': newpasswordController.text,
+        'confirm':confirmpasswordController.text
       }),
     );
     if (response.statusCode == 200) {
       const storage = FlutterSecureStorage();
-      String? reasons=await storage.read(key: 'reasons');
-      String? introductions=await storage.read(key: 'introductions');
-      // await storage.deleteAll();
-      await storage.delete(key: 'reasons');
-      await storage.delete(key: 'introductions');
-      final token = jsonDecode(response.body)['token'];
-      await storage.write(key: 'jwt', value: token);
-      await storage.write(key: 'email', value: emailController.text);
-      await storage.write(key: 'notification', value: light.toString());
-
+      await storage.delete(key: 'email');
         // ignore: use_build_context_synchronously
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => const HomeApp()));   
-        if(reasons!=null && introductions!=null){
-          List<dynamic> listReasons=jsonDecode(reasons);
-          List<dynamic> listIntroductions=jsonDecode(introductions);
-
-      // ignore: unused_local_variable
-          final reasonData= await http.post(Uri.parse('http://localhost:5000/api/reasons/user_reasons/add'),
-            headers: <String, String>{
-              'Content-Type': 'application/json; charset=UTF-8',
-            },
-            body: jsonEncode(<String, String>{
-              'email': emailController.text.toString(),
-              'reasons': jsonEncode(listReasons),
-              'introductions': jsonEncode(listIntroductions),         
-            })
-          );
-        }   
+        showAlertDialog(context);
+          
     } else {
        var error = String.fromCharCodes(response.bodyBytes);
       final string=jsonDecode(error);
@@ -92,6 +67,57 @@ class _LoginPageState extends State<LoginPage> {
       );
     }
   }
+  showAlertDialog(BuildContext context){
+    showDialog(
+      context: context,
+      builder: (_) => Center( // Aligns the container to center
+        child: Container( // A simplified version of dialog. 
+          width: 244,
+          height: 111,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
+            color: const Color.fromRGBO(43, 43, 55, 1),
+          ),
+          child: Column(
+            children: [
+              const Padding(
+                padding: EdgeInsets.all(20),
+                child: Text(
+                  'パスワードが正確に変更されました！',
+                  style: TextStyle(
+                    decoration: TextDecoration.none,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Noto Sans CJK JP',
+                    fontSize:14 ,
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Center(
+                  child: TextButton(
+                    onPressed: (){
+                      // Navigator.of(content).pop(false);
+                      Navigator.of(context, rootNavigator: true).pop(false);
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginPage()));   
+                    },
+                    child: const Text(
+                      'OK',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Color.fromRGBO(95, 134, 222, 1),
+                        fontWeight: FontWeight.bold
+                      ),
+                    )
+                  ),
+                ),
+              )
+            ],
+          ),
+          )
+        )
+  );
+}
 
   @override
   Widget build(BuildContext context) {
@@ -108,16 +134,7 @@ class _LoginPageState extends State<LoginPage> {
             children: <Widget>[
               const Padding(
                 padding: EdgeInsets.only(top: 93.5),
-                child: Text(
-                  'ログイン',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'Noto Sans CJK JP',
-                      decoration: TextDecoration.none,
-                      letterSpacing: -1),
-                ),
+                child: TitleSection(name: "新しいパスワードを入力してください")
               ),
               Form(
                   key: formKey,
@@ -136,7 +153,7 @@ class _LoginPageState extends State<LoginPage> {
                                   right: 0,
                                 ),
                                 child: const Text(
-                                  'メールアドレス',
+                                  '新しいパスワード',
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontFamily: 'Noto Sans CJK JP',
@@ -146,7 +163,8 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                               ),
                               TextFormField(
-                                controller: emailController,
+                                controller: newpasswordController,
+                                obscureText: true,
                                 decoration: InputDecoration(
                                     isDense: true,
                                     filled: true,
@@ -164,8 +182,9 @@ class _LoginPageState extends State<LoginPage> {
                                             BorderRadius.circular(5))),
                               ),
                             ],
-                          )),
-                      Padding(
+                          )
+                          ),
+                          Padding(
                           padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -178,7 +197,7 @@ class _LoginPageState extends State<LoginPage> {
                                   right: 0,
                                 ),
                                 child: const Text(
-                                  'パスワード',
+                                  'パスワード確認',
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontFamily: 'Noto Sans CJK JP',
@@ -188,7 +207,7 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                               ),
                               TextFormField(
-                                controller: passwordController,
+                                controller: confirmpasswordController,
                                 obscureText: true,
                                 decoration: InputDecoration(
                                     isDense: true,
@@ -227,60 +246,9 @@ class _LoginPageState extends State<LoginPage> {
                                   const Color.fromRGBO(138, 86, 172, 1),
                             ),
                             child: const Text(
-                              'ログイン',
+                              '送信',
                               style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Noto Sans JP',
-                                  letterSpacing: -1),
-                            )),
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          MaterialButton(
-                            onPressed: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => const PasswordForgetPage()));
-                            },
-                            child: const Text(
-                              'パスワードをお忘れの方はこちら',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontFamily: 'Noto Sans CJK JP',
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w400,
-                                  letterSpacing: -2,
-                                  decoration: TextDecoration.underline,
-                                  decorationColor: Colors.white),
-                            ),
-                          )
-                        ],
-                      ),
-                      Container(
-                        width: 354,
-                        height: 47,
-                        margin: const EdgeInsets.only(
-                          left: 20,
-                          top: 40,
-                          bottom: 0,
-                          right: 20,
-                        ),
-                        child: ElevatedButton(
-                            onPressed: () {
-                              // Navigator.of(context).pushNamed("/register");
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => const RegisterPage()));
-
-                            },
-                            style: ElevatedButton.styleFrom(
-                                side: const BorderSide(
-                                    width: 2,
-                                    color: Color.fromRGBO(138, 86, 172, 1),
-                                    style: BorderStyle.solid)),
-                            child: const Text(
-                              'アカウント作成はこちら',
-                              style: TextStyle(
-                                  color: Color.fromRGBO(138, 86, 172, 1),
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
                                   fontFamily: 'Noto Sans JP',
@@ -295,20 +263,47 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
-class Album {
-  final int id;
-  final String title;
+class TitleSection extends StatelessWidget{
+  const TitleSection({
+    super.key,
+    required this.name,
+  });
+  final String name;
 
-  const Album({required this.id, required this.title});
-
-  factory Album.fromJson(Map<String, dynamic> json) {
-    return switch (json) {
-      {
-        'id': int id,
-        'title': String title,
-      } =>
-        Album(id: id, title: title),
-      _ => throw const FormatException('Failed to load album.'),
-    };
+  @override
+  Widget build(BuildContext context){
+    return Row(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left:15),
+            child:  IconButton(
+              onPressed: (){
+                Navigator.pop(context,true);
+              },
+              icon: const ImageIcon(
+                AssetImage("assets/images/before_arrow.png"),
+                color: Colors.white,
+              )
+            ) 
+          ),  
+          Expanded(
+            child: Text(
+                name,
+                textAlign:TextAlign.center,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontFamily: 'Noto Sans CJK JP',
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: -2
+                  ),
+                  softWrap: true,
+                ),
+          ),
+          const SizedBox(
+            width: 50,
+          )
+        ],
+      );
   }
 }
