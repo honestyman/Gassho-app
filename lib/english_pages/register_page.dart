@@ -1,32 +1,34 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/pages/home_page.dart';
-import 'package:flutter_app/pages/password_forgetpage.dart';
-import 'package:flutter_app/pages/questions_page.dart';
-import 'package:http/http.dart' as http;
+import 'package:flutter_app/english_pages/login_page.dart';
+import 'package:flutter_app/english_pages/plan_page.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart' as http;
 
 void main() {
   runApp(
     const MaterialApp(
-      home: LoginPage(),
+      home: EnRegisterPage(),
     ),
   );
 }
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class EnRegisterPage extends StatefulWidget {
+  const EnRegisterPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<EnRegisterPage> createState() => _EnRegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _EnRegisterPageState extends State<EnRegisterPage> {
   final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  bool light=true;
   // String _username, _password;
-  final apiUrl = "http://localhost:5000/api/auth/";
+  // final Dio _dio=Dio();
+  final apiUrl = "http://localhost:5000/api/user/";
+  TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
@@ -37,47 +39,31 @@ class _LoginPageState extends State<LoginPage> {
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, String>{
+        'name': nameController.text,
         'email': emailController.text,
         'password': passwordController.text,
       }),
     );
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200) { 
       const storage = FlutterSecureStorage();
       // String? reasons=await storage.read(key: 'reasons');
-      // String? introductions=await storage.read(key: 'introductions');
-      // await storage.deleteAll();
+      // ignore: use_build_context_synchronously
       // await storage.delete(key: 'reasons');
-      // await storage.delete(key: 'introductions');
       final token = jsonDecode(response.body)['token'];
       await storage.write(key: 'jwt', value: token);
       await storage.write(key: 'email', value: emailController.text);
-
-        // ignore: use_build_context_synchronously
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => const HomeApp()));   
-      //    
-    } else {
-       var error = String.fromCharCodes(response.bodyBytes);
-      final string=jsonDecode(error);
-      var str;
-      if(string=="Please include a valid Email"){
-         str="有効なメールアドレスを入力してください";
-      }
-      if(string=="Password is required"){
-         str="パスワードが必要です";
-      }
-      if(string=="Invalid Credentials"){
-         str="無効な資格情報";
-      }
-      if(string=="Server Error"){
-         str="サーバーエラー";
-      }
+      await storage.write(key: 'notification', value: light.toString());
       // ignore: use_build_context_synchronously
-      showDialog(
+      Navigator.push(context, MaterialPageRoute(builder: (context) => const EnPlanPage()));
+    } else {
+      final error = String.fromCharCodes(response.bodyBytes);
+        final string=jsonDecode(error);
+        // ignore: use_build_context_synchronously
+        showDialog(
         context: context,
         builder: (context) => AlertDialog(
           title: const Text('Error'),
-          content: Text(str),
+          content: Text(string),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
@@ -105,14 +91,14 @@ class _LoginPageState extends State<LoginPage> {
               const Padding(
                 padding: EdgeInsets.only(top: 93.5),
                 child: Text(
-                  'ログイン',
+                  'Create account',
                   style: TextStyle(
                       color: Colors.white,
-                      fontSize: 18,
+                      fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      fontFamily: 'Noto Sans CJK JP',
-                      decoration: TextDecoration.none,
-                      letterSpacing: -1),
+                      fontFamily: 'Lato',
+                      decoration: TextDecoration.none
+                      ),
                 ),
               ),
               Form(
@@ -132,13 +118,54 @@ class _LoginPageState extends State<LoginPage> {
                                   right: 0,
                                 ),
                                 child: const Text(
-                                  'メールアドレス',
+                                  'Name',
                                   style: TextStyle(
                                       color: Colors.white,
-                                      fontFamily: 'Noto Sans CJK JP',
+                                      fontFamily: 'Lato',
                                       fontSize: 14,
-                                      fontWeight: FontWeight.w400,
-                                      letterSpacing: -1),
+                                      fontWeight: FontWeight.w400),
+                                ),
+                              ),
+                              TextFormField(
+                                controller: nameController,
+                                decoration: InputDecoration(
+                                    isDense: true,
+                                    filled: true,
+                                    fillColor: Colors.white,
+                                    // floatingLabelBehavior: FloatingLabelBehavior.always,
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide:
+                                          const BorderSide(color: Colors.white),
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                        borderSide: const BorderSide(
+                                            color: Colors.white),
+                                        borderRadius:
+                                            BorderRadius.circular(5))),
+                              ),
+                            ],
+                          )),
+                      Padding(
+                          padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                margin: const EdgeInsets.only(
+                                  left: 0,
+                                  top: 0,
+                                  bottom: 9,
+                                  right: 0,
+                                ),
+                                child: const Text(
+                                  'Email',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: 'Lato',
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w400
+                                      ),
                                 ),
                               ),
                               TextFormField(
@@ -174,13 +201,13 @@ class _LoginPageState extends State<LoginPage> {
                                   right: 0,
                                 ),
                                 child: const Text(
-                                  'パスワード',
+                                  'Password',
                                   style: TextStyle(
                                       color: Colors.white,
-                                      fontFamily: 'Noto Sans CJK JP',
+                                      fontFamily: 'Lato',
                                       fontSize: 14,
                                       fontWeight: FontWeight.w400,
-                                      letterSpacing: -1),
+                                      ),
                                 ),
                               ),
                               TextFormField(
@@ -215,78 +242,58 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         child: ElevatedButton(
                             onPressed: () {
-                              //  Navigator.of(context).pushNamed('/home');
                               sendPostRequest();
                             },
+
+                            // () {
+                            //
+                            // },
                             style: ElevatedButton.styleFrom(
                               backgroundColor:
                                   const Color.fromRGBO(138, 86, 172, 1),
                             ),
                             child: const Text(
-                              'ログイン',
+                              'Continue',
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
-                                  fontFamily: 'Noto Sans JP',
-                                  letterSpacing: -1),
+                                  fontFamily: 'Lato'
+                                  ),
                             )),
                       ),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
+                          const Text(
+                            'If you have an account already',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'Lato',
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400),
+                          ),
                           MaterialButton(
                             onPressed: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => const PasswordForgetPage()));
+                              // Navigator.of(context).pushNamed("/login");
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const EnLoginPage()));
                             },
                             child: const Text(
-                              'パスワードをお忘れの方はこちら',
+                              'Log in here',
                               style: TextStyle(
                                   color: Colors.white,
-                                  fontFamily: 'Noto Sans CJK JP',
-                                  fontSize: 14,
+                                  fontFamily: 'Lato',
+                                  fontSize: 16,
                                   fontWeight: FontWeight.w400,
-                                  letterSpacing: -2,
                                   decoration: TextDecoration.underline,
                                   decorationColor: Colors.white),
                             ),
                           )
                         ],
-                      ),
-                      Container(
-                        width: 354,
-                        height: 47,
-                        margin: const EdgeInsets.only(
-                          left: 20,
-                          top: 40,
-                          bottom: 0,
-                          right: 20,
-                        ),
-                        child: ElevatedButton(
-                            onPressed: () {
-                              // Navigator.of(context).pushNamed("/question");
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const QuestionsApp()));
-                              // Navigator.push(context, MaterialPageRoute(builder: (context) => const RegisterPage()));
-
-                            },
-                            style: ElevatedButton.styleFrom(
-                                side: const BorderSide(
-                                    width: 2,
-                                    color: Color.fromRGBO(138, 86, 172, 1),
-                                    style: BorderStyle.solid)),
-                            child: const Text(
-                              'アカウント作成はこちら',
-                              style: TextStyle(
-                                  color: Color.fromRGBO(138, 86, 172, 1),
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Noto Sans JP',
-                                  letterSpacing: -1),
-                            )),
-                      ),
+                      )
                     ],
                   )),
             ],

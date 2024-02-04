@@ -3,25 +3,25 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/pages/audio_page.dart';
+import 'package:flutter_app/english_pages/audio_page.dart';
+import 'package:flutter_app/english_pages/video_page.dart';
 import 'package:flutter_app/pages/send_data.dart';
-import 'package:flutter_app/pages/video_page.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 void main() {
-  runApp(const LikePageApp());
+  runApp(const EnLikePageApp());
 }
 
-class LikePageApp extends StatefulWidget {
-  const LikePageApp({super.key});
-  static const routeName = '/likepage';
+class EnLikePageApp extends StatefulWidget {
+  const EnLikePageApp({super.key});
+  static const routeName = '/en_likepage';
 
   @override
-  State<LikePageApp> createState() => _LikePageAppState();
+  State<EnLikePageApp> createState() => _EnLikePageAppState();
 }
 
-class _LikePageAppState extends State<LikePageApp> {
+class _EnLikePageAppState extends State<EnLikePageApp> {
   Future<List<Data>> getRequest() async {
     const storage=FlutterSecureStorage();
     String? email=await storage.read(key: 'email');
@@ -68,20 +68,20 @@ class _LikePageAppState extends State<LikePageApp> {
                         padding: const EdgeInsets.only(left: 13),
                         child: IconButton(
                             onPressed: () {
-                              Navigator.of(context).pushNamed('/mypage');
+                              Navigator.of(context).pushNamed('/en_mypage');
                             },
                             icon: const ImageIcon(
                               AssetImage("assets/images/before_arrow.png"),
                               color: Colors.white,
                             ))),
                     const SizedBox(
-                      width: 90,
+                      width: 100,
                     ),
                     const Text(
-                      'お気に入り',
+                      'Favorites',
                       style: TextStyle(
                           color: Colors.white,
-                          fontFamily: 'Noto Sans CJK JP',
+                          fontFamily: 'Nato',
                           fontSize: 20,
                           fontWeight: FontWeight.bold),
                       softWrap: true,
@@ -105,25 +105,13 @@ class _LikePageAppState extends State<LikePageApp> {
                               itemCount: snapshot.data.length,
                               itemBuilder: (ctx, index) => MaterialButton(
                                   onPressed: () {
-                                    if (snapshot.data[index].type == '音声') {
-                                      Navigator.pushNamed(
-                                          context, AudioPlayPage.routeName,
-                                          arguments: SendDatas(
-                                              snapshot.data[index].id,
-                                              snapshot.data[index].title,
-                                              snapshot.data[index].time,
-                                              snapshot.data[index].description,
-                                              snapshot.data[index].filename));
-                                    } else {
-                                      Navigator.pushNamed(
-                                          context, VideoPlayPage.routeName,
-                                          arguments: SendDatas(
-                                              snapshot.data[index].id,
-                                              snapshot.data[index].title,
-                                              snapshot.data[index].time,
-                                              snapshot.data[index].description,
-                                              snapshot.data[index].filename));
-                                    }
+                                    if(snapshot.data[index].type=='音声'){
+                                  Navigator.pushNamed(context, EnAudioPlayPage.routeName,
+                                      arguments: SendDatas(snapshot.data[index].id, snapshot.data[index].title, snapshot.data[index].time, snapshot.data[index].description, snapshot.data[index].filename));
+                                }else{
+                                  Navigator.pushNamed(context, EnVideoPlayPage.routeName,
+                                      arguments: SendDatas(snapshot.data[index].id, snapshot.data[index].title, snapshot.data[index].time, snapshot.data[index].description, snapshot.data[index].filename));
+                                }
                                   },
                                   child: DataListItem(
                                       title: snapshot.data[index].title,
@@ -163,11 +151,12 @@ class _LikePageAppState extends State<LikePageApp> {
                                     color: Colors.black45,
                                   ),
                                   Text(
-                                    'ホーム',
+                                    'Home',
                                     style: TextStyle(
                                         color: Colors.black,
-                                        fontFamily: 'Noto Sans CJK JP',
+                                        fontFamily: 'Nato',
                                         fontSize: 10,
+                                        letterSpacing: 1,
                                         fontWeight: FontWeight.w400),
                                   )
                                 ]),
@@ -177,7 +166,7 @@ class _LikePageAppState extends State<LikePageApp> {
                               width: 97.5,
                               child: MaterialButton(
                                 onPressed: () {
-                                  Navigator.of(context).pushNamed('/search');
+                                  Navigator.of(context).pushNamed('/en_search');
                                 },
                                 child: const Column(children: [
                                   Icon(
@@ -185,11 +174,12 @@ class _LikePageAppState extends State<LikePageApp> {
                                     color: Colors.black45,
                                   ),
                                   Text(
-                                    'さがす',
+                                    'Find',
                                     style: TextStyle(
                                         color: Colors.black,
-                                        fontFamily: 'Noto Sans CJK JP',
+                                        fontFamily: 'Nato',
                                         fontSize: 10,
+                                        letterSpacing: 1,
                                         fontWeight: FontWeight.w400),
                                   )
                                 ]),
@@ -200,7 +190,7 @@ class _LikePageAppState extends State<LikePageApp> {
                               width: 97.5,
                               child: MaterialButton(
                                 onPressed: () {
-                                  Navigator.of(context).pushNamed('/mypage');
+                                  Navigator.of(context).pushNamed('/en_mypage');
                                 },
                                 child: const Column(children: [
                                   ImageIcon(
@@ -209,11 +199,12 @@ class _LikePageAppState extends State<LikePageApp> {
                                     color: Colors.black,
                                   ),
                                   Text(
-                                    'マイページ',
+                                    'My Page',
                                     style: TextStyle(
                                         color: Colors.black,
-                                        fontFamily: 'Noto Sans CJK JP',
+                                        fontFamily: 'Nato',
                                         fontSize: 10,
+                                        letterSpacing: 1,
                                         fontWeight: FontWeight.w400),
                                   )
                                 ]),
@@ -223,7 +214,7 @@ class _LikePageAppState extends State<LikePageApp> {
                               width: 97.5,
                               child: MaterialButton(
                                 onPressed: () {
-                                  Navigator.of(context).pushNamed('/setting');
+                                  Navigator.of(context).pushNamed('/en_setting');
                                 },
                                 child: const Column(children: [
                                   Icon(
@@ -231,11 +222,12 @@ class _LikePageAppState extends State<LikePageApp> {
                                     color: Colors.black45,
                                   ),
                                   Text(
-                                    '設定',
+                                    'Settings',
                                     style: TextStyle(
                                         color: Colors.black,
-                                        fontFamily: 'Noto Sans CJK JP',
+                                        fontFamily: 'Nato',
                                         fontSize: 10,
+                                        letterSpacing: 1,
                                         fontWeight: FontWeight.w400),
                                   )
                                 ]),
@@ -302,7 +294,7 @@ class DataListItem extends StatelessWidget {
                   textAlign: TextAlign.left,
                   style: const TextStyle(
                       color: Color.fromRGBO(138, 86, 172, 1),
-                      fontFamily: 'Noto Sans CJK JP',
+                      fontFamily: 'Nato',
                       fontWeight: FontWeight.w400,
                       fontSize: 12,
                       letterSpacing: -1),
@@ -313,7 +305,7 @@ class DataListItem extends StatelessWidget {
                   textAlign: TextAlign.left,
                   style: const TextStyle(
                       color: Colors.white,
-                      fontFamily: 'Noto Sans CJK JP',
+                      fontFamily: 'Nato',
                       fontWeight: FontWeight.bold,
                       fontSize: 14,
                       letterSpacing: -1),
@@ -329,7 +321,7 @@ class DataListItem extends StatelessWidget {
                           time,
                           style: const TextStyle(
                             color: Colors.white,
-                            fontFamily: 'Noto Sans CJK JP',
+                            fontFamily: 'Nato',
                             fontWeight: FontWeight.w400,
                             fontSize: 12,
                           ),
@@ -390,7 +382,7 @@ class TitleSection extends StatelessWidget {
             color: Colors.white,
             fontSize: 20,
             letterSpacing: -2,
-            fontFamily: 'Noto Sans JP'),
+            fontFamily: 'Nato'),
       ),
     );
   }

@@ -1,25 +1,25 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/pages/home_page.dart';
+import 'package:flutter_app/english_pages/register_page.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 void main() {
   runApp(
     const MaterialApp(
-      home: QuestionnairesApp(),
+      home: EnQuestionsApp(),
     ),
   );
 }
 
-class QuestionnairesApp extends StatelessWidget {
-  const QuestionnairesApp({super.key});
+class EnQuestionsApp extends StatelessWidget {
+  const EnQuestionsApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: QuestionnarePage(),
+      home: HomePage(),
     );
   }
 }
@@ -30,61 +30,39 @@ class Question {
   final String text;
 }
 
-class QuestionnarePage extends StatefulWidget {
-  const QuestionnarePage({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
   // ignore: library_private_types_in_public_api
-  _QuestionnarePageState createState() => _QuestionnarePageState();
+  _HomePageState createState() => _HomePageState();
 }
 
-class _QuestionnarePageState extends State<QuestionnarePage> {
+class _HomePageState extends State<HomePage> {
 //Applying get request.
   final List<String> _shoppingCart = [];
 
-  void writeIntroductionStorage() async{
+  void writeStorage() {
     const storage = FlutterSecureStorage();
-    storage.write(key: 'introductions', value: jsonEncode(_shoppingCart));
-    String? reasons=await storage.read(key: 'reasons');
-    String? introductions=await storage.read(key: 'introductions');
-    String? email=await storage.read(key: 'email');
-    await storage.delete(key: 'reasons');
-    await storage.delete(key: 'introductions');
-    
-    if(reasons!=null && introductions!=null){
-          List<dynamic> listReasons=jsonDecode(reasons);
-          List<dynamic> listIntroductions=jsonDecode(introductions);
-
-      // ignore: unused_local_variable
-          final reasonData= await http.post(Uri.parse('http://localhost:5000/api/reasons/user_reasons/add'),
-            headers: <String, String>{
-              'Content-Type': 'application/json; charset=UTF-8',
-            },
-            body: jsonEncode(<String, String>{
-              'email': email.toString(),
-              'reasons': jsonEncode(listReasons),
-              'introductions': jsonEncode(listIntroductions),         
-            })
-          );
-       }  
+    storage.write(key: 'reasons', value: jsonEncode(_shoppingCart));
   }
 
   Future<List<Question>> getRequest() async {
     //replace your restFull API here.
-    String url = "http://localhost:5000/api/introductions/";
+    String url = "http://localhost:5000/api/reasons/";
     final response = await http.get(Uri.parse(url));
 
     var responseData = json.decode(response.body);
 
     //Creating a list to store input data;
-    List<Question> questionnares = [];
+    List<Question> questions = [];
     for (var singleQuestion in responseData) {
-      Question question = Question(text: singleQuestion["text"]);
+      Question question = Question(text: singleQuestion["en_text"]);
 
       //Adding question to the list.
-      questionnares.add(question);
+      questions.add(question);
     }
-    return questionnares;
+    return questions;
   }
 
   void _handleCartChanged(String text, bool inChecked) {
@@ -122,7 +100,7 @@ class _QuestionnarePageState extends State<QuestionnarePage> {
           child: Expanded(
             child: Column(
               children: [
-                const TitleSection(name: '『合掌』を何で知りましたか？'),
+                const TitleSection(name: 'Why are you interested in "GASSHO"?'),
                 Flexible(
                   child: FutureBuilder(
                     future: getRequest(),
@@ -155,15 +133,19 @@ class _QuestionnarePageState extends State<QuestionnarePage> {
                   ),
                   child: ElevatedButton(
                       onPressed: () {
+                        writeStorage();
                         // Navigator.of(context).pushNamed("/register");
-                        writeIntroductionStorage();
-                        Navigator.push(context,MaterialPageRoute(builder: (context) => const HomeApp()));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const EnRegisterPage()));
+                        // getReason();
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color.fromRGBO(138, 86, 172, 1),
                       ),
                       child: const Text(
-                        '続ける',
+                        'Continue',
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 14,
@@ -246,21 +228,24 @@ class QuestionListItem extends StatelessWidget {
             bottom: 8,
             right: 18,
           ),
+          padding: const EdgeInsets.all(5),
           child: Row(
             children: [
               Expanded(
                   child: Padding(
                 padding: const EdgeInsets.only(left: 18.0),
-                child: Text(
-                  text,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                      color: Colors.white,
-                      fontFamily: 'Noto Sans CJK JP',
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      letterSpacing: -1),
-                  softWrap: true,
+                child: Center(
+                  child: Text(
+                    text,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'Lato',
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400
+                        ),
+                    softWrap: true,
+                  ),
                 ),
               )),
               Padding(
@@ -291,16 +276,14 @@ class TitleSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 93.5, 0, 38),
+      padding: const EdgeInsets.fromLTRB(18, 93.5, 18, 38),
       child: Text(
         name,
-        textAlign: TextAlign.center,
         style: const TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.white,
-            fontSize: 18,
-            letterSpacing: -2,
-            fontFamily: 'Noto Sans CJK JP'),
+            fontSize: 20,
+            fontFamily: 'Lato'),
       ),
     );
   }

@@ -3,29 +3,29 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/pages/audio_page.dart';
+import 'package:flutter_app/english_pages/audio_page.dart';
+import 'package:flutter_app/english_pages/video_page.dart';
 import 'package:flutter_app/pages/send_data.dart';
-import 'package:flutter_app/pages/video_page.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 void main() {
-  runApp(const LikePageApp());
+  runApp(const EnDownloadPageApp());
 }
 
-class LikePageApp extends StatefulWidget {
-  const LikePageApp({super.key});
-  static const routeName = '/likepage';
+class EnDownloadPageApp extends StatefulWidget {
+  const EnDownloadPageApp({super.key});
+  static const routeName = '/en_downloadpage';
 
   @override
-  State<LikePageApp> createState() => _LikePageAppState();
+  State<EnDownloadPageApp> createState() => _EnDownloadPageAppState();
 }
 
-class _LikePageAppState extends State<LikePageApp> {
+class _EnDownloadPageAppState extends State<EnDownloadPageApp> {
   Future<List<Data>> getRequest() async {
-    const storage=FlutterSecureStorage();
-    String? email=await storage.read(key: 'email');
-    String url = "http://localhost:5000/api/items/getlike?email=$email";
+    const storage = FlutterSecureStorage();
+    String? email = await storage.read(key: 'email');
+    String url = "http://localhost:5000/api/items/getdownload?email=$email";
     final response = await http.get(Uri.parse(url));
     var reasonData = json.decode(response.body);
     List<Data> items = [];
@@ -68,20 +68,20 @@ class _LikePageAppState extends State<LikePageApp> {
                         padding: const EdgeInsets.only(left: 13),
                         child: IconButton(
                             onPressed: () {
-                              Navigator.of(context).pushNamed('/mypage');
+                              Navigator.of(context).pushNamed('/en_mypage');
                             },
                             icon: const ImageIcon(
                               AssetImage("assets/images/before_arrow.png"),
                               color: Colors.white,
                             ))),
                     const SizedBox(
-                      width: 90,
+                      width: 100,
                     ),
                     const Text(
-                      'お気に入り',
+                      'Downloads',
                       style: TextStyle(
                           color: Colors.white,
-                          fontFamily: 'Noto Sans CJK JP',
+                          fontFamily: 'Nato',
                           fontSize: 20,
                           fontWeight: FontWeight.bold),
                       softWrap: true,
@@ -107,7 +107,7 @@ class _LikePageAppState extends State<LikePageApp> {
                                   onPressed: () {
                                     if (snapshot.data[index].type == '音声') {
                                       Navigator.pushNamed(
-                                          context, AudioPlayPage.routeName,
+                                          context, EnAudioPlayPage.routeName,
                                           arguments: SendDatas(
                                               snapshot.data[index].id,
                                               snapshot.data[index].title,
@@ -116,7 +116,7 @@ class _LikePageAppState extends State<LikePageApp> {
                                               snapshot.data[index].filename));
                                     } else {
                                       Navigator.pushNamed(
-                                          context, VideoPlayPage.routeName,
+                                          context, EnVideoPlayPage.routeName,
                                           arguments: SendDatas(
                                               snapshot.data[index].id,
                                               snapshot.data[index].title,
@@ -163,11 +163,12 @@ class _LikePageAppState extends State<LikePageApp> {
                                     color: Colors.black45,
                                   ),
                                   Text(
-                                    'ホーム',
+                                    'Home',
                                     style: TextStyle(
                                         color: Colors.black,
-                                        fontFamily: 'Noto Sans CJK JP',
+                                        fontFamily: 'Nato',
                                         fontSize: 10,
+                                        letterSpacing: 1,
                                         fontWeight: FontWeight.w400),
                                   )
                                 ]),
@@ -177,7 +178,7 @@ class _LikePageAppState extends State<LikePageApp> {
                               width: 97.5,
                               child: MaterialButton(
                                 onPressed: () {
-                                  Navigator.of(context).pushNamed('/search');
+                                  Navigator.of(context).pushNamed('/en_search');
                                 },
                                 child: const Column(children: [
                                   Icon(
@@ -185,11 +186,12 @@ class _LikePageAppState extends State<LikePageApp> {
                                     color: Colors.black45,
                                   ),
                                   Text(
-                                    'さがす',
+                                    'Find',
                                     style: TextStyle(
                                         color: Colors.black,
-                                        fontFamily: 'Noto Sans CJK JP',
+                                        fontFamily: 'Nato',
                                         fontSize: 10,
+                                        letterSpacing: 1,
                                         fontWeight: FontWeight.w400),
                                   )
                                 ]),
@@ -200,7 +202,7 @@ class _LikePageAppState extends State<LikePageApp> {
                               width: 97.5,
                               child: MaterialButton(
                                 onPressed: () {
-                                  Navigator.of(context).pushNamed('/mypage');
+                                  Navigator.of(context).pushNamed('/en_mypage');
                                 },
                                 child: const Column(children: [
                                   ImageIcon(
@@ -209,11 +211,12 @@ class _LikePageAppState extends State<LikePageApp> {
                                     color: Colors.black,
                                   ),
                                   Text(
-                                    'マイページ',
+                                    'My page',
                                     style: TextStyle(
                                         color: Colors.black,
-                                        fontFamily: 'Noto Sans CJK JP',
+                                        fontFamily: 'Nato',
                                         fontSize: 10,
+                                        letterSpacing: 1,
                                         fontWeight: FontWeight.w400),
                                   )
                                 ]),
@@ -223,7 +226,7 @@ class _LikePageAppState extends State<LikePageApp> {
                               width: 97.5,
                               child: MaterialButton(
                                 onPressed: () {
-                                  Navigator.of(context).pushNamed('/setting');
+                                  Navigator.of(context).pushNamed('/en_setting');
                                 },
                                 child: const Column(children: [
                                   Icon(
@@ -231,11 +234,12 @@ class _LikePageAppState extends State<LikePageApp> {
                                     color: Colors.black45,
                                   ),
                                   Text(
-                                    '設定',
+                                    'Settings',
                                     style: TextStyle(
                                         color: Colors.black,
-                                        fontFamily: 'Noto Sans CJK JP',
+                                        fontFamily: 'Nato',
                                         fontSize: 10,
+                                        letterSpacing: 1,
                                         fontWeight: FontWeight.w400),
                                   )
                                 ]),
@@ -302,7 +306,7 @@ class DataListItem extends StatelessWidget {
                   textAlign: TextAlign.left,
                   style: const TextStyle(
                       color: Color.fromRGBO(138, 86, 172, 1),
-                      fontFamily: 'Noto Sans CJK JP',
+                      fontFamily: 'Nato',
                       fontWeight: FontWeight.w400,
                       fontSize: 12,
                       letterSpacing: -1),
@@ -313,7 +317,7 @@ class DataListItem extends StatelessWidget {
                   textAlign: TextAlign.left,
                   style: const TextStyle(
                       color: Colors.white,
-                      fontFamily: 'Noto Sans CJK JP',
+                      fontFamily: 'Nato',
                       fontWeight: FontWeight.bold,
                       fontSize: 14,
                       letterSpacing: -1),
@@ -329,7 +333,7 @@ class DataListItem extends StatelessWidget {
                           time,
                           style: const TextStyle(
                             color: Colors.white,
-                            fontFamily: 'Noto Sans CJK JP',
+                            fontFamily: 'Nato',
                             fontWeight: FontWeight.w400,
                             fontSize: 12,
                           ),
@@ -390,9 +394,8 @@ class TitleSection extends StatelessWidget {
             color: Colors.white,
             fontSize: 20,
             letterSpacing: -2,
-            fontFamily: 'Noto Sans JP'),
+            fontFamily: 'Nato'),
       ),
     );
   }
 }
-

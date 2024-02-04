@@ -1,66 +1,62 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/pages/verify_page.dart';
+import 'package:flutter_app/pages/login_page.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 void main() {
   runApp(
     const MaterialApp(
-      home: PasswordForgetPage(),
+      home: NewPasswordPage(),
     ),
   );
 }
 
-class PasswordForgetPage extends StatefulWidget {
-  const PasswordForgetPage({super.key});
+class NewPasswordPage extends StatefulWidget {
+  const NewPasswordPage({super.key});
 
   @override
-  State<PasswordForgetPage> createState() => _PasswordForgetPageState();
+  State<NewPasswordPage> createState() => _NewPasswordPageState();
 }
 
-class _PasswordForgetPageState extends State<PasswordForgetPage> {
+class _NewPasswordPageState extends State<NewPasswordPage> {
   final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
   // String _username, _password;
-  final apiUrl = "http://localhost:5000/api/auth/forget_password";
-  TextEditingController emailController = TextEditingController();
+  final apiUrl = "http://localhost:5000/api/auth/new_password";
+  TextEditingController newpasswordController = TextEditingController();
+  TextEditingController confirmpasswordController = TextEditingController();
 
   Future<void> sendPostRequest() async {
+    const storage = FlutterSecureStorage();
+    String? email=await storage.read(key: 'email');
     final response = await http.post(
       Uri.parse(apiUrl),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, String>{
-        'email': emailController.text
+        'email': email.toString(),
+        'newpassword': newpasswordController.text,
+        'confirm':confirmpasswordController.text
       }),
     );
     if (response.statusCode == 200) {
       const storage = FlutterSecureStorage();
-      await storage.write(key: 'email', value: emailController.text);
+      await storage.delete(key: 'email');
         // ignore: use_build_context_synchronously
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => const VerifyPage()));   
+        showAlertDialog(context);
           
     } else {
        var error = String.fromCharCodes(response.bodyBytes);
       final string=jsonDecode(error);
-      // ignore: prefer_typing_uninitialized_variables
-      var str;
-        if(string=="Please include a valid Email"){
-          str="有効なメールアドレスを入力してください";
-        }
-        if(string=="Server Error"){
-          str="サーバーエラー";
-          }
       // ignore: use_build_context_synchronously
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
           title: const Text('Error'),
-          content: Text(str),
+          content: Text(string),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
@@ -71,6 +67,57 @@ class _PasswordForgetPageState extends State<PasswordForgetPage> {
       );
     }
   }
+  showAlertDialog(BuildContext context){
+    showDialog(
+      context: context,
+      builder: (_) => Center( // Aligns the container to center
+        child: Container( // A simplified version of dialog. 
+          width: 244,
+          height: 111,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
+            color: const Color.fromRGBO(43, 43, 55, 1),
+          ),
+          child: Column(
+            children: [
+              const Padding(
+                padding: EdgeInsets.all(20),
+                child: Text(
+                  'パスワードが正確に変更されました！',
+                  style: TextStyle(
+                    decoration: TextDecoration.none,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Noto Sans CJK JP',
+                    fontSize:14 ,
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Center(
+                  child: TextButton(
+                    onPressed: (){
+                      // Navigator.of(content).pop(false);
+                      Navigator.of(context, rootNavigator: true).pop(false);
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginPage()));   
+                    },
+                    child: const Text(
+                      'OK',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Color.fromRGBO(95, 134, 222, 1),
+                        fontWeight: FontWeight.bold
+                      ),
+                    )
+                  ),
+                ),
+              )
+            ],
+          ),
+          )
+        )
+  );
+}
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +134,7 @@ class _PasswordForgetPageState extends State<PasswordForgetPage> {
             children: <Widget>[
               const Padding(
                 padding: EdgeInsets.only(top: 93.5),
-                child: TitleSection(name: "パスワードをお忘れの方") 
+                child: TitleSection(name: "新しいパスワードを入力してください")
               ),
               Form(
                   key: formKey,
@@ -106,7 +153,7 @@ class _PasswordForgetPageState extends State<PasswordForgetPage> {
                                   right: 0,
                                 ),
                                 child: const Text(
-                                  'メールアドレス',
+                                  '新しいパスワード',
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontFamily: 'Noto Sans CJK JP',
@@ -116,7 +163,52 @@ class _PasswordForgetPageState extends State<PasswordForgetPage> {
                                 ),
                               ),
                               TextFormField(
-                                controller: emailController,
+                                controller: newpasswordController,
+                                obscureText: true,
+                                decoration: InputDecoration(
+                                    isDense: true,
+                                    filled: true,
+                                    fillColor: Colors.white,
+                                    // floatingLabelBehavior: FloatingLabelBehavior.always,
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide:
+                                          const BorderSide(color: Colors.white),
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                        borderSide: const BorderSide(
+                                            color: Colors.white),
+                                        borderRadius:
+                                            BorderRadius.circular(5))),
+                              ),
+                            ],
+                          )
+                          ),
+                          Padding(
+                          padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                margin: const EdgeInsets.only(
+                                  left: 0,
+                                  top: 0,
+                                  bottom: 9,
+                                  right: 0,
+                                ),
+                                child: const Text(
+                                  'パスワード確認',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: 'Noto Sans CJK JP',
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w400,
+                                      letterSpacing: -1),
+                                ),
+                              ),
+                              TextFormField(
+                                controller: confirmpasswordController,
+                                obscureText: true,
                                 decoration: InputDecoration(
                                     isDense: true,
                                     filled: true,
@@ -203,7 +295,7 @@ class TitleSection extends StatelessWidget{
                   fontFamily: 'Noto Sans CJK JP',
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  letterSpacing: -1
+                  letterSpacing: -2
                   ),
                   softWrap: true,
                 ),

@@ -199,7 +199,9 @@ class _PlayPageAppState extends State<PlayPageApp> {
                                 child: SizedBox(
                               width: 97.5,
                               child: MaterialButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.of(context).pushNamed('/mypage');
+                                },
                                 child: const Column(children: [
                                   ImageIcon(
                                     AssetImage("assets/images/mypage.png"),

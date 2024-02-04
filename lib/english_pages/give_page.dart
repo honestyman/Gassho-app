@@ -1,24 +1,23 @@
 import 'package:flutter/material.dart';
-// import 'package:flutter_app/pages/send_data.dart';
 
 void main() {
   runApp(
     const MaterialApp(
-      home: GivePage(),
+      home: EnGivePage(),
     ),
   );
 }
 
-class GivePage extends StatefulWidget {
-  const GivePage({super.key});
+class EnGivePage extends StatefulWidget {
+  const EnGivePage({super.key});
 
   static const routeName = '/give';
 
   @override
-  State<GivePage> createState() => _GivePageState();
+  State<EnGivePage> createState() => _EnGivePageState();
 }
 
-class _GivePageState extends State<GivePage> {
+class _EnGivePageState extends State<EnGivePage> {
   final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
   TextEditingController first = TextEditingController();
@@ -43,7 +42,7 @@ class _GivePageState extends State<GivePage> {
         context: context,
         builder: (context) => AlertDialog(
           title: const Text('Error'),
-          content: const Text('入力データが正しくありません。'),
+          content: const Text('The input data is incorrect.'),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
@@ -55,7 +54,7 @@ class _GivePageState extends State<GivePage> {
     }
   if(result!=0 && flag==true){
         result=result*100;
-       final String string='このお寺に$result円をお布施しますか？';
+       final String string='Would you like to donate $result yen to this temple?';
        showDialog(
       context: context,
       builder: (_) => Center(
@@ -63,7 +62,7 @@ class _GivePageState extends State<GivePage> {
               child: Container(
             // A simplified version of dialog.
             width: 244,
-            height: 111,
+            height: 140,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5),
               color: const Color.fromRGBO(43, 43, 55, 1),
@@ -71,27 +70,27 @@ class _GivePageState extends State<GivePage> {
             child: Column(
               children: [
                 const Padding(
-                  padding: EdgeInsets.only(top: 15),
+                  padding: EdgeInsets.all(15),
                   child: Text(
-                    'このお寺にご志納をする',
+                    'Make a donation to this temple',
                     style: TextStyle(
                       decoration: TextDecoration.none,
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
-                      fontFamily: 'Noto Sans CJK JP',
+                      fontFamily: 'Nato',
                       fontSize: 14,
                     ),
                   ),
                 ),
                  Padding(
-                  padding: const EdgeInsets.only(top: 5),
+                  padding: const EdgeInsets.only(top: 5, left:15, right: 15),
                   child: Text(
                     string,
                     style: const TextStyle(
                         decoration: TextDecoration.none,
                         color: Colors.white,
                         fontWeight: FontWeight.w400,
-                        fontFamily: 'Noto Sans CJK JP',
+                        fontFamily: 'Nato',
                         fontSize: 13,
                         letterSpacing: -1),
                   ),
@@ -150,7 +149,6 @@ class _GivePageState extends State<GivePage> {
 
   @override
   Widget build(BuildContext context) {
-    // final args=ModalRoute.of(context)!.settings.arguments as SendDatas;
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
@@ -190,10 +188,10 @@ class _GivePageState extends State<GivePage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'このお寺にご志納をする',
+                      'Make a donation to this temple',
                       style: TextStyle(
                           color: Colors.white,
-                          fontFamily: 'Noto Sans JP',
+                          fontFamily: 'Nato',
                           fontSize: 20,
                           fontWeight: FontWeight.bold),
                     ),
@@ -205,19 +203,19 @@ class _GivePageState extends State<GivePage> {
                       ),
                     ),
                     Text(
-                      '感謝の気持ちをこめて\n高野山真言宗 別格本山 金剛三昧院に\nお志を納められます',
+                      'With gratitude, you can make a donation to Kongosanmai-in, special head temple of the Koyasan Shingon Sect',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           color: Colors.white,
-                          fontFamily: 'Noto Sans JP',
+                          fontFamily: 'Nato',
                           fontSize: 14,
                           fontWeight: FontWeight.w400),
                     ),
                     Text(
-                      '（決済手数料などの諸経費を差し引いた金額が納められます。）',
+                      '（The amount donated will be net of any transaction fees and related expenses）',
                       style: TextStyle(
                           color: Colors.white,
-                          fontFamily: 'Noto Sans JP',
+                          fontFamily: 'Nato',
                           fontSize: 11,
                           fontWeight: FontWeight.w400),
                     ),
@@ -302,7 +300,7 @@ class _GivePageState extends State<GivePage> {
                       '00円',
                       style: TextStyle(
                           color: Colors.white,
-                          fontFamily: 'Noto Sans JP',
+                          fontFamily: 'Nato',
                           fontSize: 24,
                           fontWeight: FontWeight.w500,
                           letterSpacing: 11),
@@ -323,12 +321,12 @@ class _GivePageState extends State<GivePage> {
                       backgroundColor: const Color.fromRGBO(138, 86, 172, 1),
                     ),
                     child: const Text(
-                      'ご志納をする',
+                      'Make a donation',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
-                        fontFamily: 'Noto Sans JP ',
+                        fontFamily: 'Nato ',
                       ),
                     )),
               ),
@@ -340,98 +338,6 @@ class _GivePageState extends State<GivePage> {
   }
 }
 
-showAlertDialog_1(BuildContext context) {
-  showDialog(
-      context: context,
-      builder: (_) => Center(
-              // Aligns the container to center
-              child: Container(
-            // A simplified version of dialog.
-            width: 244,
-            height: 111,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              color: const Color.fromRGBO(43, 43, 55, 1),
-            ),
-            child: Column(
-              children: [
-                const Padding(
-                  padding: EdgeInsets.only(top: 15),
-                  child: Text(
-                    'このお寺にご志納をする',
-                    style: TextStyle(
-                      decoration: TextDecoration.none,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'Noto Sans CJK JP',
-                      fontSize: 14,
-                    ),
-                  ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.only(top: 5),
-                  child: Text(
-                    'このお寺に〇〇円をお布施しますか？',
-                    style: TextStyle(
-                        decoration: TextDecoration.none,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w400,
-                        fontFamily: 'Noto Sans CJK JP',
-                        fontSize: 13,
-                        letterSpacing: -1),
-                  ),
-                ),
-                Expanded(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.only(top: 15),
-                        decoration: const BoxDecoration(
-                            border: Border(
-                                top: BorderSide(
-                                    color: Colors.white30, width: 0.5))),
-                        child: TextButton(
-                            onPressed: () {
-                              // Navigator.of(content).pop(false);
-                              Navigator.of(context, rootNavigator: true).pop(false);
-                              showAlertDialog_2(context);
-                            },
-                            child: const Text(
-                              'OK',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Color.fromRGBO(95, 134, 222, 1),
-                                  fontWeight: FontWeight.bold),
-                            )),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(top: 15),
-                        decoration: const BoxDecoration(
-                            border: Border(
-                                top: BorderSide(
-                                    color: Colors.white30, width: 0.5))),
-                        child: TextButton(
-                            onPressed: () {
-                              // Navigator.of(content).pop(false);
-                              Navigator.of(context, rootNavigator: true)
-                                  .pop(false);
-                            },
-                            child: const Text(
-                              'CANCEL',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Color.fromRGBO(95, 134, 222, 1),
-                                  fontWeight: FontWeight.bold),
-                            )),
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
-          )));
-}
 
 showAlertDialog_2(BuildContext context) {
   showDialog(
@@ -451,12 +357,12 @@ showAlertDialog_2(BuildContext context) {
                 const Padding(
                   padding: EdgeInsets.only(top: 20),
                   child: Text(
-                    '正確に献金しました！',
+                    'Donated correctly!',
                     style: TextStyle(
                         decoration: TextDecoration.none,
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
-                        fontFamily: 'Noto Sans CJK JP',
+                        fontFamily: 'Nato',
                         fontSize: 14,
                         letterSpacing: -1),
                   ),

@@ -5,61 +5,59 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/english_pages/home_page.dart';
-import 'package:flutter_app/pages/account_delete.dart';
-import 'package:flutter_app/pages/account_edit.dart';
-import 'package:flutter_app/pages/account_setting.dart';
-import 'package:flutter_app/pages/audio_page.dart';
-import 'package:flutter_app/pages/catetory_search.dart';
-import 'package:flutter_app/pages/change_language.dart';
-import 'package:flutter_app/pages/change_password.dart';
-import 'package:flutter_app/pages/content_search.dart';
-import 'package:flutter_app/pages/download_page.dart';
-import 'package:flutter_app/pages/give_page.dart';
-import 'package:flutter_app/pages/like_page.dart';
-import 'package:flutter_app/pages/mypage.dart';
-import 'package:flutter_app/pages/notification.dart';
-import 'package:flutter_app/pages/play_page.dart';
-import 'package:flutter_app/pages/search_page.dart';
-import 'package:flutter_app/pages/settings_page.dart';
-import 'package:flutter_app/pages/subscription_page.dart';
-import 'package:flutter_app/pages/tab_search.dart';
-import 'package:flutter_app/pages/video_page.dart';
+import 'package:flutter_app/english_pages/account_delete.dart';
+import 'package:flutter_app/english_pages/account_edit.dart';
+import 'package:flutter_app/english_pages/account_setting.dart';
+import 'package:flutter_app/english_pages/audio_page.dart';
+import 'package:flutter_app/english_pages/catetory_search.dart';
+import 'package:flutter_app/english_pages/change_language.dart';
+import 'package:flutter_app/english_pages/change_password.dart';
+import 'package:flutter_app/english_pages/content_search.dart';
+import 'package:flutter_app/english_pages/download_page.dart';
+import 'package:flutter_app/english_pages/give_page.dart';
+import 'package:flutter_app/english_pages/like_page.dart';
+import 'package:flutter_app/english_pages/mypage.dart';
+import 'package:flutter_app/english_pages/notification.dart';
+import 'package:flutter_app/english_pages/play_page.dart';
+import 'package:flutter_app/english_pages/search_page.dart';
+import 'package:flutter_app/english_pages/settings_page.dart';
+import 'package:flutter_app/english_pages/subscription_page.dart';
+import 'package:flutter_app/english_pages/tab_search.dart';
+import 'package:flutter_app/english_pages/video_page.dart';
+import 'package:flutter_app/pages/home_page.dart';
 import 'package:flutter_app/pages/send_data.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 
 void main() {
-  runApp(const HomeApp());
+  runApp(const EnHomeApp());
 }
 
-class HomeApp extends StatefulWidget {
-  const HomeApp({super.key});
-  static const routeName='/home'; 
+class EnHomeApp extends StatefulWidget {
+  const EnHomeApp({super.key});
+  static const routeName='/en_home'; 
 
   @override
-  State<HomeApp> createState() => _HomeAppState();
+  State<EnHomeApp> createState() => _EnHomeAppState();
 }
 
-class _HomeAppState extends State<HomeApp> {
+class _EnHomeAppState extends State<EnHomeApp> {
 
   @override
   void initState(){
     getLanguage();  
     super.initState();
   }
-
   void getLanguage() async{
     const storage = FlutterSecureStorage();
     String? language=await storage.read(key: 'language');
-    if(language.toString()=="English"){
+    if(language.toString()=="Japanese"){
       // ignore: use_build_context_synchronously
       Navigator.push(context,
-          MaterialPageRoute(builder: (context) => const EnHomeApp()));
-      //
-        // ignore: use_build_context_synchronously
-        // Navigator.of(context).pushNamed('/en_home');
+          MaterialPageRoute(builder: (context) => const HomeApp()));
+      // ignore: use_build_context_synchronously
+      // Navigator.of(context).pushNamed('/home');
 
     }
   }
@@ -67,25 +65,25 @@ class _HomeAppState extends State<HomeApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       routes: {
-        AudioPlayPage.routeName: (context) => const AudioPlayPage(),
-        VideoPlayPage.routeName: (context) => const VideoPlayPage(),
-        GivePage.routeName: (context) => const GivePage(),
-        SearchApp.routeName: (context) => const SearchApp(),
-        MyPageApp.routeName: (context) => const MyPageApp(),
-        SettingsPageApp.routeName: (context) => const SettingsPageApp(),
-        AccountSettingApp.routeName: (context) => const AccountSettingApp(),
-        AccountEditApp.routeName: (context) => const AccountEditApp(),
-        AccountDeleteApp.routeName: (context) => const AccountDeleteApp(),
-        ChangePasswordApp.routeName: (context) => const ChangePasswordApp(),
-        NotificationApp.routeName: (context) => const NotificationApp(),
-        SubscriptionPage.routeName: (context) => const SubscriptionPage(),
-        LikePageApp.routeName:(context) => const LikePageApp(),
-        PlayPageApp.routeName:(context) => const PlayPageApp(), 
-        DownloadPageApp.routeName:(context) => const DownloadPageApp(), 
-        ContentSearchPage.routeName:(context) => const ContentSearchPage(),
-        CategorySearchPage.routeName:(context) =>const CategorySearchPage(),    
-        TabSearchPage.routeName:(context) =>const TabSearchPage(),    
-        ChangeLanguage.routeName:(context) =>const ChangeLanguage(),    
+        EnAudioPlayPage.routeName: (context) => const EnAudioPlayPage(),
+        EnVideoPlayPage.routeName: (context) => const EnVideoPlayPage(),
+        EnGivePage.routeName: (context) => const EnGivePage(),
+        EnSearchApp.routeName: (context) => const EnSearchApp(),
+        EnMyPageApp.routeName: (context) => const EnMyPageApp(),
+        EnSettingsPageApp.routeName: (context) => const EnSettingsPageApp(),
+        EnAccountSettingApp.routeName: (context) => const EnAccountSettingApp(),
+        EnAccountEditApp.routeName: (context) => const EnAccountEditApp(),
+        EnAccountDeleteApp.routeName: (context) => const EnAccountDeleteApp(),
+        EnChangePasswordApp.routeName: (context) => const EnChangePasswordApp(),
+        EnNotificationApp.routeName: (context) => const EnNotificationApp(),
+        EnSubscriptionPage.routeName: (context) => const EnSubscriptionPage(),
+        EnLikePageApp.routeName:(context) => const EnLikePageApp(),
+        EnPlayPageApp.routeName:(context) => const EnPlayPageApp(), 
+        EnDownloadPageApp.routeName:(context) => const EnDownloadPageApp(), 
+        EnContentSearchPage.routeName:(context) => const EnContentSearchPage(),
+        EnCategorySearchPage.routeName:(context) =>const EnCategorySearchPage(),    
+        EnTabSearchPage.routeName:(context) =>const EnTabSearchPage(),    
+        EnChangeLanguage.routeName:(context) =>const EnChangeLanguage(),    
       },
       home: Container(
         decoration: const BoxDecoration(
@@ -121,8 +119,7 @@ class TitleSection extends StatelessWidget {
             fontWeight: FontWeight.w400,
             color: Colors.white,
             fontSize: 16,
-            letterSpacing: -2,
-            fontFamily: 'Noto Sans CJK JP'),
+            fontFamily: 'Lato'),
       ),
     );
   }
@@ -175,7 +172,7 @@ class DataListItem extends StatelessWidget {
                       textAlign: TextAlign.left,
                       style: const TextStyle(
                           color: Color.fromRGBO(138, 86, 172, 1),
-                          fontFamily: 'Noto Sans CJK JP',
+                          fontFamily: 'Lato',
                           fontWeight: FontWeight.w400,
                           fontSize: 12,
                           letterSpacing: -1),
@@ -186,7 +183,7 @@ class DataListItem extends StatelessWidget {
                       textAlign: TextAlign.left,
                       style: const TextStyle(
                           color: Colors.white,
-                          fontFamily: 'Noto Sans CJK JP',
+                          fontFamily: 'Lato',
                           fontWeight: FontWeight.bold,
                           fontSize: 14,
                           letterSpacing: -1),
@@ -202,7 +199,7 @@ class DataListItem extends StatelessWidget {
                               time,
                               style: const TextStyle(
                                 color: Colors.white,
-                                fontFamily: 'Noto Sans CJK JP',
+                                fontFamily: 'Lato',
                                 fontWeight: FontWeight.w400,
                                 fontSize: 12,
                               ),
@@ -291,7 +288,7 @@ class _DataListState extends State<DataList> {
             ),
           ),
         ),
-        const TitleSection(name: '今日の瞑想'),
+        const TitleSection(name: 'Today’s feature'),
         Expanded(
           child: Flexible(
                   child: FutureBuilder(
@@ -309,11 +306,11 @@ class _DataListState extends State<DataList> {
                               onPressed: () {
                                 if(snapshot.data[index].type=='音声'){
                                   addPlays(snapshot.data[index].id);
-                                  Navigator.pushNamed(context, AudioPlayPage.routeName,
+                                  Navigator.pushNamed(context, EnAudioPlayPage.routeName,
                                       arguments: SendDatas(snapshot.data[index].id, snapshot.data[index].title, snapshot.data[index].time, snapshot.data[index].description, snapshot.data[index].filename));
                                 }else{
                                   addPlays(snapshot.data[index].id);
-                                  Navigator.pushNamed(context, VideoPlayPage.routeName,
+                                  Navigator.pushNamed(context, EnVideoPlayPage.routeName,
                                       arguments: SendDatas(snapshot.data[index].id, snapshot.data[index].title, snapshot.data[index].time, snapshot.data[index].description, snapshot.data[index].filename));
                                 }
                               },
@@ -349,12 +346,14 @@ class _DataListState extends State<DataList> {
                             color: Colors.black,
                           ),
                           Text(
-                            'ホーム',
+                            'Home',
                             style: TextStyle(
                                 color: Colors.black,
-                                fontFamily: 'Noto Sans CJK JP',
+                                fontFamily: 'Lato',
                                 fontSize: 10,
-                                fontWeight: FontWeight.w400),
+                                fontWeight: FontWeight.w400,
+                                letterSpacing: 1
+                                ),
                           )
                         ]),
                       ),
@@ -363,7 +362,7 @@ class _DataListState extends State<DataList> {
                       width: 97.5,
                       child: MaterialButton(
                         onPressed: () {
-                          Navigator.of(context).pushNamed('/search');
+                          Navigator.of(context).pushNamed('/en_search');
                         },
                         child: const Column(children: [
                           Icon(
@@ -371,12 +370,14 @@ class _DataListState extends State<DataList> {
                             color: Colors.black45,
                           ),
                           Text(
-                            'さがす',
+                            'Find',
                             style: TextStyle(
                                 color: Colors.black,
-                                fontFamily: 'Noto Sans CJK JP',
+                                fontFamily: 'Lato',
                                 fontSize: 10,
-                                fontWeight: FontWeight.w400),
+                                fontWeight: FontWeight.w400,
+                                letterSpacing: 1
+                                ),
                           )
                         ]),
                       ),
@@ -386,7 +387,7 @@ class _DataListState extends State<DataList> {
                       width: 97.5,
                       child: MaterialButton(
                         onPressed: () {
-                          Navigator.of(context).pushNamed('/mypage');
+                          Navigator.of(context).pushNamed('/en_mypage');
                         },
                         child: const Column(children: [
                           ImageIcon(
@@ -395,12 +396,14 @@ class _DataListState extends State<DataList> {
                             color: Colors.black45,
                           ),
                           Text(
-                            'マイページ',
+                            'My Page',
                             style: TextStyle(
                                 color: Colors.black,
-                                fontFamily: 'Noto Sans CJK JP',
+                                fontFamily: 'Lato',
                                 fontSize: 10,
-                                fontWeight: FontWeight.w400),
+                                fontWeight: FontWeight.w400,
+                                letterSpacing: 1
+                                ),
                           )
                         ]),
                       ),
@@ -409,7 +412,7 @@ class _DataListState extends State<DataList> {
                       width: 97.5,
                       child: MaterialButton(
                         onPressed: () {
-                          Navigator.of(context).pushNamed('/setting');
+                          Navigator.of(context).pushNamed('/en_setting');
                         },
                         child: const Column(children: [
                           Icon(
@@ -417,12 +420,14 @@ class _DataListState extends State<DataList> {
                             color: Colors.black45,
                           ),
                           Text(
-                            '設定',
+                            'Settings',
                             style: TextStyle(
                                 color: Colors.black,
-                                fontFamily: 'Noto Sans CJK JP',
+                                fontFamily: 'Lato',
                                 fontSize: 10,
-                                fontWeight: FontWeight.w400),
+                                fontWeight: FontWeight.w400,
+                                letterSpacing: 1
+                                ),
                           )
                         ]),
                       ),

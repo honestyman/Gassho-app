@@ -1,66 +1,61 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/pages/verify_page.dart';
+import 'package:flutter_app/pages/newpassword_page.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 void main() {
   runApp(
     const MaterialApp(
-      home: PasswordForgetPage(),
+      home: VerifyPage(),
     ),
   );
 }
 
-class PasswordForgetPage extends StatefulWidget {
-  const PasswordForgetPage({super.key});
+class VerifyPage extends StatefulWidget {
+  const VerifyPage({super.key});
 
   @override
-  State<PasswordForgetPage> createState() => _PasswordForgetPageState();
+  State<VerifyPage> createState() => _VerifyPageState();
 }
 
-class _PasswordForgetPageState extends State<PasswordForgetPage> {
+class _VerifyPageState extends State<VerifyPage> {
   final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  bool light=true;
   // String _username, _password;
-  final apiUrl = "http://localhost:5000/api/auth/forget_password";
-  TextEditingController emailController = TextEditingController();
+  final apiUrl = "http://localhost:5000/api/users/verify";
+  TextEditingController verifyController = TextEditingController();
 
   Future<void> sendPostRequest() async {
+    const storage = FlutterSecureStorage();
+    String? email=await storage.read(key: 'email');
     final response = await http.post(
       Uri.parse(apiUrl),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, String>{
-        'email': emailController.text
+        'email': email.toString(),
+        'verifycode': verifyController.text
       }),
     );
     if (response.statusCode == 200) {
-      const storage = FlutterSecureStorage();
-      await storage.write(key: 'email', value: emailController.text);
+      
         // ignore: use_build_context_synchronously
       Navigator.push(context,
-          MaterialPageRoute(builder: (context) => const VerifyPage()));   
+          MaterialPageRoute(builder: (context) => const NewPasswordPage()));   
           
     } else {
        var error = String.fromCharCodes(response.bodyBytes);
       final string=jsonDecode(error);
-      // ignore: prefer_typing_uninitialized_variables
-      var str;
-        if(string=="Please include a valid Email"){
-          str="有効なメールアドレスを入力してください";
-        }
-        if(string=="Server Error"){
-          str="サーバーエラー";
-          }
       // ignore: use_build_context_synchronously
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
           title: const Text('Error'),
-          content: Text(str),
+          content: Text(string),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
@@ -87,7 +82,7 @@ class _PasswordForgetPageState extends State<PasswordForgetPage> {
             children: <Widget>[
               const Padding(
                 padding: EdgeInsets.only(top: 93.5),
-                child: TitleSection(name: "パスワードをお忘れの方") 
+                child: TitleSection(name: 'メール認証') 
               ),
               Form(
                   key: formKey,
@@ -106,7 +101,7 @@ class _PasswordForgetPageState extends State<PasswordForgetPage> {
                                   right: 0,
                                 ),
                                 child: const Text(
-                                  'メールアドレス',
+                                  '認証コード',
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontFamily: 'Noto Sans CJK JP',
@@ -116,7 +111,7 @@ class _PasswordForgetPageState extends State<PasswordForgetPage> {
                                 ),
                               ),
                               TextFormField(
-                                controller: emailController,
+                                controller: verifyController,
                                 decoration: InputDecoration(
                                     isDense: true,
                                     filled: true,

@@ -8,19 +8,19 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 void main() {
   runApp(
-    const SettingsPageApp()
+    const EnSettingsPageApp()
   );
 }
 
-class SettingsPageApp extends StatefulWidget{
-  const SettingsPageApp({super.key});
-  static const routeName='/setting';
+class EnSettingsPageApp extends StatefulWidget{
+  const EnSettingsPageApp({super.key});
+  static const routeName='/en_setting';
 
   @override
-  State<SettingsPageApp> createState() => _SettingsPageAppState();
+  State<EnSettingsPageApp> createState() => _EnSettingsPageAppState();
 }
 
-class _SettingsPageAppState extends State<SettingsPageApp> {
+class _EnSettingsPageAppState extends State<EnSettingsPageApp> {
 
   showAlertDialog(BuildContext context) async{
   const storage = FlutterSecureStorage();
@@ -41,12 +41,12 @@ class _SettingsPageAppState extends State<SettingsPageApp> {
             const Padding(
               padding: EdgeInsets.only(top:15),
               child: Text(
-                'ログアウトしますか？',
+                'Log Out?',
                 style: TextStyle(
                   decoration: TextDecoration.none,
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
-                  fontFamily: 'Noto Sans CJK JP',
+                  fontFamily: 'Nato',
                   fontSize:14 ,
                 ),
               ),
@@ -59,7 +59,7 @@ class _SettingsPageAppState extends State<SettingsPageApp> {
                   decoration: TextDecoration.none,
                   color: Colors.white,
                   fontWeight: FontWeight.w400,
-                  fontFamily: 'Noto Sans CJK JP',
+                  fontFamily: 'Nato',
                   fontSize:14 ,
                 ),
               ),
@@ -85,7 +85,7 @@ class _SettingsPageAppState extends State<SettingsPageApp> {
                         // showAlertDialog_2(context);
                       },
                       child: const Text(
-                        'キャンセル',
+                        'Change',
                         textAlign: TextAlign.center,
                          style: TextStyle(
                            color: Color.fromRGBO(95, 134, 222, 1),
@@ -113,7 +113,7 @@ class _SettingsPageAppState extends State<SettingsPageApp> {
                         exit(0);
                       },
                       child: const Text(
-                        'ログアウト',
+                        'Log Out',
                         textAlign: TextAlign.center,
                          style: TextStyle(
                            color: Color.fromRGBO(95, 134, 222, 1),
@@ -149,7 +149,7 @@ class _SettingsPageAppState extends State<SettingsPageApp> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               
-              const TitleSection(name: '設定'),
+              const TitleSection(name: 'Settings'),
               const SizedBox(
                 height: 27.6,
               ),
@@ -167,8 +167,7 @@ class _SettingsPageAppState extends State<SettingsPageApp> {
                         margin: const EdgeInsets.only(left: 17.8, right: 17.8),
                         child: MaterialButton(
                           onPressed: () {
-                            Navigator.of(context).pushNamed('/subscription');
-                            
+                            Navigator.of(context).pushNamed('/en_subscription');
                           },
                           child: const Row(
                             children: [
@@ -177,14 +176,13 @@ class _SettingsPageAppState extends State<SettingsPageApp> {
                               ),   
                               Expanded(
                                 child: Text(
-                                  'サブスクリプション',
+                                  'Subscriptions',
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontFamily: 'Noto Sans CJK JP',
+                                    fontFamily: 'Nato',
                                     fontSize: 14,
                                     fontWeight: FontWeight.w400,
-                                    letterSpacing: -1
                                   ),
                                   softWrap: true,
                                 )
@@ -212,7 +210,7 @@ class _SettingsPageAppState extends State<SettingsPageApp> {
                         margin: const EdgeInsets.only(left: 17.8, right: 17.8),
                         child: MaterialButton(
                           onPressed: () {
-                            Navigator.of(context).pushNamed('/account_setting');
+                            Navigator.of(context).pushNamed('/en_account_setting');
                           },
                           child: const Row(
                             children: [
@@ -221,14 +219,13 @@ class _SettingsPageAppState extends State<SettingsPageApp> {
                               ),   
                               Expanded(
                                 child: Text(
-                                  'アカウント',
+                                  'Account',
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontFamily: 'Noto Sans CJK JP',
+                                    fontFamily: 'Nato',
                                     fontSize: 14,
-                                    fontWeight: FontWeight.w400,
-                                    letterSpacing: -1
+                                    fontWeight: FontWeight.w400
                                   ),
                                   softWrap: true,
                                 )
@@ -256,7 +253,7 @@ class _SettingsPageAppState extends State<SettingsPageApp> {
                         margin: const EdgeInsets.only(left: 17.8, right: 17.8),
                         child: MaterialButton(
                           onPressed: () {
-                            Navigator.of(context).pushNamed('/change_password');
+                            Navigator.of(context).pushNamed('/en_change_password');
                           },
                           child: const Row(
                             children: [
@@ -265,14 +262,13 @@ class _SettingsPageAppState extends State<SettingsPageApp> {
                               ),   
                               Expanded(
                                 child: Text(
-                                  'パスワード',
+                                  'Password',
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontFamily: 'Noto Sans CJK JP',
+                                    fontFamily: 'Nato',
                                     fontSize: 14,
-                                    fontWeight: FontWeight.w400,
-                                    letterSpacing: -1
+                                    fontWeight: FontWeight.w400
                                   ),
                                   softWrap: true,
                                 )
@@ -300,7 +296,7 @@ class _SettingsPageAppState extends State<SettingsPageApp> {
                         margin: const EdgeInsets.only(left: 17.8, right: 17.8),
                         child: MaterialButton(
                           onPressed: () {
-                            Navigator.of(context).pushNamed('/notification');
+                            Navigator.of(context).pushNamed('/en_notification');
                           },
                           child: const Row(
                             children: [
@@ -309,14 +305,13 @@ class _SettingsPageAppState extends State<SettingsPageApp> {
                               ),   
                               Expanded(
                                 child: Text(
-                                  '通知',
+                                  'Notifications',
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontFamily: 'Noto Sans CJK JP',
+                                    fontFamily: 'Nato',
                                     fontSize: 14,
-                                    fontWeight: FontWeight.w400,
-                                    letterSpacing: -1
+                                    fontWeight: FontWeight.w400
                                   ),
                                   softWrap: true,
                                 )
@@ -344,7 +339,7 @@ class _SettingsPageAppState extends State<SettingsPageApp> {
                         margin: const EdgeInsets.only(left: 17.8, right: 17.8),
                         child: MaterialButton(
                           onPressed: () {
-                             Navigator.of(context).pushNamed('/change_language');
+                             Navigator.of(context).pushNamed('/en_change_language');
                           },
                           child: const Row(
                             children: [
@@ -353,14 +348,13 @@ class _SettingsPageAppState extends State<SettingsPageApp> {
                               ),   
                               Expanded(
                                 child: Text(
-                                  '言語',
+                                  'Language',
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontFamily: 'Noto Sans CJK JP',
+                                    fontFamily: 'Nato',
                                     fontSize: 14,
-                                    fontWeight: FontWeight.w400,
-                                    letterSpacing: -1
+                                    fontWeight: FontWeight.w400
                                   ),
                                   softWrap: true,
                                 )
@@ -411,14 +405,13 @@ class _SettingsPageAppState extends State<SettingsPageApp> {
                                     ),   
                                     Expanded(
                                       child: Text(
-                                        'ヘルプ＆サポート',
+                                        'Help & support',
                                         textAlign: TextAlign.left,
                                         style: TextStyle(
                                           color: Colors.white,
-                                          fontFamily: 'Noto Sans CJK JP',
+                                          fontFamily: 'Nato',
                                           fontSize: 14,
-                                          fontWeight: FontWeight.w400,
-                                          letterSpacing: -1
+                                          fontWeight: FontWeight.w400
                                         ),
                                         softWrap: true,
                                       )
@@ -455,14 +448,13 @@ class _SettingsPageAppState extends State<SettingsPageApp> {
                                     ),   
                                     Expanded(
                                       child: Text(
-                                        '利用規約',
+                                        'Terms of use',
                                         textAlign: TextAlign.left,
                                         style: TextStyle(
                                           color: Colors.white,
-                                          fontFamily: 'Noto Sans CJK JP',
+                                          fontFamily: 'Nato',
                                           fontSize: 14,
-                                          fontWeight: FontWeight.w400,
-                                          letterSpacing: -1
+                                          fontWeight: FontWeight.w400
                                         ),
                                         softWrap: true,
                                       )
@@ -499,14 +491,13 @@ class _SettingsPageAppState extends State<SettingsPageApp> {
                                     ),   
                                     Expanded(
                                       child: Text(
-                                        'プライバシーポリシー',
+                                        'Privacy Policy',
                                         textAlign: TextAlign.left,
                                         style: TextStyle(
                                           color: Colors.white,
-                                          fontFamily: 'Noto Sans CJK JP',
+                                          fontFamily: 'Nato',
                                           fontSize: 14,
-                                          fontWeight: FontWeight.w400,
-                                          letterSpacing: -1
+                                          fontWeight: FontWeight.w400
                                         ),
                                         softWrap: true,
                                       )
@@ -543,14 +534,13 @@ class _SettingsPageAppState extends State<SettingsPageApp> {
                                     ),   
                                     Expanded(
                                       child: Text(
-                                        '特定商取引法ガイド',
+                                        'Specified Commercial Transactions Law Guide',
                                         textAlign: TextAlign.left,
                                         style: TextStyle(
                                           color: Colors.white,
-                                          fontFamily: 'Noto Sans CJK JP',
+                                          fontFamily: 'Nato',
                                           fontSize: 14,
-                                          fontWeight: FontWeight.w400,
-                                          letterSpacing: -1
+                                          fontWeight: FontWeight.w400
                                         ),
                                         softWrap: true,
                                       )
@@ -587,14 +577,13 @@ class _SettingsPageAppState extends State<SettingsPageApp> {
                                     ),   
                                     Expanded(
                                       child: Text(
-                                        'ログアウト',
+                                        'Log out',
                                         textAlign: TextAlign.left,
                                         style: TextStyle(
                                           color: Colors.white,
-                                          fontFamily: 'Noto Sans CJK JP',
+                                          fontFamily: 'Nato',
                                           fontSize: 14,
-                                          fontWeight: FontWeight.w400,
-                                          letterSpacing: -1
+                                          fontWeight: FontWeight.w400
                                         ),
                                         softWrap: true,
                                       )
@@ -614,22 +603,21 @@ class _SettingsPageAppState extends State<SettingsPageApp> {
                         ),
                       ),
                       Padding(
-                              padding: const EdgeInsets.only(left: 20),
+                              padding: const EdgeInsets.only(top:10, left: 20, bottom: 10),
                               child: TextButton(
                                 onPressed: (){
                                 },
                                 child: const Text( 
-                                        '退会',
+                                        'Delete account',
                                         textAlign: TextAlign.left,
                                         style: TextStyle(
                                           color: Colors.white,
-                                          fontFamily: 'Noto Sans CJK JP',
+                                          fontFamily: 'Nato',
                                           fontSize: 14,
                                           fontWeight: FontWeight.w400,
                                           decoration: TextDecoration.underline,
                                           decorationColor: Colors.white,
-                                          decorationThickness: 2,
-                                          letterSpacing: -1
+                                          decorationThickness: 2
                                         ),
                                         softWrap: true,
                                       )
@@ -670,12 +658,13 @@ class _SettingsPageAppState extends State<SettingsPageApp> {
                                     color: Colors.black45,
                                   ),
                                   Text(
-                                    'ホーム',
+                                    'Home',
                                     style: TextStyle(
                                       color: Colors.black,
-                                      fontFamily: 'Noto Sans CJK JP',
+                                      fontFamily: 'Nato',
                                       fontSize: 10,
-                                      fontWeight: FontWeight.w400
+                                      fontWeight: FontWeight.w400,
+                                      letterSpacing: 1
                                     ),
                                   )
                                 ]
@@ -686,7 +675,7 @@ class _SettingsPageAppState extends State<SettingsPageApp> {
                             width: 97.5,
                             child: MaterialButton(
                               onPressed: () {
-                                Navigator.of(context).pushNamed('/search');
+                                Navigator.of(context).pushNamed('/en_search');
                               },
                               child: const Column(
                                 children: [
@@ -695,11 +684,12 @@ class _SettingsPageAppState extends State<SettingsPageApp> {
                                     color: Colors.black45,
                                   ),
                                   Text(
-                                    'さがす',
+                                    'Find',
                                     style: TextStyle(
                                       color: Colors.black,
-                                      fontFamily: 'Noto Sans CJK JP',
+                                      fontFamily: 'Nato',
                                       fontSize: 10,
+                                      letterSpacing: 1,
                                       fontWeight: FontWeight.w400
                                     ),
                                   )
@@ -712,7 +702,7 @@ class _SettingsPageAppState extends State<SettingsPageApp> {
                               width: 97.5,
                               child: MaterialButton(
                               onPressed: () {
-                                Navigator.of(context).pushNamed('/mypage');
+                                Navigator.of(context).pushNamed('/en_mypage');
                               },
                               child: const Column(
                                 children: [
@@ -722,12 +712,13 @@ class _SettingsPageAppState extends State<SettingsPageApp> {
                                     color: Colors.black45,
                                   ),
                                   Text(
-                                    'マイページ',
+                                    'My Page',
                                     style: TextStyle(
                                       color: Colors.black,
-                                      fontFamily: 'Noto Sans CJK JP',
+                                      fontFamily: 'Nato',
                                       fontSize: 10,
-                                      fontWeight: FontWeight.w400
+                                      fontWeight: FontWeight.w400,
+                                      letterSpacing: 1
                                     ),
                                   )
                                 ]
@@ -748,12 +739,13 @@ class _SettingsPageAppState extends State<SettingsPageApp> {
                                     color: Colors.black,
                                   ),
                                   Text(
-                                    '設定',
+                                    'Settings',
                                     style: TextStyle(
                                       color: Colors.black,
-                                      fontFamily: 'Noto Sans CJK JP',
+                                      fontFamily: 'Nato',
                                       fontSize: 10,
-                                      fontWeight: FontWeight.w400
+                                      fontWeight: FontWeight.w400,
+                                      letterSpacing: 1
                                     ),
                                   )
                                 ]
@@ -792,8 +784,7 @@ class TitleSection extends StatelessWidget{
           fontWeight: FontWeight.bold,
           color: Colors.white,
           fontSize: 20,
-          letterSpacing: -2,
-          fontFamily: 'Noto Sans JP'
+          fontFamily: 'Nato'
         ),
       ),
       );

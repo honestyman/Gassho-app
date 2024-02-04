@@ -7,19 +7,19 @@ import 'package:http/http.dart' as http;
 
 void main() {
   runApp(
-    const AccountSettingApp()
+    const EnAccountSettingApp()
   );
 }
 
-class AccountSettingApp extends StatefulWidget{
-  const AccountSettingApp({super.key});
-  static const routeName='/account_setting';
+class EnAccountSettingApp extends StatefulWidget{
+  const EnAccountSettingApp({super.key});
+  static const routeName='/en_account_setting';
 
   @override
-  State<AccountSettingApp> createState() => _AccountSettingAppState();
+  State<EnAccountSettingApp> createState() => _EnAccountSettingAppState();
 }
 
-class _AccountSettingAppState extends State<AccountSettingApp> {
+class _EnAccountSettingAppState extends State<EnAccountSettingApp> {
 
   // ignore: non_constant_identifier_names
   showAlertDialog(BuildContext context) async{
@@ -40,12 +40,12 @@ class _AccountSettingAppState extends State<AccountSettingApp> {
             const Padding(
               padding: EdgeInsets.only(top:20, left: 20, right: 20),
               child: Text(
-                '本当にアカウントを\n削除しますか？',
+                'Are you sure you want to delete your account?',
                 style: TextStyle(
                   decoration: TextDecoration.none,
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
-                  fontFamily: 'Noto Sans CJK JP',
+                  fontFamily: 'Nato',
                   fontSize:14 ,
                 ),
               ),
@@ -67,10 +67,10 @@ class _AccountSettingAppState extends State<AccountSettingApp> {
                     child: TextButton(
                       onPressed: (){
                         deleteAccount();
-                        exit(0);                        // showAlertDialog_2(context);
+                        exit(0);                            // showAlertDialog_2(context);
                       },
                       child: const Text(
-                        '確認',
+                        'OK',
                         textAlign: TextAlign.center,
                          style: TextStyle(
                            color: Color.fromRGBO(95, 134, 222, 1),
@@ -96,7 +96,7 @@ class _AccountSettingAppState extends State<AccountSettingApp> {
                         Navigator.of(context, rootNavigator: true).pop(false);
                       },
                       child: const Text(
-                        'キャンセル',
+                        'Cancel',
                         textAlign: TextAlign.center,
                          style: TextStyle(
                            color: Color.fromRGBO(95, 134, 222, 1),
@@ -153,28 +153,30 @@ class _AccountSettingAppState extends State<AccountSettingApp> {
                       padding: const EdgeInsets.only(left:13),
                       child:  IconButton(
                         onPressed: (){
-                          Navigator.of(context).pushNamed('/setting');
+                          Navigator.of(context).pushNamed('/en_setting');
                         },
                         icon: const ImageIcon(
                           AssetImage("assets/images/before_arrow.png"),
                           color: Colors.white,
                         )
                       ) 
-                    ),  
-                    const SizedBox(
-                      width: 62.5,
                     ),
-                    const Text(
-                        'アカウント',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'Noto Sans CJK JP',
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: -1
+                    const Expanded(
+                      child: Text(
+                          'Account',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'Nato',
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold
+                            ),
+                            softWrap: true,
                           ),
-                          softWrap: true,
-                        )
+                    ),
+                    const SizedBox(
+                      width: 50,
+                    )
                   ],
                 ),
                 const SizedBox(
@@ -194,7 +196,7 @@ class _AccountSettingAppState extends State<AccountSettingApp> {
                           margin: const EdgeInsets.only(left: 17.8, right: 17.8),
                           child: MaterialButton(
                             onPressed: () {
-                              Navigator.of(context).pushNamed('/account_edit');
+                              Navigator.of(context).pushNamed('/en_account_edit');
                             },
                             child: const Row(
                               children: [
@@ -203,14 +205,13 @@ class _AccountSettingAppState extends State<AccountSettingApp> {
                                 ),   
                                 Expanded(
                                   child: Text(
-                                    'アカウント情報を編集',
+                                    'Edit account information',
                                     textAlign: TextAlign.left,
                                     style: TextStyle(
                                       color: Colors.white,
-                                      fontFamily: 'Noto Sans CJK JP',
+                                      fontFamily: 'Nato',
                                       fontSize: 14,
-                                      fontWeight: FontWeight.w400,
-                                      letterSpacing: -1
+                                      fontWeight: FontWeight.w400
                                     ),
                                     softWrap: true,
                                   )
@@ -238,8 +239,8 @@ class _AccountSettingAppState extends State<AccountSettingApp> {
                           margin: const EdgeInsets.only(left: 17.8, right: 17.8),
                           child: MaterialButton(
                             onPressed: () {
-                              // Navigator.of(context).pushNamed('/account_delete');
-                              showAlertDialog(context);
+                               Navigator.of(context).pushNamed('/en_account_delete');
+                              // showAlertDialog(context);
                             },
                             child: const Row(
                               children: [
@@ -248,14 +249,13 @@ class _AccountSettingAppState extends State<AccountSettingApp> {
                                 ),   
                                 Expanded(
                                   child: Text(
-                                    'アカウント削除',
+                                    'Delete account',
                                     textAlign: TextAlign.left,
                                     style: TextStyle(
                                       color: Colors.white,
-                                      fontFamily: 'Noto Sans CJK JP',
+                                      fontFamily: 'Nato',
                                       fontSize: 14,
-                                      fontWeight: FontWeight.w400,
-                                      letterSpacing: -1
+                                      fontWeight: FontWeight.w400
                                     ),
                                     softWrap: true,
                                   )
@@ -306,12 +306,13 @@ class _AccountSettingAppState extends State<AccountSettingApp> {
                                       color: Colors.black45,
                                     ),
                                     Text(
-                                      'ホーム',
+                                      'Home',
                                       style: TextStyle(
                                         color: Colors.black,
-                                        fontFamily: 'Noto Sans CJK JP',
+                                        fontFamily: 'Nato',
                                         fontSize: 10,
-                                        fontWeight: FontWeight.w400
+                                        fontWeight: FontWeight.w400,
+                                        letterSpacing: 1
                                       ),
                                     )
                                   ]
@@ -322,7 +323,7 @@ class _AccountSettingAppState extends State<AccountSettingApp> {
                               width: 97.5,
                               child: MaterialButton(
                                 onPressed: () {
-                                  Navigator.of(context).pushNamed('/search');
+                                  Navigator.of(context).pushNamed('/en_search');
                                 },
                                 child: const Column(
                                   children: [
@@ -331,12 +332,13 @@ class _AccountSettingAppState extends State<AccountSettingApp> {
                                       color: Colors.black45,
                                     ),
                                     Text(
-                                      'さがす',
+                                      'Find',
                                       style: TextStyle(
                                         color: Colors.black,
-                                        fontFamily: 'Noto Sans CJK JP',
+                                        fontFamily: 'Nato',
                                         fontSize: 10,
-                                        fontWeight: FontWeight.w400
+                                        fontWeight: FontWeight.w400,
+                                        letterSpacing: 1
                                       ),
                                     )
                                   ]
@@ -348,7 +350,7 @@ class _AccountSettingAppState extends State<AccountSettingApp> {
                                 width: 97.5,
                                 child: MaterialButton(
                                 onPressed: () {
-                                  Navigator.of(context).pushNamed('/mypage');
+                                  Navigator.of(context).pushNamed('/en_mypage');
                                 },
                                 child: const Column(
                                   children: [
@@ -358,12 +360,13 @@ class _AccountSettingAppState extends State<AccountSettingApp> {
                                       color: Colors.black45,
                                     ),
                                     Text(
-                                      'マイページ',
+                                      'My Page',
                                       style: TextStyle(
                                         color: Colors.black,
-                                        fontFamily: 'Noto Sans CJK JP',
+                                        fontFamily: 'Nato',
                                         fontSize: 10,
-                                        fontWeight: FontWeight.w400
+                                        fontWeight: FontWeight.w400,
+                                        letterSpacing: 1
                                       ),
                                     )
                                   ]
@@ -375,7 +378,7 @@ class _AccountSettingAppState extends State<AccountSettingApp> {
                               width: 97.5,
                               child: MaterialButton(
                                 onPressed: () {
-                                  
+                                  Navigator.of(context).pushNamed('/en_setting');
                                 },
                                 child: const Column(
                                   children: [
@@ -384,12 +387,13 @@ class _AccountSettingAppState extends State<AccountSettingApp> {
                                       color: Colors.black,
                                     ),
                                     Text(
-                                      '設定',
+                                      'Settings',
                                       style: TextStyle(
                                         color: Colors.black,
-                                        fontFamily: 'Noto Sans CJK JP',
+                                        fontFamily: 'Nato',
                                         fontSize: 10,
-                                        fontWeight: FontWeight.w400
+                                        fontWeight: FontWeight.w400,
+                                        letterSpacing: 1
                                       ),
                                     )
                                   ]
@@ -430,7 +434,7 @@ class TitleSection extends StatelessWidget{
           color: Colors.white,
           fontSize: 20,
           letterSpacing: -2,
-          fontFamily: 'Noto Sans JP'
+          fontFamily: 'Nato'
         ),
       ),
       );

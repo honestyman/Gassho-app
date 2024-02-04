@@ -2,7 +2,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/pages/give_page.dart';
+import 'package:flutter_app/english_pages/give_page.dart';
 import 'package:flutter_app/pages/send_data.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
@@ -13,7 +13,7 @@ import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 void main() {
   runApp(
     const MaterialApp(
-      home: AudioPlayPage(),
+      home: EnAudioPlayPage(),
     ),
   );
 }
@@ -22,16 +22,16 @@ class Item{
   final String name;
 }
 
-class AudioPlayPage extends StatefulWidget{
-  const AudioPlayPage({super.key});
+class EnAudioPlayPage extends StatefulWidget{
+  const EnAudioPlayPage({super.key});
 
   static const routeName='/audio';
 
   @override
-  State<AudioPlayPage> createState() => _AudioPlayPageState();
+  State<EnAudioPlayPage> createState() => _EnAudioPlayPageState();
 }
 
-class _AudioPlayPageState extends State<AudioPlayPage> {
+class _EnAudioPlayPageState extends State<EnAudioPlayPage> {
   var player=AudioPlayer(); 
   
   bool loaded = false; 
@@ -120,12 +120,12 @@ class _AudioPlayPageState extends State<AudioPlayPage> {
                   const Padding(
                     padding: EdgeInsets.only(top:15),
                     child: Text(
-                      'お気に入りに登録しました!',
+                      'I registered as a favorite!',
                       style: TextStyle(
                         decoration: TextDecoration.none,
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
-                        fontFamily: 'Noto Sans CJK JP',
+                        fontFamily: 'Lato',
                         fontSize:14 ,
                       ),
                     ),
@@ -257,7 +257,7 @@ class _AudioPlayPageState extends State<AudioPlayPage> {
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
                               fontSize: 24 ,
-                              fontFamily: 'Noto Sans JP',
+                              fontFamily: 'Lato',
                               letterSpacing: -2
                             ),
                       )
@@ -274,7 +274,7 @@ class _AudioPlayPageState extends State<AudioPlayPage> {
                                   args.time,
                                   style: const TextStyle(
                                       color: Colors.white,
-                                      fontFamily: 'Noto Sans CJK JP',
+                                      fontFamily: 'Lato',
                                       fontWeight: FontWeight.w400,
                                       fontSize: 12,
                                   ),
@@ -324,7 +324,7 @@ class _AudioPlayPageState extends State<AudioPlayPage> {
                                                 style: const TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 12,
-                                                  fontFamily: 'Noto Sans CJK JP'
+                                                  fontFamily: 'Lato'
                                                 ),
                                               ),
                                             ),      
@@ -348,7 +348,7 @@ class _AudioPlayPageState extends State<AudioPlayPage> {
                       args.description,
                       style: const TextStyle(
                         color: Colors.white,
-                        fontFamily: 'Noto Sans JP',
+                        fontFamily: 'Lato',
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
                         letterSpacing: -2
@@ -502,11 +502,11 @@ class _AudioPlayPageState extends State<AudioPlayPage> {
                         ),
                         const SizedBox(height: 8),
                         const Text(
-                          'お気に入り',
+                          'Favorite',
                           style: TextStyle(
                             color: Colors.white,
-                            fontFamily: 'Noto Sans JP',
-                            fontSize: 11,
+                            fontFamily: 'Lato',
+                            fontSize: 12,
                             fontWeight: FontWeight.w400
                           ),
                         )
@@ -530,11 +530,11 @@ class _AudioPlayPageState extends State<AudioPlayPage> {
                           ),
                           const SizedBox(height: 8),
                           const Text(
-                            '共有',
+                            'Share',
                             style: TextStyle(
                               color: Colors.white,
-                              fontFamily: 'Noto Sans JP',
-                              fontSize: 11,
+                              fontFamily: 'Lato',
+                              fontSize: 12,
                               fontWeight: FontWeight.w400
                             ),
                           )
@@ -561,9 +561,9 @@ class _AudioPlayPageState extends State<AudioPlayPage> {
               ),
               child: MaterialButton(
                 onPressed: (){
-                  Navigator.pushNamed(context, GivePage.routeName,
+                  Navigator.pushNamed(context, EnGivePage.routeName,
                                       arguments: SendDatas(args.id, args.title, args.time, args.description, args.filename));
-                  // Navigator.pushNamed(context, GivePage.routeName,
+                  // Navigator.pushNamed(context, EnGivePage.routeName,
                   // arguments: null);
                 },
                 child: const Row(
@@ -576,13 +576,12 @@ class _AudioPlayPageState extends State<AudioPlayPage> {
                     Padding(
                       padding: EdgeInsets.only(left: 26.2, right: 26.2),
                       child: Text(
-                        'こちらのお寺にご志納をする',
+                        'Make a donation to this temple',
                         style: TextStyle(
                           color: Colors.white,
-                          fontFamily: 'Noto Sans CJK JP',
+                          fontFamily: 'Lato',
                           fontSize: 13,
-                          fontWeight: FontWeight.w400,
-                          letterSpacing: -1
+                          fontWeight: FontWeight.w400
                         ),
                       ),
                     ),

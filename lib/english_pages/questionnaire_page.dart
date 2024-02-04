@@ -1,20 +1,20 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/pages/home_page.dart';
+import 'package:flutter_app/english_pages/home_page.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 void main() {
   runApp(
     const MaterialApp(
-      home: QuestionnairesApp(),
+      home: EnQuestionnairesApp(),
     ),
   );
 }
 
-class QuestionnairesApp extends StatelessWidget {
-  const QuestionnairesApp({super.key});
+class EnQuestionnairesApp extends StatelessWidget {
+  const EnQuestionnairesApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +79,7 @@ class _QuestionnarePageState extends State<QuestionnarePage> {
     //Creating a list to store input data;
     List<Question> questionnares = [];
     for (var singleQuestion in responseData) {
-      Question question = Question(text: singleQuestion["text"]);
+      Question question = Question(text: singleQuestion["en_text"]);
 
       //Adding question to the list.
       questionnares.add(question);
@@ -122,7 +122,7 @@ class _QuestionnarePageState extends State<QuestionnarePage> {
           child: Expanded(
             child: Column(
               children: [
-                const TitleSection(name: '『合掌』を何で知りましたか？'),
+                const TitleSection(name: 'Where did you learn about "GASSHO"?'),
                 Flexible(
                   child: FutureBuilder(
                     future: getRequest(),
@@ -157,18 +157,18 @@ class _QuestionnarePageState extends State<QuestionnarePage> {
                       onPressed: () {
                         // Navigator.of(context).pushNamed("/register");
                         writeIntroductionStorage();
-                        Navigator.push(context,MaterialPageRoute(builder: (context) => const HomeApp()));
+                        Navigator.push(context,MaterialPageRoute(builder: (context) => const EnHomeApp()));
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color.fromRGBO(138, 86, 172, 1),
                       ),
                       child: const Text(
-                        '続ける',
+                        'Continue',
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
-                            fontFamily: 'Noto Sans JP'),
+                            fontFamily: 'Lato'),
                       )),
                 )
               ],
@@ -256,10 +256,10 @@ class QuestionListItem extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                       color: Colors.white,
-                      fontFamily: 'Noto Sans CJK JP',
+                      fontFamily: 'Lato',
                       fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      letterSpacing: -1),
+                      fontWeight: FontWeight.w400
+                    ),
                   softWrap: true,
                 ),
               )),
@@ -298,9 +298,8 @@ class TitleSection extends StatelessWidget {
         style: const TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.white,
-            fontSize: 18,
-            letterSpacing: -2,
-            fontFamily: 'Noto Sans CJK JP'),
+            fontSize: 20,
+            fontFamily: 'Lato'),
       ),
     );
   }

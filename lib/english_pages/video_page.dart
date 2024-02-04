@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_app/english_pages/give_page.dart';
 import 'package:flutter_app/pages/send_data.dart';
-import 'package:flutter_app/pages/give_page.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
@@ -11,7 +11,7 @@ import 'package:http/http.dart' as http;
 void main() {
   runApp(
     const MaterialApp(
-      home: VideoPlayPage(),
+      home: EnVideoPlayPage(),
     ),
   );
 }
@@ -20,16 +20,16 @@ class Item{
   final String name;
 }
 
-class VideoPlayPage extends StatefulWidget{
-  const VideoPlayPage({super.key});
+class EnVideoPlayPage extends StatefulWidget{
+  const EnVideoPlayPage({super.key});
 
   static const routeName='/video';
 
   @override
-  State<VideoPlayPage> createState() => _VideoPlayPageState();
+  State<EnVideoPlayPage> createState() => _EnVideoPlayPageState();
 }
 
-class _VideoPlayPageState extends State<VideoPlayPage> {
+class _EnVideoPlayPageState extends State<EnVideoPlayPage> {
   
   late VideoPlayerController videoPlayerController;
   // videoPlayerController=VideoPlayerController.asset(dataSource)
@@ -123,12 +123,12 @@ class _VideoPlayPageState extends State<VideoPlayPage> {
                   const Padding(
                     padding: EdgeInsets.only(top:15),
                     child: Text(
-                      'お気に入りに登録しました!',
+                      'I registered as a favorite!',
                       style: TextStyle(
                         decoration: TextDecoration.none,
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
-                        fontFamily: 'Noto Sans CJK JP',
+                        fontFamily: 'Nato',
                         fontSize:14 ,
                       ),
                     ),
@@ -264,7 +264,7 @@ class _VideoPlayPageState extends State<VideoPlayPage> {
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white,
                                   fontSize: 24 ,
-                                  fontFamily: 'Noto Sans JP',
+                                  fontFamily: 'Nato',
                                   letterSpacing: -2
                                 ),
                           )
@@ -281,7 +281,7 @@ class _VideoPlayPageState extends State<VideoPlayPage> {
                                       args.time,
                                       style: const TextStyle(
                                           color: Colors.white,
-                                          fontFamily: 'Noto Sans CJK JP',
+                                          fontFamily: 'Nato',
                                           fontWeight: FontWeight.w400,
                                           fontSize: 12,
                                       ),
@@ -330,7 +330,7 @@ class _VideoPlayPageState extends State<VideoPlayPage> {
                                                 style: const TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 12,
-                                                  fontFamily: 'Noto Sans CJK JP'
+                                                  fontFamily: 'Nato'
                                                 ),
                                               ),
                                             ),      
@@ -354,7 +354,7 @@ class _VideoPlayPageState extends State<VideoPlayPage> {
                           args.description,
                           style: const TextStyle(
                             color: Colors.white,
-                            fontFamily: 'Noto Sans JP',
+                            fontFamily: 'Nato',
                             fontSize: 14,
                             fontWeight: FontWeight.w400,
                             letterSpacing: -2
@@ -387,11 +387,11 @@ class _VideoPlayPageState extends State<VideoPlayPage> {
                             ),
                             const SizedBox(height: 8),
                             const Text(
-                              'お気に入り',
+                              'Favorite',
                               style: TextStyle(
                                 color: Colors.white,
-                                fontFamily: 'Noto Sans JP',
-                                fontSize: 11,
+                                fontFamily: 'Nato',
+                                fontSize: 12,
                                 fontWeight: FontWeight.w400
                               ),
                             )
@@ -415,11 +415,11 @@ class _VideoPlayPageState extends State<VideoPlayPage> {
                               ),
                               const SizedBox(height: 8),
                               const Text(
-                                '共有',
+                                'Share',
                                 style: TextStyle(
                                   color: Colors.white,
-                                  fontFamily: 'Noto Sans JP',
-                                  fontSize: 11,
+                                  fontFamily: 'Nato',
+                                  fontSize: 12,
                                   fontWeight: FontWeight.w400
                                 ),
                               )
@@ -446,7 +446,7 @@ class _VideoPlayPageState extends State<VideoPlayPage> {
                   ),
                   child: MaterialButton(
                     onPressed: (){
-                      Navigator.pushNamed(context, GivePage.routeName,
+                      Navigator.pushNamed(context, EnGivePage.routeName,
                                       arguments: SendDatas(args.id, args.title, args.time, args.description, args.filename));
                       // Navigator.pushNamed(context, GivePage.routeName,
                       // arguments: null);
@@ -461,13 +461,12 @@ class _VideoPlayPageState extends State<VideoPlayPage> {
                         Padding(
                           padding: EdgeInsets.only(left: 26.2, right: 26.2),
                           child: Text(
-                            'こちらのお寺にご志納をする',
+                            'Make a donation to this temple',
                             style: TextStyle(
                               color: Colors.white,
-                              fontFamily: 'Noto Sans CJK JP',
+                              fontFamily: 'Nato',
                               fontSize: 13,
-                              fontWeight: FontWeight.w400,
-                              letterSpacing: -1
+                              fontWeight: FontWeight.w400
                             ),
                           ),
                         ),

@@ -1,31 +1,27 @@
-// ignore_for_file: non_constant_identifier_names
-
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/pages/audio_page.dart';
+import 'package:flutter_app/english_pages/audio_page.dart';
+import 'package:flutter_app/english_pages/send_searchiddata.dart';
+import 'package:flutter_app/english_pages/video_page.dart';
 import 'package:flutter_app/pages/send_data.dart';
-import 'package:flutter_app/pages/video_page.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 void main() {
-  runApp(const LikePageApp());
+  runApp(const EnCategorySearchPage());
 }
 
-class LikePageApp extends StatefulWidget {
-  const LikePageApp({super.key});
-  static const routeName = '/likepage';
+class EnCategorySearchPage extends StatefulWidget {
+  const EnCategorySearchPage({super.key});
+  static const routeName = '/category_search';
 
   @override
-  State<LikePageApp> createState() => _LikePageAppState();
+  State<EnCategorySearchPage> createState() => _EnCategorySearchPageState();
 }
 
-class _LikePageAppState extends State<LikePageApp> {
-  Future<List<Data>> getRequest() async {
-    const storage=FlutterSecureStorage();
-    String? email=await storage.read(key: 'email');
-    String url = "http://localhost:5000/api/items/getlike?email=$email";
+class _EnCategorySearchPageState extends State<EnCategorySearchPage> {
+  Future<List<Data>> getRequest(int id) async {
+    String url = "http://localhost:5000/api/items/category_search?id=$id";
     final response = await http.get(Uri.parse(url));
     var reasonData = json.decode(response.body);
     List<Data> items = [];
@@ -47,11 +43,13 @@ class _LikePageAppState extends State<LikePageApp> {
   // final scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
+    final args =
+        ModalRoute.of(context)?.settings.arguments as EnSendSearchIdDatas;
     return MaterialApp(
       home: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/images/mypage_child.png"),
+            image: AssetImage("assets/images/search_child.png"),
             fit: BoxFit.cover,
           ),
         ),
@@ -68,24 +66,19 @@ class _LikePageAppState extends State<LikePageApp> {
                         padding: const EdgeInsets.only(left: 13),
                         child: IconButton(
                             onPressed: () {
-                              Navigator.of(context).pushNamed('/mypage');
+                              Navigator.pop(context, true);
                             },
                             icon: const ImageIcon(
                               AssetImage("assets/images/before_arrow.png"),
                               color: Colors.white,
                             ))),
+                    // const SizedBox(
+                    //   width: 100,
+                    // ),
+                    Expanded(child: TitleSection(name: args.title)),
                     const SizedBox(
-                      width: 90,
+                      width: 50,
                     ),
-                    const Text(
-                      'お気に入り',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'Noto Sans CJK JP',
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold),
-                      softWrap: true,
-                    )
                   ],
                 ),
                 const SizedBox(
@@ -94,7 +87,7 @@ class _LikePageAppState extends State<LikePageApp> {
                 Expanded(
                   child: Flexible(
                     child: FutureBuilder(
-                      future: getRequest(),
+                      future: getRequest(args.id),
                       builder: (BuildContext ctx, AsyncSnapshot snapshot) {
                         if (snapshot.data == null) {
                           return const Center(
@@ -107,7 +100,7 @@ class _LikePageAppState extends State<LikePageApp> {
                                   onPressed: () {
                                     if (snapshot.data[index].type == '音声') {
                                       Navigator.pushNamed(
-                                          context, AudioPlayPage.routeName,
+                                          context, EnAudioPlayPage.routeName,
                                           arguments: SendDatas(
                                               snapshot.data[index].id,
                                               snapshot.data[index].title,
@@ -116,7 +109,7 @@ class _LikePageAppState extends State<LikePageApp> {
                                               snapshot.data[index].filename));
                                     } else {
                                       Navigator.pushNamed(
-                                          context, VideoPlayPage.routeName,
+                                          context, EnVideoPlayPage.routeName,
                                           arguments: SendDatas(
                                               snapshot.data[index].id,
                                               snapshot.data[index].title,
@@ -163,12 +156,14 @@ class _LikePageAppState extends State<LikePageApp> {
                                     color: Colors.black45,
                                   ),
                                   Text(
-                                    'ホーム',
+                                    'Home',
                                     style: TextStyle(
                                         color: Colors.black,
-                                        fontFamily: 'Noto Sans CJK JP',
+                                        fontFamily: 'Nato',
                                         fontSize: 10,
-                                        fontWeight: FontWeight.w400),
+                                        fontWeight: FontWeight.w400,
+                                        letterSpacing: 1
+                                        ),
                                   )
                                 ]),
                               ),
@@ -177,20 +172,22 @@ class _LikePageAppState extends State<LikePageApp> {
                               width: 97.5,
                               child: MaterialButton(
                                 onPressed: () {
-                                  Navigator.of(context).pushNamed('/search');
+                                  Navigator.of(context).pushNamed('/en_search');
                                 },
                                 child: const Column(children: [
                                   Icon(
                                     Icons.search,
-                                    color: Colors.black45,
+                                    color: Colors.black,
                                   ),
                                   Text(
-                                    'さがす',
+                                    'Find',
                                     style: TextStyle(
                                         color: Colors.black,
-                                        fontFamily: 'Noto Sans CJK JP',
+                                        fontFamily: 'Nato',
                                         fontSize: 10,
-                                        fontWeight: FontWeight.w400),
+                                        fontWeight: FontWeight.w400,
+                                        letterSpacing: 1
+                                        ),
                                   )
                                 ]),
                               ),
@@ -200,21 +197,23 @@ class _LikePageAppState extends State<LikePageApp> {
                               width: 97.5,
                               child: MaterialButton(
                                 onPressed: () {
-                                  Navigator.of(context).pushNamed('/mypage');
+                                  Navigator.of(context).pushNamed('/en_mypage');
                                 },
                                 child: const Column(children: [
                                   ImageIcon(
                                     AssetImage("assets/images/mypage.png"),
                                     // color:Color.fromRGBO(196, 174, 216, 1),
-                                    color: Colors.black,
+                                    color: Colors.black45,
                                   ),
                                   Text(
-                                    'マイページ',
+                                    'My Page',
                                     style: TextStyle(
                                         color: Colors.black,
-                                        fontFamily: 'Noto Sans CJK JP',
+                                        fontFamily: 'Nato',
                                         fontSize: 10,
-                                        fontWeight: FontWeight.w400),
+                                        fontWeight: FontWeight.w400,
+                                        letterSpacing: 1
+                                        ),
                                   )
                                 ]),
                               ),
@@ -223,7 +222,7 @@ class _LikePageAppState extends State<LikePageApp> {
                               width: 97.5,
                               child: MaterialButton(
                                 onPressed: () {
-                                  Navigator.of(context).pushNamed('/setting');
+                                  Navigator.of(context).pushNamed('/en_setting');
                                 },
                                 child: const Column(children: [
                                   Icon(
@@ -231,12 +230,14 @@ class _LikePageAppState extends State<LikePageApp> {
                                     color: Colors.black45,
                                   ),
                                   Text(
-                                    '設定',
+                                    'Settings',
                                     style: TextStyle(
                                         color: Colors.black,
-                                        fontFamily: 'Noto Sans CJK JP',
+                                        fontFamily: 'Nato',
                                         fontSize: 10,
-                                        fontWeight: FontWeight.w400),
+                                        fontWeight: FontWeight.w400,
+                                        letterSpacing: 1
+                                        ),
                                   )
                                 ]),
                               ),
@@ -302,7 +303,7 @@ class DataListItem extends StatelessWidget {
                   textAlign: TextAlign.left,
                   style: const TextStyle(
                       color: Color.fromRGBO(138, 86, 172, 1),
-                      fontFamily: 'Noto Sans CJK JP',
+                      fontFamily: 'Nato',
                       fontWeight: FontWeight.w400,
                       fontSize: 12,
                       letterSpacing: -1),
@@ -313,7 +314,7 @@ class DataListItem extends StatelessWidget {
                   textAlign: TextAlign.left,
                   style: const TextStyle(
                       color: Colors.white,
-                      fontFamily: 'Noto Sans CJK JP',
+                      fontFamily: 'Nato',
                       fontWeight: FontWeight.bold,
                       fontSize: 14,
                       letterSpacing: -1),
@@ -329,7 +330,7 @@ class DataListItem extends StatelessWidget {
                           time,
                           style: const TextStyle(
                             color: Colors.white,
-                            fontFamily: 'Noto Sans CJK JP',
+                            fontFamily: 'Nato',
                             fontWeight: FontWeight.w400,
                             fontSize: 12,
                           ),
@@ -360,6 +361,7 @@ class Data {
       required this.title,
       required this.type,
       required this.time,
+      // ignore: non_constant_identifier_names
       required this.main_image_url,
       required this.description,
       required this.filename});
@@ -367,6 +369,7 @@ class Data {
   final String title;
   final String type;
   final String time;
+  // ignore: non_constant_identifier_names
   final String main_image_url;
   final String description;
   final String filename;
@@ -381,18 +384,14 @@ class TitleSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(top: 63.5),
-      child: Text(
-        name,
-        style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-            fontSize: 20,
-            letterSpacing: -2,
-            fontFamily: 'Noto Sans JP'),
-      ),
+    return Text(
+      '「$name」',
+      textAlign: TextAlign.center,
+      style: const TextStyle(
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+          fontSize: 20,
+          fontFamily: 'Nato'),
     );
   }
 }
-

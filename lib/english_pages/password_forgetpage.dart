@@ -8,19 +8,19 @@ import 'package:http/http.dart' as http;
 void main() {
   runApp(
     const MaterialApp(
-      home: PasswordForgetPage(),
+      home: EnPasswordForgetPage(),
     ),
   );
 }
 
-class PasswordForgetPage extends StatefulWidget {
-  const PasswordForgetPage({super.key});
+class EnPasswordForgetPage extends StatefulWidget {
+  const EnPasswordForgetPage({super.key});
 
   @override
-  State<PasswordForgetPage> createState() => _PasswordForgetPageState();
+  State<EnPasswordForgetPage> createState() => _EnPasswordForgetPageState();
 }
 
-class _PasswordForgetPageState extends State<PasswordForgetPage> {
+class _EnPasswordForgetPageState extends State<EnPasswordForgetPage> {
   final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
   // String _username, _password;
@@ -47,20 +47,12 @@ class _PasswordForgetPageState extends State<PasswordForgetPage> {
     } else {
        var error = String.fromCharCodes(response.bodyBytes);
       final string=jsonDecode(error);
-      // ignore: prefer_typing_uninitialized_variables
-      var str;
-        if(string=="Please include a valid Email"){
-          str="有効なメールアドレスを入力してください";
-        }
-        if(string=="Server Error"){
-          str="サーバーエラー";
-          }
       // ignore: use_build_context_synchronously
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
           title: const Text('Error'),
-          content: Text(str),
+          content: Text(string),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
@@ -87,7 +79,7 @@ class _PasswordForgetPageState extends State<PasswordForgetPage> {
             children: <Widget>[
               const Padding(
                 padding: EdgeInsets.only(top: 93.5),
-                child: TitleSection(name: "パスワードをお忘れの方") 
+                child: TitleSection(name: "Forgot your password?") 
               ),
               Form(
                   key: formKey,
@@ -106,13 +98,13 @@ class _PasswordForgetPageState extends State<PasswordForgetPage> {
                                   right: 0,
                                 ),
                                 child: const Text(
-                                  'メールアドレス',
+                                  'Email',
                                   style: TextStyle(
                                       color: Colors.white,
-                                      fontFamily: 'Noto Sans CJK JP',
+                                      fontFamily: 'Nato',
                                       fontSize: 14,
-                                      fontWeight: FontWeight.w400,
-                                      letterSpacing: -1),
+                                      fontWeight: FontWeight.w400
+                                      ),
                                 ),
                               ),
                               TextFormField(
@@ -154,13 +146,13 @@ class _PasswordForgetPageState extends State<PasswordForgetPage> {
                                   const Color.fromRGBO(138, 86, 172, 1),
                             ),
                             child: const Text(
-                              '送信',
+                              'Send',
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
-                                  fontFamily: 'Noto Sans JP',
-                                  letterSpacing: -1),
+                                  fontFamily: 'Nato'
+                                  ),
                             )),
                       ),
                     ],
@@ -200,10 +192,9 @@ class TitleSection extends StatelessWidget{
                 textAlign:TextAlign.center,
                 style: const TextStyle(
                   color: Colors.white,
-                  fontFamily: 'Noto Sans CJK JP',
+                  fontFamily: 'Nato',
                   fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: -1
+                  fontWeight: FontWeight.bold
                   ),
                   softWrap: true,
                 ),

@@ -1,25 +1,25 @@
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/english_pages/home_page.dart';
+import 'package:flutter_app/pages/home_page.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 void main() {
   runApp(
     const MaterialApp(
-      home: ChangeLanguage(),
+      home: EnChangeLanguage(),
     ),
   );
 }
 
-class ChangeLanguage extends StatefulWidget{
-  const ChangeLanguage({super.key});
-  static const routeName = '/change_language';
+class EnChangeLanguage extends StatefulWidget{
+  const EnChangeLanguage({super.key});
+  static const routeName = '/en_change_language';
   
   @override
-  State<ChangeLanguage> createState() => _ChangeLanguageState();
+  State<EnChangeLanguage> createState() => _EnChangeLanguageState();
 }
 
-class _ChangeLanguageState extends State<ChangeLanguage> {
+class _EnChangeLanguageState extends State<EnChangeLanguage> {
 
   @override
   Widget build(BuildContext context){
@@ -34,7 +34,7 @@ class _ChangeLanguageState extends State<ChangeLanguage> {
         backgroundColor: Colors.transparent,
         body: LanguageList(
           languages: [
-            Language(name: '日本語'),
+            Language(name: 'Japanese'),
             Language(name: 'English'),
           ],
           ),
@@ -58,7 +58,7 @@ class TitleSection extends StatelessWidget{
             padding: const EdgeInsets.only(left:15),
             child:  IconButton(
               onPressed: (){
-                Navigator.of(context).pushNamed('/setting');
+                Navigator.of(context).pushNamed('/en_setting');
               },
               icon: const ImageIcon(
                 AssetImage("assets/images/before_arrow.png"),
@@ -72,10 +72,9 @@ class TitleSection extends StatelessWidget{
                 textAlign:TextAlign.center,
                 style: const TextStyle(
                   color: Colors.white,
-                  fontFamily: 'Noto Sans CJK JP',
+                  fontFamily: 'Nato',
                   fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: -1
+                  fontWeight: FontWeight.bold
                   ),
                   softWrap: true,
                 ),
@@ -173,7 +172,7 @@ class LanguageListItem extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     color: Colors.white,
-                    fontFamily: 'Noto Sans CJK JP',
+                    fontFamily: 'Nato',
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
                   ),
@@ -228,7 +227,7 @@ class _LanguageListState extends State<LanguageList> {
             context: context,
             builder: (context) => AlertDialog(
               title: const Text('Error'),
-              content: const Text('現在ご利用中です。'),
+              content: const Text('Currently in use.'),
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(context),
@@ -238,28 +237,27 @@ class _LanguageListState extends State<LanguageList> {
             ),
           );
        }else{
+          
           if(_shoppingCart[0]=="English"){
            await storage.write(key: 'language', value: 'English');
           }else{
            await storage.write(key: 'language', value: 'Japanese');
           }
-          // await storage.write(key: 'language', value: _shoppingCart[0]);
           String? language=await storage.read(key: 'language');
-          if(language.toString()=="English"){
+          if(language.toString()=="Japanese"){
       // ignore: use_build_context_synchronously
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const EnHomeApp()));
+                MaterialPageRoute(builder: (context) => const HomeApp()));
           }
           // ignore: use_build_context_synchronously
           // Navigator.of(context).pushNamed('/');
-
        }
       }else{
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
             title: const Text('Error'),
-            content: const Text('言語を選択してください。'),
+            content: const Text('Please select a language.'),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
@@ -301,7 +299,7 @@ class _LanguageListState extends State<LanguageList> {
         const SizedBox(
           height: 63.5,
         ),
-        const TitleSection(name: '言語'),
+        const TitleSection(name: 'Language'),
         const SizedBox(
           height: 46.5,
         ),
@@ -335,12 +333,12 @@ class _LanguageListState extends State<LanguageList> {
               backgroundColor: const Color.fromRGBO(138, 86, 172, 1),
             ),
             child: const Text(
-              '変更',
+              'Change',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
-                fontFamily: 'Noto Sans JP'
+                fontFamily: 'Nato'
               ),
             )
             ),
@@ -361,110 +359,114 @@ class _LanguageListState extends State<LanguageList> {
                         padding:const EdgeInsets.fromLTRB(0, 7.4, 0, 20.5), 
                         child: Row(
                           children: [
-                            SizedBox(
-                              width: 97.5,
-                              child: MaterialButton(
-                                onPressed: () {
-                                  Navigator.of(context).pushNamed('/');
-                                },
-                                child: const Column(
-                                  children: [
-                                    Icon(
-                                      Icons.home,
-                                      color: Colors.black45,
-                                    ),
-                                    Text(
-                                      'ホーム',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontFamily: 'Noto Sans CJK JP',
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.w400
-                                      ),
-                                    )
-                                  ]
+                          SizedBox(
+                            width: 97.5,
+                            child: MaterialButton(
+                              onPressed: () {
+                                Navigator.of(context).pushNamed('/');
+                              },
+                              child: const Column(
+                                children: [
+                                  Icon(
+                                    Icons.home,
+                                    color: Colors.black45,
                                   ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 97.5,
-                              child: MaterialButton(
-                                onPressed: () {
-                                  Navigator.of(context).pushNamed('/search');
-                                },
-                                child: const Column(
-                                  children: [
-                                    Icon(
-                                      Icons.search,
-                                      color: Colors.black45,
-                                    ),
-                                    Text(
-                                      'さがす',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontFamily: 'Noto Sans CJK JP',
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.w400
-                                      ),
-                                    )
-                                  ]
-                                  ),
-                              ),
-                            ),
-                            Expanded(
-                              child: SizedBox(
-                                width: 97.5,
-                                child: MaterialButton(
-                                onPressed: () {
-                                  Navigator.of(context).pushNamed('/mypage'); 
-                                },
-                                child: const Column(
-                                  children: [
-                                    ImageIcon(
-                                      AssetImage("assets/images/mypage.png"),
-                                      // color:Color.fromRGBO(196, 174, 216, 1),
-                                      color: Colors.black45,
-                                    ),
-                                    Text(
-                                      'マイページ',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontFamily: 'Noto Sans CJK JP',
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.w400
-                                      ),
-                                    )
-                                  ]
-                                  ),
-                              ), 
-                              )
-                              ),
-                            SizedBox(
-                              width: 97.5,
-                              child: MaterialButton(
-                                onPressed: () {
-                                  
-                                },
-                                child: const Column(
-                                  children: [
-                                    Icon(
-                                      Icons.settings_rounded,
+                                  Text(
+                                    'Home',
+                                    style: TextStyle(
                                       color: Colors.black,
+                                      fontFamily: 'Nato',
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w400,
+                                      letterSpacing: 1
                                     ),
-                                    Text(
-                                      '設定',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontFamily: 'Noto Sans CJK JP',
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.w400
-                                      ),
-                                    )
-                                  ]
+                                  )
+                                ]
+                                ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 97.5,
+                            child: MaterialButton(
+                              onPressed: () {
+                                Navigator.of(context).pushNamed('/en_search');
+                              },
+                              child: const Column(
+                                children: [
+                                  Icon(
+                                    Icons.search,
+                                    color: Colors.black45,
                                   ),
-                              ),
+                                  Text(
+                                    'Find',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontFamily: 'Nato',
+                                      fontSize: 10,
+                                      letterSpacing: 1,
+                                      fontWeight: FontWeight.w400
+                                    ),
+                                  )
+                                ]
+                                ),
+                            ),
+                          ),
+                          Expanded(
+                            child: SizedBox(
+                              width: 97.5,
+                              child: MaterialButton(
+                              onPressed: () {
+                                Navigator.of(context).pushNamed('/en_mypage');
+                              },
+                              child: const Column(
+                                children: [
+                                  ImageIcon(
+                                    AssetImage("assets/images/mypage.png"),
+                                    // color:Color.fromRGBO(196, 174, 216, 1),
+                                    color: Colors.black45,
+                                  ),
+                                  Text(
+                                    'My Page',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontFamily: 'Nato',
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w400,
+                                      letterSpacing: 1
+                                    ),
+                                  )
+                                ]
+                                ),
+                            ), 
                             )
-                          ],
+                            ),
+                          SizedBox(
+                            width: 97.5,
+                            child: MaterialButton(
+                              onPressed: () {
+                                
+                              },
+                              child: const Column(
+                                children: [
+                                  Icon(
+                                    Icons.settings_rounded,
+                                    color: Colors.black,
+                                  ),
+                                  Text(
+                                    'Settings',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontFamily: 'Nato',
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w400,
+                                      letterSpacing: 1
+                                    ),
+                                  )
+                                ]
+                                ),
+                            ),
+                          )
+                        ],
                         ),
                         ),
                     ),

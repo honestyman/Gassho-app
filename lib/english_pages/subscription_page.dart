@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 void main() {
   runApp(
     const MaterialApp(
-      home: SubscriptionPage(),
+      home: EnSubscriptionPage(),
     ),
   );
 }
 
-class SubscriptionPage extends StatelessWidget {
-  const SubscriptionPage({super.key});
-  static const routeName = '/subscription';
+class EnSubscriptionPage extends StatelessWidget {
+  const EnSubscriptionPage({super.key});
+  static const routeName = '/en_subscription';
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +26,8 @@ class SubscriptionPage extends StatelessWidget {
         backgroundColor: Colors.transparent,
         body: PlanList(
                   plans: [
-        Plan(name_1: '月額プラン', name_2: '980円', name_3: ''),
-        Plan(name_1: '年額プラン', name_2: '9,800円', name_3: '11,760円'),
+        Plan(name_1: 'Monthly plan', name_2: '980円', name_3: ''),
+        Plan(name_1: 'Annual plan', name_2: '9,800円', name_3: '11,760円'),
                   ],
                 ),
       ),
@@ -54,107 +54,98 @@ class TitleSection extends StatelessWidget {
                     padding: const EdgeInsets.only(left: 13),
                     child: IconButton(
                         onPressed: () {
-                          Navigator.of(context).pushNamed('/setting');
+                          Navigator.of(context).pushNamed('/en_setting');
                         },
                         icon: const ImageIcon(
                           AssetImage("assets/images/before_arrow.png"),
                           color: Colors.white,
                         ))),
+                
+                Expanded(
+                  child: Text(
+                    name,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontFamily: 'Nato'),
+                  ),
+                ),
                 const SizedBox(
-                  width: 30,
-                ),
-                Text(
-                  name,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontFamily: 'Noto Sans CJK JP'),
-                ),
+                  width: 50,
+                )
               ],
             )),
-        SizedBox(
-          height: 146,
-          child: Column(
-            children: [
-              const Padding(
-                padding: EdgeInsets.only(top: 49.5, left: 25, right: 14),
-                child: Row(
-                  children: [
-                    Text(
-                      '現在の登録プラン',
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'Noto Sans CJK JP',
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: -1),
-                    ),
-                    Expanded(
-                        child: Text(
-                      '月額プラン（980円）',
-                      textAlign: TextAlign.right,
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'Noto Sans CJK JP',
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: -1),
-                    ))
-                  ],
-                ),
-              ),
-              const Padding(
-                padding: EdgeInsets.only(top: 11, left: 25, right: 18),
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Expanded(
-                        child: Text(
-                      '登録日 2023年12月3日 1:53AM',
-                      textAlign: TextAlign.right,
-                      style: TextStyle(
+        Column(
+          children: [
+            const Padding(
+              padding: EdgeInsets.only(top: 49.5, left: 25, right: 14),
+              child: Row(
+                children: [
+                  Text(
+                    'Current Plan',
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
                         color: Colors.white,
-                        fontFamily: 'Noto Sans CJK JP',
-                        fontSize: 13,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ))
-                  ],
-                ),
+                        fontFamily: 'Nato',
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  Expanded(
+                      child: Text(
+                    'Monthly plan（980円）',
+                    textAlign: TextAlign.right,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'Nato',
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
+                  ))
+                ],
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 11, left: 25, right: 18),
-                child: Row(
-                  children: [
-                    const SizedBox(
-                      width: 10,
+            ),
+            const Padding(
+              padding: EdgeInsets.only(top: 11, left: 25, right: 18),
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Expanded(
+                      child: Text(
+                    'Registered: Dec 3, 2023, 1:53 a.m',
+                    textAlign: TextAlign.right,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: 'Nato',
+                      fontSize: 13,
+                      fontWeight: FontWeight.w400,
                     ),
-                    Expanded(
-                        child: Container(
-                      margin: const EdgeInsets.only(left: 180),
-                      padding: const EdgeInsets.only(right: 10),
-                      color: Colors.red,
-                      child: const Text(
-                        '7日後の23:59まで無料期間',
-                        textAlign: TextAlign.right,
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: 'Noto Sans CJK JP',
-                            fontSize: 13,
-                            fontWeight: FontWeight.w400,
-                            letterSpacing: -1),
-                      ),
-                    ))
-                  ],
-                ),
+                  ))
+                ],
               ),
-            ],
-          ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 11, left: 25, right: 18),
+              child: Expanded(
+                  child: Container(
+                margin: const EdgeInsets.only(left: 80),
+                padding: const EdgeInsets.only(right:10),
+                color: Colors.red,
+                child: const Text(
+                  'Your access is complimentary until 11:59 p.m. on the day after 7 days of your registration',
+                  textAlign: TextAlign.right,
+                  softWrap: true,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: 'Nato',
+                      fontSize: 13,
+                      fontWeight: FontWeight.w400),
+                ),
+              )),
+            ),
+          ],
         )
       ],
     );
@@ -235,7 +226,7 @@ class PlanListItem extends StatelessWidget {
                   textAlign: TextAlign.left,
                   style: const TextStyle(
                     color: Colors.white,
-                    fontFamily: 'Noto Sans CJK JP',
+                    fontFamily: 'Nato',
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
@@ -249,7 +240,7 @@ class PlanListItem extends StatelessWidget {
                     textAlign: TextAlign.right,
                     style: const TextStyle(
                         color: Colors.white,
-                        fontFamily: 'Noto Sans CJK JP',
+                        fontFamily: 'Nato',
                         fontSize: 13,
                         fontWeight: FontWeight.w400,
                         decoration: TextDecoration.lineThrough,
@@ -264,7 +255,7 @@ class PlanListItem extends StatelessWidget {
                     textAlign: TextAlign.right,
                     style: const TextStyle(
                         color: Colors.white,
-                        fontFamily: 'Noto Sans CJK JP',
+                        fontFamily: 'Nato',
                         fontSize: 16,
                         fontWeight: FontWeight.w400,
                         letterSpacing: -1),
@@ -332,7 +323,7 @@ class _PlanListState extends State<PlanList> {
     return ListView(
       // backgroundColor: Colors.transparent,
       children: [
-        const TitleSection(name: 'サブスクリプション'),
+        const TitleSection(name: 'Subscription'),
         Container(
           margin: const EdgeInsets.only(
             left: 22,
@@ -359,40 +350,42 @@ class _PlanListState extends State<PlanList> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Padding(
-                  padding: EdgeInsets.only(left:10),
+                  padding: EdgeInsets.only(left:10, right: 30),
                   child: Text(
-                    '年額プランに変更されると、現在の月額プランのご契約期間終了\n日の翌日から年間プランが適用されます。',
+                    'When you switch to the annual plan, it will take effect the day after the end of your current monthly plan. ',
                     textAlign: TextAlign.left,
                     style: TextStyle(
                         fontWeight: FontWeight.w400,
                         color: Colors.white,
-                        fontSize: 12,
-                        letterSpacing: -2,
-                        fontFamily: 'Noto Sans CJK JP'),
+                        fontSize: 14,
+                        fontFamily: 'Nato'),
                   ),
                 ),
                 TextButton(
                   onPressed: () {
                     
                   },
-                  child: RichText(
-                    textAlign: TextAlign.left,
-                    text: const TextSpan(
-                      text: 'ご利用をキャンセルされたい場合は、',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'Noto Sans CJK JP',
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                          letterSpacing: -2),
-                      children: <TextSpan>[
-                        TextSpan(
-                            text: 'こちら',
-                            style: TextStyle(
-                                color: Colors.blue,
-                                decoration: TextDecoration.underline)),
-                        TextSpan(text: 'から手続きをお願い\nいたします。'),
-                      ],
+                  child: Padding(
+                    padding: const EdgeInsets.only(right:30),
+                    child: RichText(
+                      textAlign: TextAlign.left,
+                      text: const TextSpan(
+                        text: 'If you wish to cancel your subscription, please proceed with the cancellation process',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'Nato',
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400
+                            ),
+                        children: <TextSpan>[
+                          TextSpan(
+                              text: 'here',
+                              style: TextStyle(
+                                  color: Colors.blue,
+                                  decoration: TextDecoration.underline)),
+                          // TextSpan(text: 'から手続きをお願い\nいたします。'),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -420,7 +413,7 @@ class _PlanListState extends State<PlanList> {
                     color: Colors.white,
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
-                    fontFamily: 'Noto Sans JP'),
+                    fontFamily: 'Nato'),
               )),
         )
       ],
@@ -450,7 +443,7 @@ showAlertDialog_1(BuildContext context) {
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
-                      fontFamily: 'Noto Sans CJK JP',
+                      fontFamily: 'Nato',
                       fontSize: 14,
                     ),
                   ),
@@ -462,7 +455,7 @@ showAlertDialog_1(BuildContext context) {
                     style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.w400,
-                        fontFamily: 'Noto Sans CJK JP',
+                        fontFamily: 'Nato',
                         fontSize: 13,
                         letterSpacing: -1),
                   ),
@@ -516,7 +509,7 @@ showAlertDialog_2(BuildContext context) {
                     style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
-                        fontFamily: 'Noto Sans CJK JP',
+                        fontFamily: 'Nato',
                         fontSize: 14,
                         letterSpacing: -1),
                   ),
@@ -528,7 +521,7 @@ showAlertDialog_2(BuildContext context) {
                     style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.w400,
-                        fontFamily: 'Noto Sans CJK JP',
+                        fontFamily: 'Nato',
                         fontSize: 13,
                         letterSpacing: -1),
                   ),

@@ -1,28 +1,28 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/pages/home_page.dart';
-import 'package:flutter_app/pages/password_forgetpage.dart';
-import 'package:flutter_app/pages/questions_page.dart';
+import 'package:flutter_app/english_pages/home_page.dart';
+import 'package:flutter_app/english_pages/password_forgetpage.dart';
+import 'package:flutter_app/english_pages/questions_page.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 void main() {
   runApp(
     const MaterialApp(
-      home: LoginPage(),
+      home: EnLoginPage(),
     ),
   );
 }
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class EnLoginPage extends StatefulWidget {
+  const EnLoginPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<EnLoginPage> createState() => _EnLoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _EnLoginPageState extends State<EnLoginPage> {
   final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
   // String _username, _password;
@@ -54,30 +54,17 @@ class _LoginPageState extends State<LoginPage> {
 
         // ignore: use_build_context_synchronously
       Navigator.push(context,
-          MaterialPageRoute(builder: (context) => const HomeApp()));   
+          MaterialPageRoute(builder: (context) => const EnHomeApp()));   
       //    
     } else {
        var error = String.fromCharCodes(response.bodyBytes);
       final string=jsonDecode(error);
-      var str;
-      if(string=="Please include a valid Email"){
-         str="有効なメールアドレスを入力してください";
-      }
-      if(string=="Password is required"){
-         str="パスワードが必要です";
-      }
-      if(string=="Invalid Credentials"){
-         str="無効な資格情報";
-      }
-      if(string=="Server Error"){
-         str="サーバーエラー";
-      }
       // ignore: use_build_context_synchronously
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
           title: const Text('Error'),
-          content: Text(str),
+          content: Text(string),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
@@ -105,14 +92,14 @@ class _LoginPageState extends State<LoginPage> {
               const Padding(
                 padding: EdgeInsets.only(top: 93.5),
                 child: Text(
-                  'ログイン',
+                  'Log in',
                   style: TextStyle(
                       color: Colors.white,
-                      fontSize: 18,
+                      fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      fontFamily: 'Noto Sans CJK JP',
-                      decoration: TextDecoration.none,
-                      letterSpacing: -1),
+                      fontFamily: 'Lato',
+                      decoration: TextDecoration.none
+                      ),
                 ),
               ),
               Form(
@@ -132,13 +119,13 @@ class _LoginPageState extends State<LoginPage> {
                                   right: 0,
                                 ),
                                 child: const Text(
-                                  'メールアドレス',
+                                  'Email',
                                   style: TextStyle(
                                       color: Colors.white,
-                                      fontFamily: 'Noto Sans CJK JP',
+                                      fontFamily: 'Lato',
                                       fontSize: 14,
-                                      fontWeight: FontWeight.w400,
-                                      letterSpacing: -1),
+                                      fontWeight: FontWeight.w400
+                                      ),
                                 ),
                               ),
                               TextFormField(
@@ -174,13 +161,13 @@ class _LoginPageState extends State<LoginPage> {
                                   right: 0,
                                 ),
                                 child: const Text(
-                                  'パスワード',
+                                  'Password',
                                   style: TextStyle(
                                       color: Colors.white,
-                                      fontFamily: 'Noto Sans CJK JP',
+                                      fontFamily: 'Lato',
                                       fontSize: 14,
-                                      fontWeight: FontWeight.w400,
-                                      letterSpacing: -1),
+                                      fontWeight: FontWeight.w400
+                                      ),
                                 ),
                               ),
                               TextFormField(
@@ -223,13 +210,13 @@ class _LoginPageState extends State<LoginPage> {
                                   const Color.fromRGBO(138, 86, 172, 1),
                             ),
                             child: const Text(
-                              'ログイン',
+                              'Log in',
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
-                                  fontFamily: 'Noto Sans JP',
-                                  letterSpacing: -1),
+                                  fontFamily: 'Lato'
+                                  ),
                             )),
                       ),
                       Column(
@@ -237,16 +224,15 @@ class _LoginPageState extends State<LoginPage> {
                         children: [
                           MaterialButton(
                             onPressed: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => const PasswordForgetPage()));
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => const EnPasswordForgetPage()));
                             },
                             child: const Text(
-                              'パスワードをお忘れの方はこちら',
+                              'Tap here if you forgot your password',
                               style: TextStyle(
                                   color: Colors.white,
-                                  fontFamily: 'Noto Sans CJK JP',
-                                  fontSize: 14,
+                                  fontFamily: 'Lato',
+                                  fontSize: 16,
                                   fontWeight: FontWeight.w400,
-                                  letterSpacing: -2,
                                   decoration: TextDecoration.underline,
                                   decorationColor: Colors.white),
                             ),
@@ -264,12 +250,8 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         child: ElevatedButton(
                             onPressed: () {
-                              // Navigator.of(context).pushNamed("/question");
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const QuestionsApp()));
-                              // Navigator.push(context, MaterialPageRoute(builder: (context) => const RegisterPage()));
+                              // Navigator.of(context).pushNamed("/en_question");
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => const EnQuestionsApp()));
 
                             },
                             style: ElevatedButton.styleFrom(
@@ -278,13 +260,13 @@ class _LoginPageState extends State<LoginPage> {
                                     color: Color.fromRGBO(138, 86, 172, 1),
                                     style: BorderStyle.solid)),
                             child: const Text(
-                              'アカウント作成はこちら',
+                              'Create account',
                               style: TextStyle(
                                   color: Color.fromRGBO(138, 86, 172, 1),
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
-                                  fontFamily: 'Noto Sans JP',
-                                  letterSpacing: -1),
+                                  fontFamily: 'Lato'
+                                  ),
                             )),
                       ),
                     ],

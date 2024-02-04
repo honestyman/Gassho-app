@@ -1,24 +1,24 @@
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/pages/home_page.dart';
+import 'package:flutter_app/english_pages/home_page.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 void main() {
   runApp(
     const MaterialApp(
-      home: FirstChangeLanguage(),
+      home: EnFirstChangeLanguage(),
     ),
   );
 }
 
-class FirstChangeLanguage extends StatefulWidget{
-  const FirstChangeLanguage({super.key});
+class EnFirstChangeLanguage extends StatefulWidget{
+  const EnFirstChangeLanguage({super.key});
 
   @override
-  State<FirstChangeLanguage> createState() => _FirstChangeLanguageState();
+  State<EnFirstChangeLanguage> createState() => _EnFirstChangeLanguageState();
 }
 
-class _FirstChangeLanguageState extends State<FirstChangeLanguage> {
+class _EnFirstChangeLanguageState extends State<EnFirstChangeLanguage> {
 
    @override 
   void initState() { 
@@ -32,7 +32,14 @@ class _FirstChangeLanguageState extends State<FirstChangeLanguage> {
     if(token!=null){
       // ignore: use_build_context_synchronously
       Navigator.push(context,
-          MaterialPageRoute(builder: (context) => const HomeApp()));
+          MaterialPageRoute(builder: (context) => const EnHomeApp()));
+    }else{
+      String? language=await storage.read(key: 'language');
+      if(language.toString()=="Japanese"){
+          // MaterialPageRoute(builder: (context) => const EnHomeApp());
+          // ignore: use_build_context_synchronously
+          Navigator.of(context).pushNamed('/japanese_languagechange');
+      }
     }
   }
 
@@ -49,7 +56,7 @@ class _FirstChangeLanguageState extends State<FirstChangeLanguage> {
         backgroundColor: Colors.transparent,
         body: LanguageList(
           languages: [
-            Language(name: '日本語'),
+            Language(name: 'Japanese'),
             Language(name: 'English'),
           ],
           ),
@@ -78,7 +85,7 @@ class TitleSection extends StatelessWidget{
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                   fontSize: 18 ,
-                  fontFamily: 'Noto Sans CJK JP'
+                  fontFamily: 'Lato'
                 ),
           )
         ),
@@ -172,7 +179,7 @@ class LanguageListItem extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     color: Colors.white,
-                    fontFamily: 'Noto Sans CJK JP',
+                    fontFamily: 'Lato',
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
                   ),
@@ -220,19 +227,18 @@ class _LanguageListState extends State<LanguageList> {
     void saveLanguage(){
       if(_shoppingCart.isNotEmpty){
        const storage = FlutterSecureStorage();
-       if(_shoppingCart[0]=="English"){
-        storage.write(key: 'language', value: 'English');
-        Navigator.of(context).pushNamed('/en_login');
-       }else{
-        storage.write(key: 'language', value: 'Japanese');
+       storage.write(key: 'language', value: _shoppingCart[0]);
+       if(_shoppingCart[0].toString()=="Japanese"){
         Navigator.of(context).pushNamed('/login');
+       }else{
+        Navigator.of(context).pushNamed('/en_login');
        }
       }else{
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
             title: const Text('Error'),
-            content: const Text('言語を選択してください'),
+            content: const Text('Please select a language.'),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
@@ -243,6 +249,8 @@ class _LanguageListState extends State<LanguageList> {
         );
       }
     }
+
+
 
   void _handleCartChanged(String language, bool inChecked) {
     setState(() {
@@ -271,7 +279,7 @@ class _LanguageListState extends State<LanguageList> {
     return ListView(
       // backgroundColor: Colors.transparent, 
       children: [
-        const TitleSection(name: '言語を選択してください'),
+        const TitleSection(name: 'Select your language'),
         const SizedBox(
           height: 46.5,
         ),
@@ -301,12 +309,12 @@ class _LanguageListState extends State<LanguageList> {
               backgroundColor: const Color.fromRGBO(138, 86, 172, 1),
             ),
             child: const Text(
-              '続ける',
+              'Continue',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
-                fontFamily: 'Noto Sans JP'
+                fontFamily: 'Lato'
               ),
             )
             ),
