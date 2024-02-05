@@ -1,8 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/pages/verify_page.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_app/english_pages/login_page.dart';
 import 'package:http/http.dart' as http;
 
 void main() {
@@ -38,11 +37,67 @@ class _EnPasswordForgetPageState extends State<EnPasswordForgetPage> {
       }),
     );
     if (response.statusCode == 200) {
-      const storage = FlutterSecureStorage();
-      await storage.write(key: 'email', value: emailController.text);
-        // ignore: use_build_context_synchronously
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => const VerifyPage()));   
+      // ignore: use_build_context_synchronously
+      showDialog(
+          context: context,
+          builder: (_) => Center( // Aligns the container to center
+            child: Container( // A simplified version of dialog. 
+              width: 244,
+              height: 140,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                color: const Color.fromRGBO(43, 43, 55, 1),
+              ),
+              child: Column(
+                children: [
+                   Padding(
+                    padding: const EdgeInsets.only(top:20, left: 20, right: 20),
+                    child: Text(
+                      'Since you sent an email to ${emailController.text}, please set a new password.',
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        decoration: TextDecoration.none,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Noto Sans CJK JP',
+                        fontSize:14 
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                      width: 240,
+                      margin: const EdgeInsets.only(top: 15),
+                      decoration: const BoxDecoration(
+                        border:Border(
+                          top: BorderSide(
+                            color: Colors.white30,
+                            width: 0.5
+                          )
+                        )
+                      ),
+                      child: TextButton(
+                        onPressed: (){
+                          Navigator.of(context, rootNavigator: true).pop(false);
+                          Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => const EnLoginPage()));      
+                        },
+                        child: const Text(
+                          'OK',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Color.fromRGBO(95, 134, 222, 1),
+                            fontWeight: FontWeight.bold
+                          ),
+                        )
+                      ),
+                    ),
+                  )
+                ],
+              ),
+              )
+            )
+        );   
           
     } else {
        var error = String.fromCharCodes(response.bodyBytes);

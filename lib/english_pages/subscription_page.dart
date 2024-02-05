@@ -408,7 +408,7 @@ class _PlanListState extends State<PlanList> {
                 backgroundColor: const Color.fromRGBO(138, 86, 172, 1),
               ),
               child: const Text(
-                'プラン変更',
+                'Change Plane',
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 14,
