@@ -127,6 +127,7 @@ class _AccountSettingAppState extends State<AccountSettingApp> {
       if (response.statusCode == 200) { 
         // ignore: use_build_context_synchronously
         storage.deleteAll();
+        exit(0);
       } 
   }
   @override

@@ -239,8 +239,8 @@ class _EnAccountSettingAppState extends State<EnAccountSettingApp> {
                           margin: const EdgeInsets.only(left: 17.8, right: 17.8),
                           child: MaterialButton(
                             onPressed: () {
-                               Navigator.of(context).pushNamed('/en_account_delete');
-                              // showAlertDialog(context);
+                              //  Navigator.of(context).pushNamed('/en_account_delete');
+                              showAlertDialog(context);
                             },
                             child: const Row(
                               children: [

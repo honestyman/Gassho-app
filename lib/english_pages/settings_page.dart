@@ -4,6 +4,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart' as http;
+
 
 
 void main() {
@@ -130,6 +132,127 @@ class _EnSettingsPageAppState extends State<EnSettingsPageApp> {
         )
       )
     );
+  }
+
+  accountDeleteDialog(BuildContext context) async{
+  const storage = FlutterSecureStorage();
+  String? email=await storage.read(key: 'email');
+  // ignore: use_build_context_synchronously
+  showDialog(
+    context: context,
+    builder: (_) => Center( // Aligns the container to center
+      child: Container( // A simplified version of dialog. 
+        width: 244,
+        height: 140,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5),
+          color: const Color.fromRGBO(43, 43, 55, 1),
+        ),
+        child: Column(
+          children: [
+            const Padding(
+              padding: EdgeInsets.only(top:20, left: 20, right: 20),
+              child: Text(
+                'Are you sure you want to delete your account?',
+                style: TextStyle(
+                  decoration: TextDecoration.none,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Nato',
+                  fontSize:14 ,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: Text(
+                email.toString(),
+                style: const TextStyle(
+                  decoration: TextDecoration.none,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: 'Nato',
+                  fontSize:14 ,
+                ),
+              ),
+            ),
+            Container(
+              width: 244,
+              padding: const EdgeInsets.all(5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container( 
+                    decoration: const BoxDecoration(
+                      border:Border(
+                        top: BorderSide(
+                          color: Colors.white30,
+                          width: 0.5
+                        )
+                      )
+                    ),
+                    child: TextButton(
+                      onPressed: (){
+                        DeleteOnly();
+                      },
+                      child: const Text(
+                        'OK',
+                        textAlign: TextAlign.center,
+                         style: TextStyle(
+                           color: Color.fromRGBO(95, 134, 222, 1),
+                           fontWeight: FontWeight.bold
+                         ),
+                      )
+                    ),
+                  ),
+                  Container(
+                    decoration: const BoxDecoration(
+                      border:Border(
+                        top: BorderSide(
+                          color: Colors.white30,
+                          width: 0.5
+                        )
+                      )
+                    ),
+                    child: TextButton(
+                      onPressed: (){
+                        Navigator.of(context, rootNavigator: true).pop(false);
+                      },
+                      child: const Text(
+                        'Cancel',
+                        textAlign: TextAlign.center,
+                         style: TextStyle(
+                           color: Color.fromRGBO(95, 134, 222, 1),
+                           fontWeight: FontWeight.bold
+                         ),
+                      )
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+        )
+      )
+    );
+  }
+
+  // ignore: non_constant_identifier_names
+  Future<void> DeleteOnly() async {
+    const storage = FlutterSecureStorage();
+    String? email=await storage.read(key: 'email');
+    String url="http://localhost:5000/api/users/onlydelete?email=$email";
+    final response = await http.delete(
+        Uri.parse(url),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        });
+      if (response.statusCode == 200) { 
+        // ignore: use_build_context_synchronously
+        storage.deleteAll();
+        exit(0);
+      } 
   }
 
   @override
@@ -606,6 +729,7 @@ class _EnSettingsPageAppState extends State<EnSettingsPageApp> {
                               padding: const EdgeInsets.only(top:10, left: 20, bottom: 10),
                               child: TextButton(
                                 onPressed: (){
+                                  accountDeleteDialog(context);
                                 },
                                 child: const Text( 
                                         'Delete account',
