@@ -8,6 +8,7 @@ import 'package:flutter_app/english_pages/video_page.dart';
 import 'package:flutter_app/pages/send_data.dart';
 import 'package:flutter_app/pages/send_searchdata.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_app/pages/requesturl.dart' as requesturl;
 
 void main() {
   runApp(const EnContentSearchPage());
@@ -24,7 +25,7 @@ class EnContentSearchPage extends StatefulWidget {
 class _EnContentSearchPageState extends State<EnContentSearchPage> {
 
   Future<List<Data>> getRequest(String content) async {
-    String url = "http://localhost:5000/api/items/search?content=$content";
+    String url = "${requesturl.Constants.url}/api/items/search?content=$content";
     final response = await http.get(Uri.parse(url));
     var reasonData = json.decode(response.body);
     List<Data> items = [];

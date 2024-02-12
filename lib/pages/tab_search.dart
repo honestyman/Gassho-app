@@ -8,6 +8,7 @@ import 'package:flutter_app/pages/send_data.dart';
 import 'package:flutter_app/pages/send_searchiddata.dart';
 import 'package:flutter_app/pages/video_page.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_app/pages/requesturl.dart' as requesturl;
 
 void main() {
   runApp(const TabSearchPage());
@@ -24,7 +25,7 @@ class TabSearchPage extends StatefulWidget {
 class _TabSearchPageState extends State<TabSearchPage> {
 
   Future<List<Data>> getRequest(int id) async {
-    String url = "http://localhost:5000/api/items/tab_search?id=$id";
+    String url = "${requesturl.Constants.url}/api/items/tab_search?id=$id";
     final response = await http.get(Uri.parse(url));
     var reasonData = json.decode(response.body);
     List<Data> items = [];

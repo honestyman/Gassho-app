@@ -8,7 +8,7 @@ import 'package:flutter_app/english_pages/send_searchiddata.dart';
 import 'package:flutter_app/english_pages/tab_search.dart';
 import 'package:flutter_app/pages/send_searchdata.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:flutter_app/pages/requesturl.dart' as requesturl;
 
 void main() {
   runApp(const EnSearchApp());
@@ -30,7 +30,7 @@ class _EnSearchAppState extends State<EnSearchApp> {
 
   Future<List<TabItem>> getAllTab() async{
     
-    String url="http://localhost:5000/api/items/getalltab";
+    String url="${requesturl.Constants.url}/api/items/getalltab";
     final response=await http.get(Uri.parse(url));
     var reasonData=json.decode(response.body);
     List<TabItem> tabs=[];
@@ -43,7 +43,7 @@ class _EnSearchAppState extends State<EnSearchApp> {
 
   Future<List<CategoryItem>> getAllCategory() async{
     
-    String url="http://localhost:5000/api/items/getallcategory";
+    String url="${requesturl.Constants.url}/api/items/getallcategory";
     final response=await http.get(Uri.parse(url));
     var reasonData=json.decode(response.body);
     List<CategoryItem> categorys=[];

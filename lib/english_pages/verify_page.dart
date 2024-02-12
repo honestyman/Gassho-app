@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/pages/newpassword_page.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_app/pages/requesturl.dart' as requesturl;
 
 void main() {
   runApp(
@@ -25,7 +26,7 @@ class _VerifyPageState extends State<VerifyPage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   bool light=true;
   // String _username, _password;
-  final apiUrl = "http://localhost:5000/api/users/verify";
+  final apiUrl = "${requesturl.Constants.url}/api/users/verify";
   TextEditingController verifyController = TextEditingController();
 
   Future<void> sendPostRequest() async {

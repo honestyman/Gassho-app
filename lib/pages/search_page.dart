@@ -7,6 +7,7 @@ import 'package:flutter_app/pages/catetory_search.dart';
 import 'package:flutter_app/pages/send_searchdata.dart';
 import 'package:flutter_app/pages/tab_search.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_app/pages/requesturl.dart' as requesturl;
 
 import 'send_searchiddata.dart';
 
@@ -30,7 +31,7 @@ class _SearchAppState extends State<SearchApp> {
 
   Future<List<TabItem>> getAllTab() async{
     
-    String url="http://localhost:5000/api/items/getalltab";
+    String url="${requesturl.Constants.url}/api/items/getalltab";
     final response=await http.get(Uri.parse(url));
     var reasonData=json.decode(response.body);
     List<TabItem> tabs=[];
@@ -43,7 +44,7 @@ class _SearchAppState extends State<SearchApp> {
 
   Future<List<CategoryItem>> getAllCategory() async{
     
-    String url="http://localhost:5000/api/items/getallcategory";
+    String url="${requesturl.Constants.url}/api/items/getallcategory";
     final response=await http.get(Uri.parse(url));
     var reasonData=json.decode(response.body);
     List<CategoryItem> categorys=[];

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/pages/home_page.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_app/pages/requesturl.dart' as requesturl;
 
 void main() {
   runApp(
@@ -56,7 +57,7 @@ class _QuestionnarePageState extends State<QuestionnarePage> {
           List<dynamic> listIntroductions=jsonDecode(introductions);
 
       // ignore: unused_local_variable
-          final reasonData= await http.post(Uri.parse('http://localhost:5000/api/reasons/user_reasons/add'),
+          final reasonData= await http.post(Uri.parse('${requesturl.Constants.url}/api/reasons/user_reasons/add'),
             headers: <String, String>{
               'Content-Type': 'application/json; charset=UTF-8',
             },
@@ -71,7 +72,7 @@ class _QuestionnarePageState extends State<QuestionnarePage> {
 
   Future<List<Question>> getRequest() async {
     //replace your restFull API here.
-    String url = "http://localhost:5000/api/introductions/";
+    String url = "${requesturl.Constants.url}/api/introductions/";
     final response = await http.get(Uri.parse(url));
 
     var responseData = json.decode(response.body);

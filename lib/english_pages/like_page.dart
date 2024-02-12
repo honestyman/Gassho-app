@@ -8,6 +8,8 @@ import 'package:flutter_app/english_pages/video_page.dart';
 import 'package:flutter_app/pages/send_data.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_app/pages/requesturl.dart' as requesturl;
+
 
 void main() {
   runApp(const EnLikePageApp());
@@ -25,7 +27,7 @@ class _EnLikePageAppState extends State<EnLikePageApp> {
   Future<List<Data>> getRequest() async {
     const storage=FlutterSecureStorage();
     String? email=await storage.read(key: 'email');
-    String url = "http://localhost:5000/api/items/getlike?email=$email";
+    String url = "${requesturl.Constants.url}/api/items/getlike?email=$email";
     final response = await http.get(Uri.parse(url));
     var reasonData = json.decode(response.body);
     List<Data> items = [];

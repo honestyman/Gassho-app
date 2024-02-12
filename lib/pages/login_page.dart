@@ -6,6 +6,7 @@ import 'package:flutter_app/pages/password_forgetpage.dart';
 import 'package:flutter_app/pages/questions_page.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_app/pages/requesturl.dart' as requesturl;
 
 void main() {
   runApp(
@@ -26,7 +27,7 @@ class _LoginPageState extends State<LoginPage> {
   final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
   // String _username, _password;
-  final apiUrl = "http://localhost:5000/api/auth/";
+  final apiUrl = "${requesturl.Constants.url}/api/auth/";
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
@@ -59,7 +60,7 @@ class _LoginPageState extends State<LoginPage> {
     } else {
        var error = String.fromCharCodes(response.bodyBytes);
       final string=jsonDecode(error);
-      var str;
+      var str="";
       if(string=="Please include a valid Email"){
          str="有効なメールアドレスを入力してください";
       }

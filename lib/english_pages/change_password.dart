@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_app/pages/requesturl.dart' as requesturl;
 
 
 void main() {
@@ -30,7 +31,7 @@ class _EnChangePasswordAppState extends State<EnChangePasswordApp> {
   TextEditingController newPassword = TextEditingController();
 
   Future<void> changePassword() async {
-    String url="http://localhost:5000/api/user/changepassword";
+    String url="${requesturl.Constants.url}/api/user/changepassword";
     const storage = FlutterSecureStorage();
     String? email=await storage.read(key: 'email');
     final response = await http.post(

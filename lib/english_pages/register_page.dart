@@ -5,6 +5,7 @@ import 'package:flutter_app/english_pages/login_page.dart';
 import 'package:flutter_app/english_pages/plan_page.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_app/pages/requesturl.dart' as requesturl;
 
 void main() {
   runApp(
@@ -27,7 +28,7 @@ class _EnRegisterPageState extends State<EnRegisterPage> {
   bool light=true;
   // String _username, _password;
   // final Dio _dio=Dio();
-  final apiUrl = "http://localhost:5000/api/user/";
+  final apiUrl = "${requesturl.Constants.url}/api/user/";
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();

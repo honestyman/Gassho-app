@@ -7,6 +7,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_app/pages/requesturl.dart' as requesturl;
 
 void main() {
   runApp(
@@ -81,7 +82,7 @@ class _EnVideoPlayPageState extends State<EnVideoPlayPage> {
 
   Future<List<Item>> getTab(int id) async{
     
-    String url="http://localhost:5000/api/items/tab?id=$id";
+    String url="${requesturl.Constants.url}/api/items/tab?id=$id";
     final response=await http.get(Uri.parse(url));
     var reasonData=json.decode(response.body);
     List<Item> tabs=[];
@@ -95,7 +96,7 @@ class _EnVideoPlayPageState extends State<EnVideoPlayPage> {
   Future<void> addLike(int id) async{
     const storage=FlutterSecureStorage();
     String? email=await storage.read(key: 'email');
-    String url="http://localhost:5000/api/items/like";
+    String url="${requesturl.Constants.url}/api/items/like";
     final response = await http.post(
       Uri.parse(url),
       headers: <String, String>{
@@ -171,7 +172,7 @@ class _EnVideoPlayPageState extends State<EnVideoPlayPage> {
   Future<void> addDownload(int id) async{
     const storage=FlutterSecureStorage();
     String? email=await storage.read(key: 'email');
-    String url="http://localhost:5000/api/items/download";
+    String url="${requesturl.Constants.url}/api/items/download";
     // ignore: unused_local_variable
     final response = await http.post(
       Uri.parse(url),

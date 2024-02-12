@@ -28,6 +28,7 @@ import 'package:flutter_app/pages/home_page.dart';
 import 'package:flutter_app/pages/send_data.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_app/pages/requesturl.dart' as requesturl;
 
 
 void main() {
@@ -245,7 +246,7 @@ class DataList extends StatefulWidget {
 class _DataListState extends State<DataList> {
 
   Future<List<Data>> getRequest() async {
-    String url="http://localhost:5000/api/items/";
+    String url="${requesturl.Constants.url}/api/items/";
     final response=await http.get(Uri.parse(url));
     var reasonData=json.decode(response.body);
     List<Data> items=[];
@@ -259,7 +260,7 @@ class _DataListState extends State<DataList> {
   Future<void> addPlays(int id) async{
     const storage=FlutterSecureStorage();
     String? email=await storage.read(key: 'email');
-    String url="http://localhost:5000/api/items/play";
+    String url="${requesturl.Constants.url}/api/items/play";
     // ignore: unused_local_variable
     final response = await http.post(
       Uri.parse(url),

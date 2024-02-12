@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/pages/login_page.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_app/pages/requesturl.dart' as requesturl;
+
 
 void main() {
   runApp(
@@ -23,7 +25,7 @@ class _PasswordForgetPageState extends State<PasswordForgetPage> {
   final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
   // String _username, _password;
-  final apiUrl = "http://localhost:5000/api/auth/forget_password";
+  final apiUrl = "${requesturl.Constants.url}/api/auth/forget_password";
   TextEditingController emailController = TextEditingController();
 
   Future<void> sendPostRequest() async {

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/english_pages/register_page.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_app/pages/requesturl.dart' as requesturl;
 
 void main() {
   runApp(
@@ -49,7 +50,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<List<Question>> getRequest() async {
     //replace your restFull API here.
-    String url = "http://localhost:5000/api/reasons/";
+    String url = "${requesturl.Constants.url}/api/reasons/";
     final response = await http.get(Uri.parse(url));
 
     var responseData = json.decode(response.body);
