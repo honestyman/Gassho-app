@@ -29,11 +29,19 @@ class _FirstChangeLanguageState extends State<FirstChangeLanguage> {
   void getUser() async{
     const storage = FlutterSecureStorage();
     String? token=await storage.read(key: 'jwt');
-    if(token!=null){
+    if(token!= null){
       // ignore: use_build_context_synchronously
       Navigator.push(context,
           MaterialPageRoute(builder: (context) => const HomeApp()));
+    }else{
+      String? language=await storage.read(key: 'language');
+      if(language.toString()=="English"){
+          // MaterialPageRoute(builder: (context) => const EnHomeApp());
+          // ignore: use_build_context_synchronously
+          Navigator.of(context).pushNamed('/english_languagechange');
+      }
     }
+
   }
 
   @override

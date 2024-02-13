@@ -17,6 +17,7 @@ import 'package:flutter_app/pages/content_search.dart';
 import 'package:flutter_app/pages/download_page.dart';
 import 'package:flutter_app/pages/give_page.dart';
 import 'package:flutter_app/pages/like_page.dart';
+import 'package:flutter_app/pages/login_page.dart';
 import 'package:flutter_app/pages/mypage.dart';
 import 'package:flutter_app/pages/notification.dart';
 import 'package:flutter_app/pages/play_page.dart';
@@ -47,23 +48,27 @@ class _HomeAppState extends State<HomeApp> {
 
   @override
   void initState(){
-    getLanguage();  
+    getState();
+    // getUser();  
     super.initState();
   }
 
-  void getLanguage() async{
+  void getState() async{
     const storage = FlutterSecureStorage();
     String? language=await storage.read(key: 'language');
+    String? token=await storage.read(key: 'jwt');
     if(language.toString()=="English"){
       // ignore: use_build_context_synchronously
       Navigator.push(context,
           MaterialPageRoute(builder: (context) => const EnHomeApp()));
-      //
-        // ignore: use_build_context_synchronously
-        // Navigator.of(context).pushNamed('/en_home');
-
+    }
+    if(token == null){
+      // ignore: use_build_context_synchronously
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => const LoginPage()));
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -293,38 +298,36 @@ class _DataListState extends State<DataList> {
           ),
         ),
         const TitleSection(name: '今日の瞑想'),
-        Expanded(
-          child: Flexible(
-                  child: FutureBuilder(
-                    future: getRequest(),
-                    builder: (BuildContext ctx, AsyncSnapshot snapshot) {
-                      if (snapshot.data == null) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      } else {
-                        return ListView.builder(
-                            itemCount: snapshot.data.length,
-                            itemBuilder: (ctx, index) => 
-                            MaterialButton(
-                              onPressed: () {
-                                if(snapshot.data[index].type=='音声'){
-                                  addPlays(snapshot.data[index].id);
-                                  Navigator.pushNamed(context, AudioPlayPage.routeName,
-                                      arguments: SendDatas(snapshot.data[index].id, snapshot.data[index].title, snapshot.data[index].time, snapshot.data[index].description, snapshot.data[index].filename));
-                                }else{
-                                  addPlays(snapshot.data[index].id);
-                                  Navigator.pushNamed(context, VideoPlayPage.routeName,
-                                      arguments: SendDatas(snapshot.data[index].id, snapshot.data[index].title, snapshot.data[index].time, snapshot.data[index].description, snapshot.data[index].filename));
-                                }
-                              },
-                              child: DataListItem(title: snapshot.data[index].title, type: snapshot.data[index].type, time: snapshot.data[index].time, imageUrl: snapshot.data[index].main_image_url)
-                              ));
-                      }
-                    },
-                  ),
+        Flexible(
+                child: FutureBuilder(
+                  future: getRequest(),
+                  builder: (BuildContext ctx, AsyncSnapshot snapshot) {
+                    if (snapshot.data == null) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    } else {
+                      return ListView.builder(
+                          itemCount: snapshot.data.length,
+                          itemBuilder: (ctx, index) => 
+                          MaterialButton(
+                            onPressed: () {
+                              if(snapshot.data[index].type=='音声'){
+                                addPlays(snapshot.data[index].id);
+                                Navigator.pushNamed(context, AudioPlayPage.routeName,
+                                    arguments: SendDatas(snapshot.data[index].id, snapshot.data[index].title, snapshot.data[index].time, snapshot.data[index].description, snapshot.data[index].filename));
+                              }else{
+                                addPlays(snapshot.data[index].id);
+                                Navigator.pushNamed(context, VideoPlayPage.routeName,
+                                    arguments: SendDatas(snapshot.data[index].id, snapshot.data[index].title, snapshot.data[index].time, snapshot.data[index].description, snapshot.data[index].filename));
+                              }
+                            },
+                            child: DataListItem(title: snapshot.data[index].title, type: snapshot.data[index].type, time: snapshot.data[index].time, imageUrl: snapshot.data[index].main_image_url)
+                            ));
+                    }
+                  },
                 ),
-        ),
+              ),
         Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [

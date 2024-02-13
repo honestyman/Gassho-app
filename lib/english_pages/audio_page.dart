@@ -283,8 +283,7 @@ class _EnAudioPlayPageState extends State<EnAudioPlayPage> {
                             )
                           ],
                         ),
-                    ),
-                    
+                    ),   
                   ],
                 ),
                 Expanded(
@@ -442,15 +441,29 @@ class _EnAudioPlayPageState extends State<EnAudioPlayPage> {
                 child: StreamBuilder( 
                     stream: player.positionStream, 
                     builder: (context, snapshot1) { 
-                      final Duration duration = loaded 
-                          ? snapshot1.data as Duration 
-                          : const Duration(seconds: 0); 
+                      final Duration duration;
+                      if (loaded) {
+                        if (snapshot1.data != null) {
+                            duration = snapshot1.data as Duration;
+                          } else {
+                            duration = const Duration(seconds: 0);
+                          }
+                      } else {
+                        duration = const Duration(seconds: 0);
+                      } 
                       return StreamBuilder( 
                           stream: player.bufferedPositionStream, 
                           builder: (context, snapshot2) { 
-                            final Duration bufferedDuration = loaded 
-                                ? snapshot2.data as Duration 
-                                : const Duration(seconds: 0); 
+                            final Duration bufferedDuration;
+                            if (loaded) {
+                              if (snapshot2.data != null) {
+                                  bufferedDuration = snapshot2.data as Duration;
+                                }else{
+                                  bufferedDuration = const Duration(seconds: 0);
+                                }
+                            } else {
+                              bufferedDuration = const Duration(seconds: 0);
+                            } 
                             return SizedBox( 
                               height: 30, 
                               child: Padding( 

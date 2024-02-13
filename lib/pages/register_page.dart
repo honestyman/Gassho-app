@@ -7,7 +7,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_app/pages/requesturl.dart' as requesturl;
 
-
 void main() {
   runApp(
     const MaterialApp(
@@ -26,7 +25,7 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  bool light=true;
+  bool light = true;
   // String _username, _password;
   // final Dio _dio=Dio();
   final apiUrl = "${requesturl.Constants.url}/api/user/";
@@ -46,7 +45,7 @@ class _RegisterPageState extends State<RegisterPage> {
         'password': passwordController.text,
       }),
     );
-    if (response.statusCode == 200) { 
+    if (response.statusCode == 200) {
       const storage = FlutterSecureStorage();
       // String? reasons=await storage.read(key: 'reasons');
       // ignore: use_build_context_synchronously
@@ -56,28 +55,29 @@ class _RegisterPageState extends State<RegisterPage> {
       await storage.write(key: 'email', value: emailController.text);
       await storage.write(key: 'notification', value: light.toString());
       // ignore: use_build_context_synchronously
-      Navigator.push(context, MaterialPageRoute(builder: (context) => const PlanPage()));
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => const PlanPage()));
     } else {
       final error = String.fromCharCodes(response.bodyBytes);
-        final string=jsonDecode(error);
-        var str="";
-        if(string=="Please include a valid Email"){
-         str="有効なメールアドレスを入力してください";
-        }
-        if(string=="Name is Required"){
-         str="名前は必須です";
-        }
-        if(string=="Please enter a Passowrd with 6 or more charcters"){
-         str="6文字以上のパスワードを入力してください";
-        }
-        if(string=="User Already Exists"){
-         str="このユーザーは既に存在します";
-        }
-        if(string=="Server Error"){
-         str="サーバーエラー";
-        }
-        // ignore: use_build_context_synchronously
-        showDialog(
+      final string = jsonDecode(error);
+      var str = "";
+      if (string == "Please include a valid Email") {
+        str = "有効なメールアドレスを入力してください";
+      }
+      if (string == "Name is Required") {
+        str = "名前は必須です";
+      }
+      if (string == "Please enter a Passowrd with 6 or more charcters") {
+        str = "6文字以上のパスワードを入力してください";
+      }
+      if (string == "User Already Exists") {
+        str = "このユーザーは既に存在します";
+      }
+      if (string == "Server Error") {
+        str = "サーバーエラー";
+      }
+      // ignore: use_build_context_synchronously
+      showDialog(
         context: context,
         builder: (context) => AlertDialog(
           title: const Text('Error'),
@@ -296,7 +296,6 @@ class _RegisterPageState extends State<RegisterPage> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => const LoginPage()));
-
                             },
                             child: const Text(
                               'こちらからログイン',

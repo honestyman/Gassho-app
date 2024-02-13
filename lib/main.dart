@@ -40,8 +40,8 @@ final routes={
   '/en_passwordforget':(BuildContext context)=>const EnPasswordForgetPage(),
   '/verify':(BuildContext context)=>const VerifyPage(),
   '/newpassword':(BuildContext context)=>const NewPasswordPage(),
-   '/japanese_languagechange':(BuildContext context)=>const FirstChangeLanguage(),
-   '/':(BuildContext context)=>const EnFirstChangeLanguage(),
+  '/english_languagechange':(BuildContext context)=>const EnFirstChangeLanguage(),
+  '/':(BuildContext context)=>const FirstChangeLanguage(),
 
 };
 

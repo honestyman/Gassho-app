@@ -3,6 +3,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_app/english_pages/home_page.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_app/pages/requesturl.dart' as requesturl;
@@ -107,12 +108,21 @@ class _EnSettingsPageAppState extends State<EnSettingsPageApp> {
                       )
                     ),
                     child: TextButton(
-                      onPressed: (){
+                      onPressed: () async{
                         // Navigator.of(content).pop(false);
                         // Navigator.of(context, rootNavigator: true).pop(false);
                         storage.delete(key: 'jwt');
                         storage.delete(key: 'email');
-                        exit(0);
+                        String? token=await storage.read(key: 'jwt');
+                        String? email=await storage.read(key: 'email');
+                        if(token==null && email==null){
+                          // ignore: use_build_context_synchronously
+                         Navigator.of(context, rootNavigator: true).pop(false);
+                        // ignore: use_build_context_synchronously
+                         Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => const EnHomeApp()));
+                        }
+                        // exit(0);
                       },
                       child: const Text(
                         'Log Out',
