@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_app/pages/home_page.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 void main() {
@@ -29,6 +30,8 @@ class _FirstChangeLanguageState extends State<FirstChangeLanguage> {
   void getUser() async{
     const storage = FlutterSecureStorage();
     String? token=await storage.read(key: 'jwt');
+    WidgetsFlutterBinding.ensureInitialized();
+      await FlutterDownloader.initialize(debug: true);
     if(token!= null){
       // ignore: use_build_context_synchronously
       Navigator.push(context,

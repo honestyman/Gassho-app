@@ -52,7 +52,10 @@ class _EnHomeAppState extends State<EnHomeApp> {
     super.initState();
   }
   void getState() async{
+    // WidgetsFlutterBinding.ensureInitialized();
+    // await FlutterDownloader.initialize(debug: true);
     const storage = FlutterSecureStorage();
+    
     String? language=await storage.read(key: 'language');
     String? token=await storage.read(key: 'jwt');
     if(language.toString()=="Japanese"){
@@ -142,7 +145,7 @@ class DataListItem extends StatelessWidget {
 
   final String title;
   final String type;
-  final String time;
+  final int time;
   final String imageUrl;
 
   @override
@@ -160,7 +163,10 @@ class DataListItem extends StatelessWidget {
                 margin: const EdgeInsets.all(6),
                 width: 100,
                 height: 100,
-                child: Image.asset("assets/images/$imageUrl"),
+                decoration:BoxDecoration(
+                  borderRadius: BorderRadius.circular(10)
+                ),
+                child: Image.network("${requesturl.Constants.url}/$imageUrl"),
               ),
               Expanded(
                   child: Container(
@@ -179,8 +185,7 @@ class DataListItem extends StatelessWidget {
                           color: Color.fromRGBO(138, 86, 172, 1),
                           fontFamily: 'Lato',
                           fontWeight: FontWeight.w400,
-                          fontSize: 12,
-                          letterSpacing: -1),
+                          fontSize: 12),
                     ),
                     Text(
                       title,
@@ -190,8 +195,8 @@ class DataListItem extends StatelessWidget {
                           color: Colors.white,
                           fontFamily: 'Lato',
                           fontWeight: FontWeight.bold,
-                          fontSize: 14,
-                          letterSpacing: -1),
+                          fontSize: 14
+                          ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 5.0),
@@ -201,7 +206,7 @@ class DataListItem extends StatelessWidget {
                           Container(
                             margin: const EdgeInsets.only(left: 5),
                             child: Text(
-                              time,
+                              time.toString(),
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontFamily: 'Lato',
@@ -234,7 +239,7 @@ class Data{
   final int id;
   final String title;
   final String type;
-  final String time;
+  final int time;
   final String main_image_url;
   final String description;
   final String filename;
@@ -255,7 +260,7 @@ class _DataListState extends State<DataList> {
     var reasonData=json.decode(response.body);
     List<Data> items=[];
     for(var singleItem in reasonData){
-      Data item=Data(id:singleItem["id"], title: singleItem["title"], type: singleItem["type"], time: singleItem["time"], main_image_url: singleItem["main_image_url"], description: singleItem["description"], filename: singleItem["filename"]);
+      Data item=Data(id:singleItem["id"], title: singleItem["englishtitle"], type: singleItem["type"], time: singleItem["time"], main_image_url: singleItem["main_image_url"], description: singleItem["englishdescription"], filename: singleItem["filename"]);
       items.add(item);
     }
     return items;

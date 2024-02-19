@@ -32,11 +32,11 @@ class _TabSearchPageState extends State<TabSearchPage> {
     for (var singleItem in reasonData) {
       Data item = Data(
           id: singleItem["id"],
-          title: singleItem["title"],
+          title: singleItem["japanesetitle"],
           type: singleItem["type"],
           time: singleItem["time"],
           main_image_url: singleItem["main_image_url"],
-          description: singleItem["description"],
+          description: singleItem["japanesedescription"],
           filename: singleItem["filename"]);
       items.add(item);
     }
@@ -259,7 +259,7 @@ class DataListItem extends StatelessWidget {
 
   final String title;
   final String type;
-  final String time;
+  final int time;
   final String imageUrl;
 
   @override
@@ -277,7 +277,10 @@ class DataListItem extends StatelessWidget {
             margin: const EdgeInsets.all(6),
             width: 100,
             height: 100,
-            child: Image.asset("assets/images/$imageUrl"),
+            decoration:BoxDecoration(
+                  borderRadius: BorderRadius.circular(10)
+            ),
+            child: Image.network("${requesturl.Constants.url}/$imageUrl"),
           ),
           Expanded(
               child: Container(
@@ -318,7 +321,7 @@ class DataListItem extends StatelessWidget {
                       Container(
                         margin: const EdgeInsets.only(left: 5),
                         child: Text(
-                          time,
+                          time.toString(),
                           style: const TextStyle(
                             color: Colors.white,
                             fontFamily: 'Noto Sans CJK JP',
@@ -358,7 +361,7 @@ class Data {
   final int id;
   final String title;
   final String type;
-  final String time;
+  final int time;
   final String main_image_url;
   final String description;
   final String filename;

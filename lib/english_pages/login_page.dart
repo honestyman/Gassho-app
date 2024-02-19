@@ -45,11 +45,6 @@ class _EnLoginPageState extends State<EnLoginPage> {
     );
     if (response.statusCode == 200) {
       const storage = FlutterSecureStorage();
-      // String? reasons=await storage.read(key: 'reasons');
-      // String? introductions=await storage.read(key: 'introductions');
-      // await storage.deleteAll();
-      // await storage.delete(key: 'reasons');
-      // await storage.delete(key: 'introductions');
       final token = jsonDecode(response.body)['token'];
       await storage.write(key: 'jwt', value: token);
       await storage.write(key: 'email', value: emailController.text);

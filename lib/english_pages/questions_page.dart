@@ -98,64 +98,62 @@ class _HomePageState extends State<HomePage> {
                   image: AssetImage("assets/images/back.png"),
                   fit: BoxFit.cover)),
           // padding: EdgeInsets.all(16.0),
-          child: Expanded(
-            child: Column(
-              children: [
-                const TitleSection(name: 'Why are you interested in "GASSHO"?'),
-                Flexible(
-                  child: FutureBuilder(
-                    future: getRequest(),
-                    builder: (BuildContext ctx, AsyncSnapshot snapshot) {
-                      if (snapshot.data == null) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      } else {
-                        return ListView.builder(
-                            itemCount: snapshot.data.length,
-                            itemBuilder: (ctx, index) => QuestionListItem(
-                                  text: snapshot.data[index].text,
-                                  inChecked: _shoppingCart
-                                      .contains(snapshot.data[index].text),
-                                  onCartChanged: _handleCartChanged,
-                                ));
-                      }
-                    },
-                  ),
+          child: Column(
+            children: [
+              const TitleSection(name: 'Why are you interested in "GASSHO"?'),
+              Flexible(
+                child: FutureBuilder(
+                  future: getRequest(),
+                  builder: (BuildContext ctx, AsyncSnapshot snapshot) {
+                    if (snapshot.data == null) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    } else {
+                      return ListView.builder(
+                          itemCount: snapshot.data.length,
+                          itemBuilder: (ctx, index) => QuestionListItem(
+                                text: snapshot.data[index].text,
+                                inChecked: _shoppingCart
+                                    .contains(snapshot.data[index].text),
+                                onCartChanged: _handleCartChanged,
+                              ));
+                    }
+                  },
                 ),
-                Container(
-                  height: 47,
-                  width: 354,
-                  margin: const EdgeInsets.only(
-                    left: 20,
-                    top: 20,
-                    bottom: 82,
-                    right: 20,
-                  ),
-                  child: ElevatedButton(
-                      onPressed: () {
-                        writeStorage();
-                        // Navigator.of(context).pushNamed("/register");
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const EnRegisterPage()));
-                        // getReason();
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color.fromRGBO(138, 86, 172, 1),
-                      ),
-                      child: const Text(
-                        'Continue',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'Noto Sans JP'),
-                      )),
-                )
-              ],
-            ),
+              ),
+              Container(
+                height: 47,
+                width: 354,
+                margin: const EdgeInsets.only(
+                  left: 20,
+                  top: 20,
+                  bottom: 82,
+                  right: 20,
+                ),
+                child: ElevatedButton(
+                    onPressed: () {
+                      writeStorage();
+                      // Navigator.of(context).pushNamed("/register");
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const EnRegisterPage()));
+                      // getReason();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromRGBO(138, 86, 172, 1),
+                    ),
+                    child: const Text(
+                      'Continue',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Noto Sans JP'),
+                    )),
+              )
+            ],
           ),
         ),
       ),

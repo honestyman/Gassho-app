@@ -1,7 +1,7 @@
  class SendDatas{
   final int id;
   final String title;
-  final String time;
+  final int time;
   final String description;
   final String filename;
 

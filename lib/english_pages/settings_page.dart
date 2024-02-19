@@ -1,9 +1,8 @@
 
 
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_app/english_pages/home_page.dart';
+import 'package:flutter_app/english_pages/login_page.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_app/pages/requesturl.dart' as requesturl;
@@ -113,6 +112,7 @@ class _EnSettingsPageAppState extends State<EnSettingsPageApp> {
                         // Navigator.of(context, rootNavigator: true).pop(false);
                         storage.delete(key: 'jwt');
                         storage.delete(key: 'email');
+                        storage.delete(key: 'downloadset');
                         String? token=await storage.read(key: 'jwt');
                         String? email=await storage.read(key: 'email');
                         if(token==null && email==null){
@@ -153,7 +153,7 @@ class _EnSettingsPageAppState extends State<EnSettingsPageApp> {
     builder: (_) => Center( // Aligns the container to center
       child: Container( // A simplified version of dialog. 
         width: 244,
-        height: 140,
+        height: 150,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
           color: const Color.fromRGBO(43, 43, 55, 1),
@@ -261,7 +261,12 @@ class _EnSettingsPageAppState extends State<EnSettingsPageApp> {
       if (response.statusCode == 200) { 
         // ignore: use_build_context_synchronously
         storage.deleteAll();
-        exit(0);
+        // ignore: use_build_context_synchronously
+        Navigator.of(context, rootNavigator: true).pop(false);
+        // ignore: use_build_context_synchronously
+        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => const EnLoginPage()));
+        // exit(0);
       } 
   }
 

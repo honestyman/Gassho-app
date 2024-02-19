@@ -1,7 +1,8 @@
-import 'dart:io';
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_app/english_pages/login_page.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_app/pages/requesturl.dart' as requesturl;
@@ -30,7 +31,7 @@ class _EnAccountSettingAppState extends State<EnAccountSettingApp> {
     builder: (_) => Center( // Aligns the container to center
       child: Container( // A simplified version of dialog. 
         width: 244,
-        height: 111,
+        height: 150,
         padding: const EdgeInsets.only(bottom: 5),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
@@ -67,8 +68,7 @@ class _EnAccountSettingAppState extends State<EnAccountSettingApp> {
                     ),
                     child: TextButton(
                       onPressed: (){
-                        deleteAccount();
-                        exit(0);                            // showAlertDialog_2(context);
+                        deleteAccount();                       // showAlertDialog_2(context);
                       },
                       child: const Text(
                         'OK',
@@ -128,6 +128,13 @@ class _EnAccountSettingAppState extends State<EnAccountSettingApp> {
       if (response.statusCode == 200) { 
         // ignore: use_build_context_synchronously
         storage.deleteAll();
+        // ignore: use_build_context_synchronously
+        Navigator.of(context, rootNavigator: true).pop(false);
+
+        // ignore: use_build_context_synchronously
+        Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const EnLoginPage()));
+
       } 
   }
   @override

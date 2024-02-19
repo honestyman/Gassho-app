@@ -198,7 +198,7 @@ class _GivePageState extends State<GivePage> {
                           fontWeight: FontWeight.bold),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(top: 17.5, bottom: 21.6),
+                      padding: EdgeInsets.only(top: 17.5),
                       child: ImageIcon(
                         AssetImage("assets/images/flower.png"),
                         color: Color.fromRGBO(138, 86, 172, 1),
@@ -224,113 +224,118 @@ class _GivePageState extends State<GivePage> {
                   ],
                 ),
               ),
-              Container(
-                margin: const EdgeInsets.only(top: 32, bottom: 60),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: 37,
-                      height: 50,
-                      child: TextFormField(
-                        controller: first,
-                        decoration: InputDecoration(
-                            isDense: true,
-                            filled: true,
-                            fillColor: Colors.white,
-                            // floatingLabelBehavior: FloatingLabelBehavior.always,
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(color: Colors.white),
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                                borderSide:
-                                    const BorderSide(color: Colors.white),
-                                borderRadius: BorderRadius.circular(5))),
+              Expanded(
+                child: Container(
+                  margin: const EdgeInsets.only(top: 32, bottom: 60),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: 37,
+                        height: 50,
+                        child: TextFormField(
+                          controller: first,
+                          decoration: InputDecoration(
+                              isDense: true,
+                              filled: true,
+                              fillColor: Colors.white,
+                              // floatingLabelBehavior: FloatingLabelBehavior.always,
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(color: Colors.white),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                  borderSide:
+                                      const BorderSide(color: Colors.white),
+                                  borderRadius: BorderRadius.circular(5))),
+                        ),
                       ),
-                    ),
-                    const SizedBox(
-                      width: 11,
-                    ),
-                    SizedBox(
-                      width: 37,
-                      height: 50,
-                      child: TextFormField(
-                        controller: second,
-                        decoration: InputDecoration(
-                            isDense: true,
-                            filled: true,
-                            fillColor: Colors.white,
-                            // floatingLabelBehavior: FloatingLabelBehavior.always,
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(color: Colors.white),
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                                borderSide:
-                                    const BorderSide(color: Colors.white),
-                                borderRadius: BorderRadius.circular(5))),
+                      const SizedBox(
+                        width: 11,
                       ),
-                    ),
-                    const SizedBox(
-                      width: 11,
-                    ),
-                    SizedBox(
-                      width: 37,
-                      height: 50,
-                      child: TextFormField(
-                        controller: third,
-                        decoration: InputDecoration(
-                            isDense: true,
-                            filled: true,
-                            fillColor: Colors.white,
-                            // floatingLabelBehavior: FloatingLabelBehavior.always,
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(color: Colors.white),
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                                borderSide:
-                                    const BorderSide(color: Colors.white),
-                                borderRadius: BorderRadius.circular(5))),
+                      SizedBox(
+                        width: 37,
+                        height: 50,
+                        child: TextFormField(
+                          controller: second,
+                          decoration: InputDecoration(
+                              isDense: true,
+                              filled: true,
+                              fillColor: Colors.white,
+                              // floatingLabelBehavior: FloatingLabelBehavior.always,
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(color: Colors.white),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                  borderSide:
+                                      const BorderSide(color: Colors.white),
+                                  borderRadius: BorderRadius.circular(5))),
+                        ),
                       ),
-                    ),
-                    const SizedBox(
-                      width: 11,
-                    ),
-                    const Text(
-                      '00円',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'Noto Sans JP',
-                          fontSize: 24,
-                          fontWeight: FontWeight.w500,
-                          letterSpacing: 11),
-                    ),
-                  ],
+                      const SizedBox(
+                        width: 11,
+                      ),
+                      SizedBox(
+                        width: 37,
+                        height: 50,
+                        child: TextFormField(
+                          controller: third,
+                          decoration: InputDecoration(
+                              isDense: true,
+                              filled: true,
+                              fillColor: Colors.white,
+                              // floatingLabelBehavior: FloatingLabelBehavior.always,
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(color: Colors.white),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                  borderSide:
+                                      const BorderSide(color: Colors.white),
+                                  borderRadius: BorderRadius.circular(5))),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 11,
+                      ),
+                      const Text(
+                        '00円',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'Noto Sans JP',
+                            fontSize: 24,
+                            fontWeight: FontWeight.w500,
+                            letterSpacing: 11),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              SizedBox(
-                width: 354,
-                height: 47,
-                child: ElevatedButton(
-                    onPressed: () {
-                      // Navigator.of(context).pushNamed('/home');
-                      sendValue();
-                      // showAlertDialog_1(context);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromRGBO(138, 86, 172, 1),
-                    ),
-                    child: const Text(
-                      'ご志納をする',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Noto Sans JP ',
+              Container(
+                margin: const EdgeInsets.only(bottom: 20),
+                child: SizedBox(
+                  width: 354,
+                  height: 47,
+                  child: ElevatedButton(
+                      onPressed: () {
+                        // Navigator.of(context).pushNamed('/home');
+                        sendValue();
+                        // showAlertDialog_1(context);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromRGBO(138, 86, 172, 1),
                       ),
-                    )),
+                      child: const Text(
+                        'ご志納をする',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Noto Sans JP ',
+                        ),
+                      )),
+                ),
               ),
             ],
           ),

@@ -3,14 +3,18 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/pages/send_data.dart';
 import 'package:flutter_app/pages/give_page.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_app/pages/requesturl.dart' as requesturl;
 
 
-void main() {
+void main() async{
+  // WidgetsFlutterBinding.ensureInitialized();
+  //     await FlutterDownloader.initialize(debug: true);
   runApp(
     const MaterialApp(
       home: VideoPlayPage(),
@@ -39,14 +43,29 @@ class _VideoPlayPageState extends State<VideoPlayPage> {
   late ChewieController chewieController;
   // ignore: non_constant_identifier_names, prefer_typing_uninitialized_variables
   var file_name;
+  late final String fileUrl;
+  late final String fileName;
 
   bool loaded=false;
 
-  // @override
-  // void initState() {
-  //    super.initState();
-  // }
+  @override
+  void initState() {
+     super.initState();
+     loadVideo();
 
+  }
+   void loadVideo() async{
+    // final file=ModalRoute.of(context)!.settings.arguments as SendDatas;
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      final file = ModalRoute.of(context)?.settings.arguments as SendDatas;
+      fileUrl="assets/video/${file.filename}";
+      // ignore: unnecessary_string_interpolations
+      fileName="${file.filename}"; 
+    });
+    setState(() {
+      loaded = true;
+    });
+  }
  
   @override
   void dispose() {
@@ -169,6 +188,23 @@ class _VideoPlayPageState extends State<VideoPlayPage> {
       );
     }
   }
+  Future<void> _startDownload() async {
+    // ignore: unused_local_variable
+
+    final appDir = await getApplicationDocumentsDirectory();
+    // ignore: unused_local_variable
+    final savedDir = appDir.path;
+    
+    // ignore: unused_local_variable
+    final taskId = await FlutterDownloader.enqueue(
+      url: fileUrl,
+      savedDir: "/sdcard/Download/",
+      fileName: fileName,
+      showNotification: true,
+      openFileFromNotification: true,
+    );
+    
+  }
 
   Future<void> addDownload(int id) async{
     const storage=FlutterSecureStorage();
@@ -238,6 +274,7 @@ class _VideoPlayPageState extends State<VideoPlayPage> {
                                 child: IconButton(
                                   onPressed: (){
                                     addDownload(args.id);
+                                    _startDownload();
                                   },
                                    icon: const ImageIcon(
                                     AssetImage("assets/images/download.png")
@@ -280,7 +317,7 @@ class _VideoPlayPageState extends State<VideoPlayPage> {
                                 Container(
                                   margin: const EdgeInsets.only(left: 5),
                                   child: Text(
-                                      args.time,
+                                      args.time.toString(),
                                       style: const TextStyle(
                                           color: Colors.white,
                                           fontFamily: 'Noto Sans CJK JP',

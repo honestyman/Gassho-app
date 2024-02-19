@@ -44,11 +44,12 @@ class _LoginPageState extends State<LoginPage> {
     );
     if (response.statusCode == 200) {
       const storage = FlutterSecureStorage();
-      // String? reasons=await storage.read(key: 'reasons');
-      // String? introductions=await storage.read(key: 'introductions');
-      // await storage.deleteAll();
-      // await storage.delete(key: 'reasons');
-      // await storage.delete(key: 'introductions');
+      // String? downloadset=await storage.read(key: 'downloadset');
+      // if(downloadset==null){
+      //   WidgetsFlutterBinding.ensureInitialized();
+      //   await FlutterDownloader.initialize(debug: true);
+      //   await storage.write(key: 'dowloadset', value: 'Setted');
+      // }      
       final token = jsonDecode(response.body)['token'];
       await storage.write(key: 'jwt', value: token);
       await storage.write(key: 'email', value: emailController.text);
@@ -69,6 +70,9 @@ class _LoginPageState extends State<LoginPage> {
       }
       if(string=="Invalid Credentials"){
          str="無効な資格情報";
+      }
+      if(string=="Your account is already deleted!"){
+        str="あなたのアカウントはすでに削除されています！";
       }
       if(string=="Server Error"){
          str="サーバーエラー";

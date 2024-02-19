@@ -4,14 +4,16 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/english_pages/give_page.dart';
 import 'package:flutter_app/pages/send_data.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:just_audio/just_audio.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter_app/pages/requesturl.dart' as requesturl;
+import 'package:path_provider/path_provider.dart';
 
 
-void main() {
+void main() async{
   runApp(
     const MaterialApp(
       home: EnAudioPlayPage(),
@@ -34,7 +36,8 @@ class EnAudioPlayPage extends StatefulWidget{
 
 class _EnAudioPlayPageState extends State<EnAudioPlayPage> {
   var player=AudioPlayer(); 
-  
+  late final String fileUrl;
+  late final String fileName;
   bool loaded = false; 
 
   bool playing = false;
@@ -44,7 +47,9 @@ class _EnAudioPlayPageState extends State<EnAudioPlayPage> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async{
       final file=ModalRoute.of(context)?.settings.arguments as SendDatas;
      await player.setAsset("assets/music/${file.filename}");
-
+       fileUrl="assets/music/${file.filename}";
+      // ignore: unnecessary_string_interpolations
+      fileName="${file.filename}"; 
     });
     setState((){
       loaded=true;
@@ -166,6 +171,24 @@ class _EnAudioPlayPageState extends State<EnAudioPlayPage> {
     }
   }
 
+  Future<void> _startDownload() async {
+    // ignore: unused_local_variable
+
+    final appDir = await getApplicationDocumentsDirectory();
+    // ignore: unused_local_variable
+    final savedDir = appDir.path;
+    
+    // ignore: unused_local_variable
+    final taskId = await FlutterDownloader.enqueue(
+      url: fileUrl,
+      savedDir: "/sdcard/Download/",
+      fileName: fileName,
+      showNotification: true,
+      openFileFromNotification: true,
+    );
+    
+  }
+
   Future<void> addDownload(int id) async{
     const storage=FlutterSecureStorage();
     String? email=await storage.read(key: 'email');
@@ -235,6 +258,7 @@ class _EnAudioPlayPageState extends State<EnAudioPlayPage> {
                             child: IconButton(
                               onPressed: (){
                                  addDownload(args.id);
+                                 _startDownload();
                               },
                                icon: const ImageIcon(
                                 AssetImage("assets/images/download.png")
@@ -258,8 +282,8 @@ class _EnAudioPlayPageState extends State<EnAudioPlayPage> {
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
                               fontSize: 24 ,
-                              fontFamily: 'Lato',
-                              letterSpacing: -2
+                              fontFamily: 'Lato'
+                              
                             ),
                       )
                     ),
@@ -272,7 +296,7 @@ class _EnAudioPlayPageState extends State<EnAudioPlayPage> {
                             Container(
                               margin: const EdgeInsets.only(left: 5),
                               child: Text(
-                                  args.time,
+                                  args.time.toString(),
                                   style: const TextStyle(
                                       color: Colors.white,
                                       fontFamily: 'Lato',
@@ -350,8 +374,7 @@ class _EnAudioPlayPageState extends State<EnAudioPlayPage> {
                         color: Colors.white,
                         fontFamily: 'Lato',
                         fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        letterSpacing: -2
+                        fontWeight: FontWeight.w400
                       ),
                     ),
                   ),
