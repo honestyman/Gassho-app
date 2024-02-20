@@ -32,8 +32,7 @@ class _MyPageAppState extends State<MyPageApp> {
           backgroundColor: Colors.transparent,
           body: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              
+            children: [             
               const TitleSection(name: 'マイページ'),
               const SizedBox(
                 height: 27.6,

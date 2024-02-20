@@ -10,7 +10,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_app/pages/requesturl.dart' as requesturl;
 
-
 void main() {
   runApp(const EnPlayPageApp());
 }
@@ -25,8 +24,8 @@ class EnPlayPageApp extends StatefulWidget {
 
 class _EnPlayPageAppState extends State<EnPlayPageApp> {
   Future<List<Data>> getRequest() async {
-    const storage=FlutterSecureStorage();
-    String? email=await storage.read(key: 'email');
+    const storage = FlutterSecureStorage();
+    String? email = await storage.read(key: 'email');
     String url = "${requesturl.Constants.url}/api/items/getplay?email=$email";
     final response = await http.get(Uri.parse(url));
     var reasonData = json.decode(response.body);
@@ -34,11 +33,11 @@ class _EnPlayPageAppState extends State<EnPlayPageApp> {
     for (var singleItem in reasonData) {
       Data item = Data(
           id: singleItem["id"],
-          title: singleItem["title"],
+          title: singleItem["englishtitle"],
           type: singleItem["type"],
           time: singleItem["time"],
           main_image_url: singleItem["main_image_url"],
-          description: singleItem["description"],
+          description: singleItem["englishdescription"],
           filename: singleItem["filename"]);
       items.add(item);
     }
@@ -93,37 +92,46 @@ class _EnPlayPageAppState extends State<EnPlayPageApp> {
                 const SizedBox(
                   height: 24.5,
                 ),
-                Expanded(
-                  child: Flexible(
-                    child: FutureBuilder(
-                      future: getRequest(),
-                      builder: (BuildContext ctx, AsyncSnapshot snapshot) {
-                        if (snapshot.data == null) {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        } else {
-                          return ListView.builder(
-                              itemCount: snapshot.data.length,
-                              itemBuilder: (ctx, index) => MaterialButton(
-                                  onPressed: () {
-                                     if(snapshot.data[index].type=='音声'){
-                                  Navigator.pushNamed(context, EnAudioPlayPage.routeName,
-                                      arguments: SendDatas(snapshot.data[index].id, snapshot.data[index].title, snapshot.data[index].time, snapshot.data[index].description, snapshot.data[index].filename));
-                                }else{
-                                  Navigator.pushNamed(context, EnVideoPlayPage.routeName,
-                                      arguments: SendDatas(snapshot.data[index].id, snapshot.data[index].title, snapshot.data[index].time, snapshot.data[index].description, snapshot.data[index].filename));
-                                }
-                                  },
-                                  child: DataListItem(
-                                      title: snapshot.data[index].title,
-                                      type: snapshot.data[index].type,
-                                      time: snapshot.data[index].time,
-                                      imageUrl: snapshot
-                                          .data[index].main_image_url)));
-                        }
-                      },
-                    ),
+                Flexible(
+                  child: FutureBuilder(
+                    future: getRequest(),
+                    builder: (BuildContext ctx, AsyncSnapshot snapshot) {
+                      if (snapshot.data == null) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else {
+                        return ListView.builder(
+                            itemCount: snapshot.data.length,
+                            itemBuilder: (ctx, index) => MaterialButton(
+                                onPressed: () {
+                                  if (snapshot.data[index].type == '音声') {
+                                    Navigator.pushNamed(
+                                      context, EnAudioPlayPage.routeName,
+                                      arguments: SendDatas(
+                                        snapshot.data[index].id,
+                                        snapshot.data[index].title,
+                                        snapshot.data[index].time,
+                                        snapshot.data[index].description,
+                                        snapshot.data[index].filename));
+                                  } else {
+                                    Navigator.pushNamed(
+                                      context, EnVideoPlayPage.routeName,
+                                      arguments: SendDatas(
+                                        snapshot.data[index].id,
+                                        snapshot.data[index].title,
+                                        snapshot.data[index].time,
+                                        snapshot.data[index].description,
+                                        snapshot.data[index].filename));
+                                  }
+                                },
+                                child: DataListItem(
+                                    title: snapshot.data[index].title,
+                                    type: snapshot.data[index].type,
+                                    time: snapshot.data[index].time,
+                                    imageUrl: snapshot.data[index].main_image_url)));
+                      }
+                    },
                   ),
                 ),
                 Column(
@@ -216,7 +224,8 @@ class _EnPlayPageAppState extends State<EnPlayPageApp> {
                               width: 97.5,
                               child: MaterialButton(
                                 onPressed: () {
-                                  Navigator.of(context).pushNamed('/en_setting');
+                                  Navigator.of(context)
+                                      .pushNamed('/en_setting');
                                 },
                                 child: const Column(children: [
                                   Icon(
@@ -261,7 +270,7 @@ class DataListItem extends StatelessWidget {
 
   final String title;
   final String type;
-  final String time;
+  final int time;
   final String imageUrl;
 
   @override
@@ -279,7 +288,8 @@ class DataListItem extends StatelessWidget {
             margin: const EdgeInsets.all(6),
             width: 100,
             height: 100,
-            child: Image.asset("assets/images/$imageUrl"),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+            child: Image.network("${requesturl.Constants.url}/$imageUrl"),
           ),
           Expanded(
               child: Container(
@@ -298,8 +308,7 @@ class DataListItem extends StatelessWidget {
                       color: Color.fromRGBO(138, 86, 172, 1),
                       fontFamily: 'Nato',
                       fontWeight: FontWeight.w400,
-                      fontSize: 12,
-                      letterSpacing: -1),
+                      fontSize: 12),
                 ),
                 Text(
                   title,
@@ -309,8 +318,7 @@ class DataListItem extends StatelessWidget {
                       color: Colors.white,
                       fontFamily: 'Nato',
                       fontWeight: FontWeight.bold,
-                      fontSize: 14,
-                      letterSpacing: -1),
+                      fontSize: 14),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 5.0),
@@ -320,7 +328,7 @@ class DataListItem extends StatelessWidget {
                       Container(
                         margin: const EdgeInsets.only(left: 5),
                         child: Text(
-                          time,
+                          "${time}minutes",
                           style: const TextStyle(
                             color: Colors.white,
                             fontFamily: 'Nato',
@@ -360,7 +368,7 @@ class Data {
   final int id;
   final String title;
   final String type;
-  final String time;
+  final int time;
   final String main_image_url;
   final String description;
   final String filename;
@@ -383,7 +391,6 @@ class TitleSection extends StatelessWidget {
             fontWeight: FontWeight.bold,
             color: Colors.white,
             fontSize: 20,
-            letterSpacing: -2,
             fontFamily: 'Nato'),
       ),
     );

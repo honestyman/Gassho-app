@@ -23,7 +23,6 @@ class EnTabSearchPage extends StatefulWidget {
 }
 
 class _EnTabSearchPageState extends State<EnTabSearchPage> {
-
   Future<List<Data>> getRequest(int id) async {
     String url = "${requesturl.Constants.url}/api/items/tab_search?id=$id";
     final response = await http.get(Uri.parse(url));
@@ -47,7 +46,8 @@ class _EnTabSearchPageState extends State<EnTabSearchPage> {
   // final scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
-    final args=ModalRoute.of(context)?.settings.arguments as EnSendSearchIdDatas;
+    final args =
+        ModalRoute.of(context)?.settings.arguments as EnSendSearchIdDatas;
     return MaterialApp(
       home: Container(
         decoration: const BoxDecoration(
@@ -69,7 +69,7 @@ class _EnTabSearchPageState extends State<EnTabSearchPage> {
                         padding: const EdgeInsets.only(left: 13),
                         child: IconButton(
                             onPressed: () {
-                              Navigator.pop(context,true);
+                              Navigator.pop(context, true);
                             },
                             icon: const ImageIcon(
                               AssetImage("assets/images/before_arrow.png"),
@@ -84,36 +84,47 @@ class _EnTabSearchPageState extends State<EnTabSearchPage> {
                 const SizedBox(
                   height: 24.5,
                 ),
-                Expanded(
-                  child: Flexible(
-                    child: FutureBuilder(
-                      future: getRequest(args.id),
-                      builder: (BuildContext ctx, AsyncSnapshot snapshot) {
-                        if (snapshot.data == null) {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        } else {
-                          return ListView.builder(
-                              itemCount: snapshot.data.length,
-                              itemBuilder: (ctx, index) => MaterialButton(
-                                  onPressed: () {
-                                    if(snapshot.data[index].type=='音声'){
-                                  Navigator.pushNamed(context, EnAudioPlayPage.routeName,
-                                      arguments: SendDatas(snapshot.data[index].id, snapshot.data[index].title, snapshot.data[index].time, snapshot.data[index].description, snapshot.data[index].filename));
-                                }else{
-                                  Navigator.pushNamed(context, EnVideoPlayPage.routeName,
-                                      arguments: SendDatas(snapshot.data[index].id, snapshot.data[index].title, snapshot.data[index].time, snapshot.data[index].description, snapshot.data[index].filename));
-                                }
-                                  },
-                                  child: DataListItem(
-                                      title: snapshot.data[index].title,
-                                      type: snapshot.data[index].type,
-                                      time: snapshot.data[index].time,
-                                      imageUrl: snapshot.data[index].main_image_url)));
-                        }
-                      },
-                    ),
+                Flexible(
+                  child: FutureBuilder(
+                    future: getRequest(args.id),
+                    builder: (BuildContext ctx, AsyncSnapshot snapshot) {
+                      if (snapshot.data == null) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else {
+                        return ListView.builder(
+                            itemCount: snapshot.data.length,
+                            itemBuilder: (ctx, index) => MaterialButton(
+                                onPressed: () {
+                                  if (snapshot.data[index].type == '音声') {
+                                    Navigator.pushNamed(
+                                        context, EnAudioPlayPage.routeName,
+                                        arguments: SendDatas(
+                                            snapshot.data[index].id,
+                                            snapshot.data[index].title,
+                                            snapshot.data[index].time,
+                                            snapshot.data[index].description,
+                                            snapshot.data[index].filename));
+                                  } else {
+                                    Navigator.pushNamed(
+                                        context, EnVideoPlayPage.routeName,
+                                        arguments: SendDatas(
+                                            snapshot.data[index].id,
+                                            snapshot.data[index].title,
+                                            snapshot.data[index].time,
+                                            snapshot.data[index].description,
+                                            snapshot.data[index].filename));
+                                  }
+                                },
+                                child: DataListItem(
+                                    title: snapshot.data[index].title,
+                                    type: snapshot.data[index].type,
+                                    time: snapshot.data[index].time,
+                                    imageUrl:
+                                        snapshot.data[index].main_image_url)));
+                      }
+                    },
                   ),
                 ),
                 Column(
@@ -206,7 +217,8 @@ class _EnTabSearchPageState extends State<EnTabSearchPage> {
                               width: 97.5,
                               child: MaterialButton(
                                 onPressed: () {
-                                  Navigator.of(context).pushNamed('/en_setting');
+                                  Navigator.of(context)
+                                      .pushNamed('/en_setting');
                                 },
                                 child: const Column(children: [
                                   Icon(
@@ -269,9 +281,7 @@ class DataListItem extends StatelessWidget {
             margin: const EdgeInsets.all(6),
             width: 100,
             height: 100,
-            decoration:BoxDecoration(
-                  borderRadius: BorderRadius.circular(10)
-            ),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
             child: Image.network("${requesturl.Constants.url}/$imageUrl"),
           ),
           Expanded(
@@ -291,8 +301,7 @@ class DataListItem extends StatelessWidget {
                       color: Color.fromRGBO(138, 86, 172, 1),
                       fontFamily: 'Nato',
                       fontWeight: FontWeight.w400,
-                      fontSize: 12
-                      ),
+                      fontSize: 12),
                 ),
                 Text(
                   title,
@@ -302,8 +311,7 @@ class DataListItem extends StatelessWidget {
                       color: Colors.white,
                       fontFamily: 'Nato',
                       fontWeight: FontWeight.bold,
-                      fontSize: 14
-                      ),
+                      fontSize: 14),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 5.0),
@@ -313,7 +321,7 @@ class DataListItem extends StatelessWidget {
                       Container(
                         margin: const EdgeInsets.only(left: 5),
                         child: Text(
-                          time.toString(),
+                          "${time}minutes",
                           style: const TextStyle(
                             color: Colors.white,
                             fontFamily: 'Nato',

@@ -33,11 +33,11 @@ class _PlayPageAppState extends State<PlayPageApp> {
     for (var singleItem in reasonData) {
       Data item = Data(
           id: singleItem["id"],
-          title: singleItem["title"],
+          title: singleItem["japanesetitle"],
           type: singleItem["type"],
           time: singleItem["time"],
           main_image_url: singleItem["main_image_url"],
-          description: singleItem["description"],
+          description: singleItem["japanesedescription"],
           filename: singleItem["filename"]);
       items.add(item);
     }
@@ -92,49 +92,47 @@ class _PlayPageAppState extends State<PlayPageApp> {
                 const SizedBox(
                   height: 24.5,
                 ),
-                Expanded(
-                  child: Flexible(
-                    child: FutureBuilder(
-                      future: getRequest(),
-                      builder: (BuildContext ctx, AsyncSnapshot snapshot) {
-                        if (snapshot.data == null) {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        } else {
-                          return ListView.builder(
-                              itemCount: snapshot.data.length,
-                              itemBuilder: (ctx, index) => MaterialButton(
-                                  onPressed: () {
-                                    if (snapshot.data[index].type == '音声') {
-                                      Navigator.pushNamed(
-                                          context, AudioPlayPage.routeName,
-                                          arguments: SendDatas(
-                                              snapshot.data[index].id,
-                                              snapshot.data[index].title,
-                                              snapshot.data[index].time,
-                                              snapshot.data[index].description,
-                                              snapshot.data[index].filename));
-                                    } else {
-                                      Navigator.pushNamed(
-                                          context, VideoPlayPage.routeName,
-                                          arguments: SendDatas(
-                                              snapshot.data[index].id,
-                                              snapshot.data[index].title,
-                                              snapshot.data[index].time,
-                                              snapshot.data[index].description,
-                                              snapshot.data[index].filename));
-                                    }
-                                  },
-                                  child: DataListItem(
-                                      title: snapshot.data[index].title,
-                                      type: snapshot.data[index].type,
-                                      time: snapshot.data[index].time,
-                                      imageUrl: snapshot
-                                          .data[index].main_image_url)));
-                        }
-                      },
-                    ),
+                Flexible(
+                  child: FutureBuilder(
+                    future: getRequest(),
+                    builder: (BuildContext ctx, AsyncSnapshot snapshot) {
+                      if (snapshot.data == null) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else {
+                        return ListView.builder(
+                            itemCount: snapshot.data.length,
+                            itemBuilder: (ctx, index) => MaterialButton(
+                                onPressed: () {
+                                  if (snapshot.data[index].type == '音声') {
+                                    Navigator.pushNamed(
+                                        context, AudioPlayPage.routeName,
+                                        arguments: SendDatas(
+                                            snapshot.data[index].id,
+                                            snapshot.data[index].title,
+                                            snapshot.data[index].time,
+                                            snapshot.data[index].description,
+                                            snapshot.data[index].filename));
+                                  } else {
+                                    Navigator.pushNamed(
+                                        context, VideoPlayPage.routeName,
+                                        arguments: SendDatas(
+                                            snapshot.data[index].id,
+                                            snapshot.data[index].title,
+                                            snapshot.data[index].time,
+                                            snapshot.data[index].description,
+                                            snapshot.data[index].filename));
+                                  }
+                                },
+                                child: DataListItem(
+                                    title: snapshot.data[index].title,
+                                    type: snapshot.data[index].type,
+                                    time: snapshot.data[index].time,
+                                    imageUrl: snapshot
+                                        .data[index].main_image_url)));
+                      }
+                    },
                   ),
                 ),
                 Column(
@@ -268,7 +266,7 @@ class DataListItem extends StatelessWidget {
 
   final String title;
   final String type;
-  final String time;
+  final int time;
   final String imageUrl;
 
   @override
@@ -286,7 +284,10 @@ class DataListItem extends StatelessWidget {
             margin: const EdgeInsets.all(6),
             width: 100,
             height: 100,
-            child: Image.asset("assets/images/$imageUrl"),
+            decoration:BoxDecoration(
+              borderRadius: BorderRadius.circular(10)
+            ),
+            child: Image.network("${requesturl.Constants.url}/$imageUrl"),
           ),
           Expanded(
               child: Container(
@@ -327,7 +328,7 @@ class DataListItem extends StatelessWidget {
                       Container(
                         margin: const EdgeInsets.only(left: 5),
                         child: Text(
-                          time,
+                          "$time分",
                           style: const TextStyle(
                             color: Colors.white,
                             fontFamily: 'Noto Sans CJK JP',
@@ -367,7 +368,7 @@ class Data {
   final int id;
   final String title;
   final String type;
-  final String time;
+  final int time;
   final String main_image_url;
   final String description;
   final String filename;

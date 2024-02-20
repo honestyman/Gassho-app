@@ -6,15 +6,12 @@ import 'package:flutter_app/pages/give_page.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:video_player/video_player.dart';
-import 'package:chewie/chewie.dart';
+import 'package:pod_player/pod_player.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_app/pages/requesturl.dart' as requesturl;
 
 
 void main() async{
-  // WidgetsFlutterBinding.ensureInitialized();
-  //     await FlutterDownloader.initialize(debug: true);
   runApp(
     const MaterialApp(
       home: VideoPlayPage(),
@@ -37,30 +34,23 @@ class VideoPlayPage extends StatefulWidget{
 
 class _VideoPlayPageState extends State<VideoPlayPage> {
   
-  late VideoPlayerController videoPlayerController;
-  // videoPlayerController=VideoPlayerController.asset(dataSource)
-  
-  late ChewieController chewieController;
-  // ignore: non_constant_identifier_names, prefer_typing_uninitialized_variables
-  var file_name;
   late final String fileUrl;
   late final String fileName;
-
+  late final PodPlayerController controller;
+  
   bool loaded=false;
 
   @override
   void initState() {
-     super.initState();
      loadVideo();
-
+    super.initState();
+    
   }
    void loadVideo() async{
-    // final file=ModalRoute.of(context)!.settings.arguments as SendDatas;
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      final file = ModalRoute.of(context)?.settings.arguments as SendDatas;
-      fileUrl="assets/video/${file.filename}";
-      // ignore: unnecessary_string_interpolations
-      fileName="${file.filename}"; 
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      final file = ModalRoute.of(context)?.settings.arguments as SendDatas;  
+      fileUrl="https://vimeo.com/${file.filename}";
+      fileName=file.filename; 
     });
     setState(() {
       loaded = true;
@@ -69,40 +59,20 @@ class _VideoPlayPageState extends State<VideoPlayPage> {
  
   @override
   void dispose() {
-    videoPlayerController.dispose();
-    chewieController.dispose();
- 
+    controller.dispose();
     super.dispose();
   }
 
   Widget _playView(){
      final file=ModalRoute.of(context)?.settings.arguments as SendDatas;
-     videoPlayerController = VideoPlayerController.asset("assets/video/${file.filename}");
-
-    chewieController = ChewieController(
-      videoPlayerController: videoPlayerController,
-      aspectRatio: 3 / 2,
-      autoPlay: false,
-      looping: true,
-      // Try playing around with some of these other options:
-      showControls: true,
-      materialProgressColors: ChewieProgressColors(
-        playedColor:  Colors.blue,
-        // handleColor: Colors.blue,
-        backgroundColor: Colors.grey,
-        bufferedColor: Colors.white30,
-      ),
-      placeholder: Container(
-        color: Colors.black,
-      ),
-    );
-    chewieController.play();
-    return Chewie(controller: chewieController);
+     controller = PodPlayerController(
+        playVideoFrom: PlayVideoFrom.vimeo(file.filename),
+     )..initialise();
+    return PodVideoPlayer(controller: controller);
   }
 
   Future<List<Item>> getTab(int id) async{
     String url = "${requesturl.Constants.url}/api/items/tab?id=$id";
-    // String url="http://localhost:5000/api/items/tab?id=$id";
     final response=await http.get(Uri.parse(url));
     var reasonData=json.decode(response.body);
     List<Item> tabs=[];
@@ -286,11 +256,15 @@ class _VideoPlayPageState extends State<VideoPlayPage> {
                         ],
                       ),
                     ),
-                  Container(
-                    margin: const EdgeInsets.only(top:18),
-                    height: 220,
-                    child: _playView(),
-                  ),
+                    // const SizedBox(
+                    //   height: 18,
+                    // ),
+                    Container(
+                      margin: const EdgeInsets.only(top:18),
+                      height: 250,
+                      child: _playView(),
+                    ),
+      
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [

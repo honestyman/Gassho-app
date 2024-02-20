@@ -206,7 +206,7 @@ class DataListItem extends StatelessWidget {
                           Container(
                             margin: const EdgeInsets.only(left: 5),
                             child: Text(
-                              time.toString(),
+                              "${time}minutes",
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontFamily: 'Lato',

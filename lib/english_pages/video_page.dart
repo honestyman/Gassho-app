@@ -6,6 +6,7 @@ import 'package:flutter_app/pages/send_data.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:pod_player/pod_player.dart';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
 import 'package:http/http.dart' as http;
@@ -42,6 +43,7 @@ class _EnVideoPlayPageState extends State<EnVideoPlayPage> {
   var file_name;
   late final String fileUrl;
   late final String fileName;
+  late final PodPlayerController controller;
 
   bool loaded=false;
 
@@ -55,9 +57,8 @@ class _EnVideoPlayPageState extends State<EnVideoPlayPage> {
     // final file=ModalRoute.of(context)!.settings.arguments as SendDatas;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       final file = ModalRoute.of(context)?.settings.arguments as SendDatas;
-      fileUrl="assets/video/${file.filename}";
-      // ignore: unnecessary_string_interpolations
-      fileName="${file.filename}"; 
+      fileUrl="https://vimeo.com/${file.filename}";
+      fileName=file.filename;  
     });
     setState(() {
       loaded = true;
@@ -75,27 +76,10 @@ class _EnVideoPlayPageState extends State<EnVideoPlayPage> {
 
   Widget _playView(){
      final file=ModalRoute.of(context)?.settings.arguments as SendDatas;
-     videoPlayerController = VideoPlayerController.asset("assets/video/${file.filename}");
-
-    chewieController = ChewieController(
-      videoPlayerController: videoPlayerController,
-      aspectRatio: 3 / 2,
-      autoPlay: false,
-      looping: true,
-      // Try playing around with some of these other options:
-      showControls: true,
-      materialProgressColors: ChewieProgressColors(
-        playedColor:  Colors.blue,
-        // handleColor: Colors.blue,
-        backgroundColor: Colors.grey,
-        bufferedColor: Colors.white30,
-      ),
-      placeholder: Container(
-        color: Colors.black,
-      ),
-    );
-    chewieController.play();
-    return Chewie(controller: chewieController);
+     controller = PodPlayerController(
+        playVideoFrom: PlayVideoFrom.vimeo(file.filename),
+     )..initialise();
+    return PodVideoPlayer(controller: controller);
   }
 
   Future<List<Item>> getTab(int id) async{
@@ -287,7 +271,7 @@ class _EnVideoPlayPageState extends State<EnVideoPlayPage> {
                     ),
                   Container(
                     margin: const EdgeInsets.only(top:18),
-                    height: 220,
+                    height: 250,
                     child: _playView(),
                   ),
                   Column(

@@ -31,7 +31,7 @@ class _FirstChangeLanguageState extends State<FirstChangeLanguage> {
     const storage = FlutterSecureStorage();
     String? token=await storage.read(key: 'jwt');
     WidgetsFlutterBinding.ensureInitialized();
-      await FlutterDownloader.initialize(debug: true);
+    await FlutterDownloader.initialize(debug: true);
     if(token!= null){
       // ignore: use_build_context_synchronously
       Navigator.push(context,
@@ -44,7 +44,6 @@ class _FirstChangeLanguageState extends State<FirstChangeLanguage> {
           Navigator.of(context).pushNamed('/english_languagechange');
       }
     }
-
   }
 
   @override

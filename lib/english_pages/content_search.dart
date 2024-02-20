@@ -84,37 +84,35 @@ class _EnContentSearchPageState extends State<EnContentSearchPage> {
                 const SizedBox(
                   height: 24.5,
                 ),
-                Expanded(
-                  child: Flexible(
-                    child: FutureBuilder(
-                      future: getRequest(args.content),
-                      builder: (BuildContext ctx, AsyncSnapshot snapshot) {
-                        if (snapshot.data == null) {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        } else {
-                          return ListView.builder(
-                              itemCount: snapshot.data.length,
-                              itemBuilder: (ctx, index) => MaterialButton(
-                                  onPressed: () {
-                                    if(snapshot.data[index].type=='音声'){
-                                  Navigator.pushNamed(context, EnAudioPlayPage.routeName,
-                                      arguments: SendDatas(snapshot.data[index].id, snapshot.data[index].title, snapshot.data[index].time, snapshot.data[index].description, snapshot.data[index].filename));
-                                }else{
-                                  Navigator.pushNamed(context, EnVideoPlayPage.routeName,
-                                      arguments: SendDatas(snapshot.data[index].id, snapshot.data[index].title, snapshot.data[index].time, snapshot.data[index].description, snapshot.data[index].filename));
-                                }
-                                  },
-                                  child: DataListItem(
-                                      title: snapshot.data[index].title,
-                                      type: snapshot.data[index].type,
-                                      time: snapshot.data[index].time,
-                                      imageUrl: snapshot
-                                          .data[index].main_image_url)));
-                        }
-                      },
-                    ),
+                Flexible(
+                  child: FutureBuilder(
+                    future: getRequest(args.content),
+                    builder: (BuildContext ctx, AsyncSnapshot snapshot) {
+                      if (snapshot.data == null) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else {
+                        return ListView.builder(
+                            itemCount: snapshot.data.length,
+                            itemBuilder: (ctx, index) => MaterialButton(
+                                onPressed: () {
+                                  if(snapshot.data[index].type=='音声'){
+                                Navigator.pushNamed(context, EnAudioPlayPage.routeName,
+                                    arguments: SendDatas(snapshot.data[index].id, snapshot.data[index].title, snapshot.data[index].time, snapshot.data[index].description, snapshot.data[index].filename));
+                              }else{
+                                Navigator.pushNamed(context, EnVideoPlayPage.routeName,
+                                    arguments: SendDatas(snapshot.data[index].id, snapshot.data[index].title, snapshot.data[index].time, snapshot.data[index].description, snapshot.data[index].filename));
+                              }
+                                },
+                                child: DataListItem(
+                                    title: snapshot.data[index].title,
+                                    type: snapshot.data[index].type,
+                                    time: snapshot.data[index].time,
+                                    imageUrl: snapshot
+                                        .data[index].main_image_url)));
+                      }
+                    },
                   ),
                 ),
                 Column(
@@ -314,7 +312,7 @@ class DataListItem extends StatelessWidget {
                       Container(
                         margin: const EdgeInsets.only(left: 5),
                         child: Text(
-                          time.toString(),
+                          "${time}minutes",
                           style: const TextStyle(
                             color: Colors.white,
                             fontFamily: 'Nato',

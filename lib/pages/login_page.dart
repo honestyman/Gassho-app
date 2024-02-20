@@ -43,13 +43,7 @@ class _LoginPageState extends State<LoginPage> {
       }),
     );
     if (response.statusCode == 200) {
-      const storage = FlutterSecureStorage();
-      // String? downloadset=await storage.read(key: 'downloadset');
-      // if(downloadset==null){
-      //   WidgetsFlutterBinding.ensureInitialized();
-      //   await FlutterDownloader.initialize(debug: true);
-      //   await storage.write(key: 'dowloadset', value: 'Setted');
-      // }      
+      const storage = FlutterSecureStorage();    
       final token = jsonDecode(response.body)['token'];
       await storage.write(key: 'jwt', value: token);
       await storage.write(key: 'email', value: emailController.text);
