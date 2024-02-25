@@ -1,10 +1,12 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_app/english_pages/home_page.dart';
 import 'package:flutter_app/pages/home_page.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
-void main() {
+void main() async{
   runApp(
     const MaterialApp(
       home: FirstChangeLanguage(),
@@ -24,9 +26,52 @@ class _FirstChangeLanguageState extends State<FirstChangeLanguage> {
    @override 
   void initState() { 
     getUser();
+    OneSignal.shared.setNotificationOpenedHandler((OSNotificationOpenedResult result) {
+  // Extract notification data
+      String title = result.notification.title.toString();
+      
+      // ignore: unused_local_variable
+      String notificationId = result.notification.notificationId;
+
+      // Additional custom data
+      
+      Map<String, dynamic> additionalData = result.notification.additionalData ?? {
+          
+      };
+
+      final String japanese= additionalData['japanese'];
+
+      // Handle the opened notification based on your requirements
+      // For example, you can navigate to a specific screen or perform an action
+      // using the extracted data from the notification
+      if (additionalData.containsKey('screen')) {
+        String screenName = additionalData['screen'];
+        // Navigate to a specific screen
+        // Example using the named routes approach:
+        Navigator.pushNamed(context, screenName);
+      } else {
+        // Perform a default action
+        // Example: Show an alert dialog with the notification details
+        showDialog(
+          context: context,
+          builder: (_) => AlertDialog(
+            title: Text(title),
+            content: Text(japanese),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('Close'),
+              ),
+            ],
+          ),
+        );
+      }
+    });
     super.initState(); 
   }
-
+  
   void getUser() async{
     const storage = FlutterSecureStorage();
     String? token=await storage.read(key: 'jwt');
@@ -39,7 +84,7 @@ class _FirstChangeLanguageState extends State<FirstChangeLanguage> {
     }else{
       String? language=await storage.read(key: 'language');
       if(language.toString()=="English"){
-          // MaterialPageRoute(builder: (context) => const EnHomeApp());
+          MaterialPageRoute(builder: (context) => const EnHomeApp());
           // ignore: use_build_context_synchronously
           Navigator.of(context).pushNamed('/english_languagechange');
       }

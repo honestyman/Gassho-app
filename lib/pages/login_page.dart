@@ -7,6 +7,7 @@ import 'package:flutter_app/pages/questions_page.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_app/pages/requesturl.dart' as requesturl;
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 void main() {
   runApp(
@@ -30,6 +31,49 @@ class _LoginPageState extends State<LoginPage> {
   final apiUrl = "${requesturl.Constants.url}/api/auth/";
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
+  @override
+  void initState() { 
+    OneSignal.shared.setNotificationOpenedHandler((OSNotificationOpenedResult result) {
+  // Extract notification data
+      String title = result.notification.title.toString();
+      // ignore: unused_local_variable
+      String notificationId = result.notification.notificationId;
+
+      // Additional custom data
+      Map<String, dynamic> additionalData = result.notification.additionalData ?? {};
+
+      final String japanese = additionalData['japanese'];
+      // Handle the opened notification based on your requirements
+      // For example, you can navigate to a specific screen or perform an action
+      // using the extracted data from the notification
+      if (additionalData.containsKey('screen')) {
+        String screenName = additionalData['screen'];
+        // Navigate to a specific screen
+        // Example using the named routes approach:
+        Navigator.pushNamed(context, screenName);
+      } else {
+        // Perform a default action
+        // Example: Show an alert dialog with the notification details
+        showDialog(
+          context: context,
+          builder: (_) => AlertDialog(
+            title: Text(title),
+            content: Text(japanese),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context, rootNavigator: true).pop(false);
+                },
+                child: const Text('Close'),
+              ),
+            ],
+          ),
+        );
+      }
+    });
+    super.initState(); 
+  }
 
   Future<void> sendPostRequest() async {
     final response = await http.post(

@@ -21,6 +21,9 @@ import 'package:flutter_app/pages/questions_page.dart';
 import 'package:flutter_app/pages/questionnaire_page.dart';
 import 'package:flutter_app/pages/home_page.dart';
 import 'package:flutter_app/pages/verify_page.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
+
 
 final routes={
   '/question':(BuildContext context)=>const QuestionsApp(),
@@ -45,10 +48,40 @@ final routes={
 
 };
 
-void main() => runApp(const MyApp());
+void main() async {
+  // WidgetsFlutterBinding.ensureInitialized();
+  runApp(const MyApp());
+}
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+
+@override
+void initState() {
+  initPlatform();
+  super.initState();
+}
+
+Future<void> initPlatform() async{
+   const storage = FlutterSecureStorage();
+   var noti= await storage.read(key: 'notification');
+   await OneSignal.shared.setAppId("60e87cd5-8d05-48d7-ad50-7c36f424ef29");
+   await OneSignal.shared.getDeviceState().then((value) => {
+    // ignore: avoid_print
+    print(value!.userId)
+   });
+   if(noti.toString() == "true"){
+    OneSignal.shared.setNotificationWillShowInForegroundHandler((OSNotificationReceivedEvent event) { 
+      event.complete(null);
+    });
+   }
+}
 
   @override
   Widget build(BuildContext context) {

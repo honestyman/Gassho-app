@@ -8,7 +8,6 @@ environment:
 
 dependencies:
   audio_video_progress_bar: ^2.0.1
-  chewie: ^1.7.4
   dio: ^5.4.0
   flutter:
     sdk: flutter
@@ -23,6 +22,8 @@ dependencies:
   video_player: ^2.8.2
   vimeo_player_flutter: ^0.1.0
   webview_flutter: ^4.5.0
+  onesignal_flutter: ^3.2.7
+
 
 dev_dependencies:
   flutter_test:
@@ -34,10 +35,6 @@ flutter:
 
   assets:
     - assets/images/
-
-    - assets/music/
-
-    - assets/video/mov_bbb.mp4
 
   
 

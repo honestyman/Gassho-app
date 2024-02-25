@@ -30,6 +30,8 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <!-- <meta-data android:name="onesignal_app_id" android:value="<ONESIGNAL_APP_ID>" /> -->
+        <!-- <meta-data android:name="onesignal_google_project_number" android:value="<ONESIGNAL_GOOGLE_PROJECT_NUMBER>" /> -->
     </application>
 
     <uses-permission android:name="android.permission,INTERNET"/>

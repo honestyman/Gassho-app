@@ -7,8 +7,6 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pod_player/pod_player.dart';
-import 'package:video_player/video_player.dart';
-import 'package:chewie/chewie.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_app/pages/requesturl.dart' as requesturl;
 
@@ -37,8 +35,6 @@ class _EnVideoPlayPageState extends State<EnVideoPlayPage> {
   
   late VideoPlayerController videoPlayerController;
   // videoPlayerController=VideoPlayerController.asset(dataSource)
-  
-  late ChewieController chewieController;
   // ignore: non_constant_identifier_names, prefer_typing_uninitialized_variables
   var file_name;
   late final String fileUrl;
@@ -69,7 +65,6 @@ class _EnVideoPlayPageState extends State<EnVideoPlayPage> {
   @override
   void dispose() {
     videoPlayerController.dispose();
-    chewieController.dispose();
  
     super.dispose();
   }

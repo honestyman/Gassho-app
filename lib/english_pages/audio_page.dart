@@ -46,8 +46,8 @@ class _EnAudioPlayPageState extends State<EnAudioPlayPage> {
     // final file=ModalRoute.of(context)!.settings.arguments as SendDatas;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async{
       final file=ModalRoute.of(context)?.settings.arguments as SendDatas;
-     await player.setAsset("assets/music/${file.filename}");
-       fileUrl="assets/music/${file.filename}";
+      await player.setUrl("${requesturl.Constants.url}/sound/${file.filename}");
+      fileUrl="${requesturl.Constants.url}/sound/${file.filename}";
       // ignore: unnecessary_string_interpolations
       fileName="${file.filename}"; 
     });
