@@ -23,6 +23,7 @@ dependencies:
   vimeo_player_flutter: ^0.1.0
   webview_flutter: ^4.5.0
   onesignal_flutter: ^3.2.7
+  ip_country_lookup: ^1.0.2
 
 
 dev_dependencies:

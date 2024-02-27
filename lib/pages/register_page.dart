@@ -6,6 +6,8 @@ import 'package:flutter_app/pages/plan_page.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_app/pages/requesturl.dart' as requesturl;
+import 'package:ip_country_lookup/ip_country_lookup.dart';
+import 'package:ip_country_lookup/models/ip_country_data_model.dart';
 
 void main() {
   runApp(
@@ -32,8 +34,11 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  IpCountryData? countryData;
 
   Future<void> sendPostRequest() async {
+    countryData = await IpCountryLookup().getIpLocationData();
+    String countryName=countryData!.country_name.toString();
     final response = await http.post(
       Uri.parse(apiUrl),
       headers: <String, String>{
@@ -43,6 +48,7 @@ class _RegisterPageState extends State<RegisterPage> {
         'name': nameController.text,
         'email': emailController.text,
         'password': passwordController.text,
+        'country': countryName
       }),
     );
     if (response.statusCode == 200) {
