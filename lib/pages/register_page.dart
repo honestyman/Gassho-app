@@ -1,11 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/pages/login_page.dart';
-import 'package:flutter_app/pages/plan_page.dart';
+import 'package:gassho/pages/login_page.dart';
+import 'package:gassho/pages/plan_page.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_app/pages/requesturl.dart' as requesturl;
+import 'package:gassho/pages/requesturl.dart' as requesturl;
 import 'package:ip_country_lookup/ip_country_lookup.dart';
 import 'package:ip_country_lookup/models/ip_country_data_model.dart';
 

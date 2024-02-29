@@ -1,3 +1,3 @@
-# flutter_app
+# gassho
 
 A new Flutter project.

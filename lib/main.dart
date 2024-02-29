@@ -1,26 +1,26 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/english_pages/first_language.dart';
-import 'package:flutter_app/english_pages/home_page.dart';
-import 'package:flutter_app/english_pages/login_page.dart';
-import 'package:flutter_app/english_pages/password_forgetpage.dart';
-import 'package:flutter_app/english_pages/plan_page.dart';
-import 'package:flutter_app/english_pages/questionnaire_page.dart';
-import 'package:flutter_app/english_pages/questions_page.dart';
-import 'package:flutter_app/english_pages/register_page.dart';
-import 'package:flutter_app/pages/first_language.dart';
-//  import 'package:flutter_app/pages/first.dart';
-import 'package:flutter_app/pages/login_page.dart';
-import 'package:flutter_app/pages/newpassword_page.dart';
-import 'package:flutter_app/pages/password_forgetpage.dart';
-import 'package:flutter_app/pages/plan_page.dart';
-import 'package:flutter_app/pages/register_page.dart';
+import 'package:gassho/english_pages/first_language.dart';
+import 'package:gassho/english_pages/home_page.dart';
+import 'package:gassho/english_pages/login_page.dart';
+import 'package:gassho/english_pages/password_forgetpage.dart';
+import 'package:gassho/english_pages/plan_page.dart';
+import 'package:gassho/english_pages/questionnaire_page.dart';
+import 'package:gassho/english_pages/questions_page.dart';
+import 'package:gassho/english_pages/register_page.dart';
+import 'package:gassho/pages/first_language.dart';
+//  import 'package:gassho/pages/first.dart';
+import 'package:gassho/pages/login_page.dart';
+import 'package:gassho/pages/newpassword_page.dart';
+import 'package:gassho/pages/password_forgetpage.dart';
+import 'package:gassho/pages/plan_page.dart';
+import 'package:gassho/pages/register_page.dart';
 
-import 'package:flutter_app/pages/questions_page.dart';
-import 'package:flutter_app/pages/questionnaire_page.dart';
-import 'package:flutter_app/pages/home_page.dart';
-import 'package:flutter_app/pages/verify_page.dart';
+import 'package:gassho/pages/questions_page.dart';
+import 'package:gassho/pages/questionnaire_page.dart';
+import 'package:gassho/pages/home_page.dart';
+import 'package:gassho/pages/verify_page.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 

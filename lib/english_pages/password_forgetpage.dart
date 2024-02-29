@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/english_pages/login_page.dart';
+import 'package:gassho/english_pages/login_page.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_app/pages/requesturl.dart' as requesturl;
+import 'package:gassho/pages/requesturl.dart' as requesturl;
 
 void main() {
   runApp(

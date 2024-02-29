@@ -2,14 +2,14 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/english_pages/give_page.dart';
-import 'package:flutter_app/pages/send_data.dart';
+import 'package:gassho/english_pages/give_page.dart';
+import 'package:gassho/pages/send_data.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:just_audio/just_audio.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
-import 'package:flutter_app/pages/requesturl.dart' as requesturl;
+import 'package:gassho/pages/requesturl.dart' as requesturl;
 import 'package:path_provider/path_provider.dart';
 
 

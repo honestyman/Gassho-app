@@ -2,13 +2,13 @@
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/english_pages/catetory_search.dart';
-import 'package:flutter_app/english_pages/content_search.dart';
-import 'package:flutter_app/english_pages/send_searchiddata.dart';
-import 'package:flutter_app/english_pages/tab_search.dart';
-import 'package:flutter_app/pages/send_searchdata.dart';
+import 'package:gassho/english_pages/catetory_search.dart';
+import 'package:gassho/english_pages/content_search.dart';
+import 'package:gassho/english_pages/send_searchiddata.dart';
+import 'package:gassho/english_pages/tab_search.dart';
+import 'package:gassho/pages/send_searchdata.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_app/pages/requesturl.dart' as requesturl;
+import 'package:gassho/pages/requesturl.dart' as requesturl;
 
 void main() {
   runApp(const EnSearchApp());

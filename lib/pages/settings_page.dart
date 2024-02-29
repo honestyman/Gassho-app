@@ -2,11 +2,12 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/pages/home_page.dart';
-import 'package:flutter_app/pages/login_page.dart';
+import 'package:gassho/pages/home_page.dart';
+import 'package:gassho/pages/login_page.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_app/pages/requesturl.dart' as requesturl;
+import 'package:gassho/pages/requesturl.dart' as requesturl;
+import 'package:url_launcher/url_launcher.dart';
 
 
 
@@ -275,6 +276,36 @@ class _SettingsPageAppState extends State<SettingsPageApp> {
                             MaterialPageRoute(builder: (context) => const LoginPage()));
         // exit(0);
       } 
+  }
+
+  // ignore: non_constant_identifier_names
+  Future<void> help_launchURL() async {
+    const String url="https://gassho.info/help-support/";
+    if (!await launchUrl(Uri.parse(url))) {
+      throw Exception('Could not launch $url');
+    }
+  }
+
+  // ignore: non_constant_identifier_names
+  Future<void> term_launchURL() async {
+    const String url="https://gassho.info/terms/";
+    if (!await launchUrl(Uri.parse(url))) {
+      throw Exception('Could not launch $url');
+    }
+  }
+  // ignore: non_constant_identifier_names
+  Future<void> privacy_launchURL() async {
+    const String url="https://gassho.info/privacy/";
+    if (!await launchUrl(Uri.parse(url))) {
+      throw Exception('Could not launch $url');
+    }
+  }
+  // ignore: non_constant_identifier_names
+  Future<void> transactions_launchURL() async {
+    const String url="https://gassho.info/transactions/";
+    if (!await launchUrl(Uri.parse(url))) {
+      throw Exception('Could not launch $url');
+    }
   }
 
   @override
@@ -547,7 +578,7 @@ class _SettingsPageAppState extends State<SettingsPageApp> {
                               ),
                               child: MaterialButton(
                                 onPressed: () {
-                                  
+                                  help_launchURL();
                                 },
                                 child: const Row(
                                   children: [
@@ -591,7 +622,7 @@ class _SettingsPageAppState extends State<SettingsPageApp> {
                               ),
                               child: MaterialButton(
                                 onPressed: () {
-                                  
+                                  term_launchURL();
                                 },
                                 child: const Row(
                                   children: [
@@ -635,7 +666,7 @@ class _SettingsPageAppState extends State<SettingsPageApp> {
                               ),
                               child: MaterialButton(
                                 onPressed: () {
-                                  
+                                  privacy_launchURL();
                                 },
                                 child: const Row(
                                   children: [
@@ -679,7 +710,7 @@ class _SettingsPageAppState extends State<SettingsPageApp> {
                               ),
                               child: MaterialButton(
                                 onPressed: () {
-                                  
+                                  transactions_launchURL();
                                 },
                                 child: const Row(
                                   children: [
@@ -949,7 +980,6 @@ class TitleSection extends StatelessWidget{
       );
   }
 }
-
 
 
 

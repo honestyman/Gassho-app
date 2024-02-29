@@ -2,12 +2,12 @@
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/pages/content_search.dart';
-import 'package:flutter_app/pages/catetory_search.dart';
-import 'package:flutter_app/pages/send_searchdata.dart';
-import 'package:flutter_app/pages/tab_search.dart';
+import 'package:gassho/pages/content_search.dart';
+import 'package:gassho/pages/catetory_search.dart';
+import 'package:gassho/pages/send_searchdata.dart';
+import 'package:gassho/pages/tab_search.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_app/pages/requesturl.dart' as requesturl;
+import 'package:gassho/pages/requesturl.dart' as requesturl;
 
 import 'send_searchiddata.dart';
 

@@ -1,4 +1,4 @@
-name: flutter_app
+name: gassho
 description: "A new Flutter project."
 publish_to: 'none'
 version: 0.1.0
@@ -24,6 +24,7 @@ dependencies:
   webview_flutter: ^4.5.0
   onesignal_flutter: ^3.2.7
   ip_country_lookup: ^1.0.2
+  url_launcher: ^6.2.5
 
 
 dev_dependencies:

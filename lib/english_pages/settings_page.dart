@@ -1,11 +1,12 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/english_pages/home_page.dart';
-import 'package:flutter_app/english_pages/login_page.dart';
+import 'package:gassho/english_pages/home_page.dart';
+import 'package:gassho/english_pages/login_page.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_app/pages/requesturl.dart' as requesturl;
+import 'package:gassho/pages/requesturl.dart' as requesturl;
+import 'package:url_launcher/url_launcher.dart';
 
 
 void main() {
@@ -268,6 +269,36 @@ class _EnSettingsPageAppState extends State<EnSettingsPageApp> {
                             MaterialPageRoute(builder: (context) => const EnLoginPage()));
         // exit(0);
       } 
+  }
+
+  // ignore: non_constant_identifier_names
+  Future<void> help_launchURL() async {
+    const String url="https://gassho.info/en/help-support/";
+    if (!await launchUrl(Uri.parse(url))) {
+      throw Exception('Could not launch $url');
+    }
+  }
+
+  // ignore: non_constant_identifier_names
+  Future<void> term_launchURL() async {
+    const String url="https://gassho.info/en/terms/";
+    if (!await launchUrl(Uri.parse(url))) {
+      throw Exception('Could not launch $url');
+    }
+  }
+  // ignore: non_constant_identifier_names
+  Future<void> privacy_launchURL() async {
+    const String url="https://gassho.info/en/privacy/";
+    if (!await launchUrl(Uri.parse(url))) {
+      throw Exception('Could not launch $url');
+    }
+  }
+  // ignore: non_constant_identifier_names
+  Future<void> transactions_launchURL() async {
+    const String url="https://gassho.info/en/transactions/";
+    if (!await launchUrl(Uri.parse(url))) {
+      throw Exception('Could not launch $url');
+    }
   }
 
   @override
@@ -534,7 +565,7 @@ class _EnSettingsPageAppState extends State<EnSettingsPageApp> {
                               ),
                               child: MaterialButton(
                                 onPressed: () {
-                                  
+                                  help_launchURL();
                                 },
                                 child: const Row(
                                   children: [
@@ -577,7 +608,7 @@ class _EnSettingsPageAppState extends State<EnSettingsPageApp> {
                               ),
                               child: MaterialButton(
                                 onPressed: () {
-                                  
+                                  term_launchURL();
                                 },
                                 child: const Row(
                                   children: [
@@ -620,7 +651,7 @@ class _EnSettingsPageAppState extends State<EnSettingsPageApp> {
                               ),
                               child: MaterialButton(
                                 onPressed: () {
-                                  
+                                  privacy_launchURL();
                                 },
                                 child: const Row(
                                   children: [
@@ -663,7 +694,7 @@ class _EnSettingsPageAppState extends State<EnSettingsPageApp> {
                               ),
                               child: MaterialButton(
                                 onPressed: () {
-                                  
+                                  transactions_launchURL();
                                 },
                                 child: const Row(
                                   children: [

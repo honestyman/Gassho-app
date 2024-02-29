@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/pages/register_page.dart';
-import 'package:flutter_app/pages/requesturl.dart' as requesturl;
+import 'package:gassho/pages/register_page.dart';
+import 'package:gassho/pages/requesturl.dart' as requesturl;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
