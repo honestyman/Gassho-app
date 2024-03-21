@@ -323,7 +323,7 @@ class _PlanListState extends State<PlanList> {
     return ListView(
       // backgroundColor: Colors.transparent,
       children: [
-        const TitleSection(name: 'Subscription'),
+        const TitleSection(name: 'Subscriptions'),
         Container(
           margin: const EdgeInsets.only(
             left: 22,

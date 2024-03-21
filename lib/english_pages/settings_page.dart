@@ -153,8 +153,8 @@ class _EnSettingsPageAppState extends State<EnSettingsPageApp> {
     context: context,
     builder: (_) => Center( // Aligns the container to center
       child: Container( // A simplified version of dialog. 
-        width: 244,
-        height: 150,
+        width: 300,
+        height: 200,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
           color: const Color.fromRGBO(43, 43, 55, 1),
@@ -164,14 +164,31 @@ class _EnSettingsPageAppState extends State<EnSettingsPageApp> {
             const Padding(
               padding: EdgeInsets.only(top:20, left: 20, right: 20),
               child: Text(
-                'Are you sure you want to delete your account?',
+                'Do you want to cancel your membership in GASSHO?',
                 style: TextStyle(
                   decoration: TextDecoration.none,
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                   fontFamily: 'Nato',
-                  fontSize:14 ,
+                  fontSize:16 ,
                 ),
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.only(top:20, left: 20, right: 20),
+              child: Column(
+                children: [
+                  Text(
+                    'Please note that subscription cancellation is a separate procedure.',
+                    style: TextStyle(
+                      decoration: TextDecoration.none,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Noto Sans CJK JP',
+                      fontSize:12 ,
+                    ),
+                  ),
+                ],
               ),
             ),
             Padding(
@@ -188,8 +205,16 @@ class _EnSettingsPageAppState extends State<EnSettingsPageApp> {
               ),
             ),
             Container(
-              width: 244,
+              width: 300,
               padding: const EdgeInsets.all(5),
+              decoration: const BoxDecoration(
+                      border:Border(
+                        top: BorderSide(
+                          color: Colors.white30,
+                          width: 0.5
+                        )
+                      )
+                    ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -205,6 +230,7 @@ class _EnSettingsPageAppState extends State<EnSettingsPageApp> {
                     child: TextButton(
                       onPressed: (){
                         DeleteOnly();
+                        Navigator.of(context, rootNavigator: true).pop(false);
                       },
                       child: const Text(
                         'OK',
@@ -262,6 +288,96 @@ class _EnSettingsPageAppState extends State<EnSettingsPageApp> {
       if (response.statusCode == 200) { 
         // ignore: use_build_context_synchronously
         storage.deleteAll();
+        // ignore: use_build_context_synchronously
+        showDialog(
+        context: context,
+        builder: (_) => Center( // Aligns the container to center
+          child: Container( // A simplified version of dialog. 
+            width: 300,
+            height: 180,
+            transformAlignment:Alignment.center,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              color: const Color.fromRGBO(43, 43, 55, 1),
+            ),
+            child: Column(
+              // crossAxisAlignment: CrossAxisAlignment.center,
+              // mainAxisAlignment: MainAxisAlignment.center,,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(top:20, left: 20, right: 20),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment:CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Cancelled your account.',
+                        style: TextStyle(
+                          decoration: TextDecoration.none,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Noto Sans CJK JP',
+                          fontSize:16 ,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(top:20, left: 20, right: 20, bottom: 20),
+                  child: Column(
+                    children: [
+                      Text(
+                        'Hope to have the opportunity to serve you again.',
+                        style: TextStyle(
+                          decoration: TextDecoration.none,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Noto Sans CJK JP',
+                          fontSize:14 ,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  width: 300,
+                  decoration: const BoxDecoration(
+                          border:Border(
+                            top: BorderSide(
+                              color: Colors.white30,
+                              width: 0.5
+                            )
+                          )
+                        ),
+                  // padding: const EdgeInsets.only(top: 5, bottom: 5),
+                  child: Container(
+                    padding: const EdgeInsets.only(left:10),
+                  
+                    child: TextButton(
+                      onPressed: (){
+                        // ignore: use_build_context_synchronously
+                        Navigator.of(context, rootNavigator: true).pop(false);
+                        // ignore: use_build_context_synchronously
+                        Navigator.push(context,
+                                            MaterialPageRoute(builder: (context) => const EnLoginPage()));
+                      },
+                      child: const Text(
+                        'OK',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Color.fromRGBO(95, 134, 222, 1),
+                          fontWeight: FontWeight.bold
+                        ),
+                      )
+                    ),
+                  ),
+                )
+              ],
+            ),
+            )
+          )
+        );
         // ignore: use_build_context_synchronously
         Navigator.of(context, rootNavigator: true).pop(false);
         // ignore: use_build_context_synchronously

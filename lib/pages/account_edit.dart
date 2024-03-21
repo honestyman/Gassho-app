@@ -25,9 +25,29 @@ class _AccountEditAppState extends State<AccountEditApp> {
 
   final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  String name="";
+  String email1="";
 
   TextEditingController newName = TextEditingController();
   TextEditingController newEmail = TextEditingController();
+
+  @override
+  void initState() {
+    loadUser();
+    super.initState();
+  }
+
+  void loadUser() async {
+    const storage = FlutterSecureStorage();
+    String? email=await storage.read(key: 'email');
+    String url = "${requesturl.Constants.url}/api/users/getname?email=$email";
+    final response = await http.get(Uri.parse(url));
+    var reasonData = json.decode(response.body);
+    setState(() {
+      name=reasonData.toString();
+      email1 = email.toString();
+    });
+  }
 
   Future<void> editAccount() async {
     String url="${requesturl.Constants.url}/api/user/editaccount";
@@ -220,7 +240,7 @@ class _AccountEditAppState extends State<AccountEditApp> {
                                           decoration: InputDecoration(
                                             isDense: true,
                                             filled: true,
-                                            hintText: 'ニックネーム',
+                                            hintText: name,
                                             fillColor: Colors.white,
                                             // floatingLabelBehavior: FloatingLabelBehavior.always,
                                             focusedBorder: OutlineInputBorder(
@@ -266,7 +286,7 @@ class _AccountEditAppState extends State<AccountEditApp> {
                                             isDense: true,
                                             filled: true,
                                             fillColor: Colors.white,
-                                            hintText: 'samplemail@sample.com',
+                                            hintText: email1,
                                             focusedBorder: OutlineInputBorder(
                                               borderSide: const BorderSide(color: Colors.white),
                                               borderRadius: BorderRadius.circular(5),

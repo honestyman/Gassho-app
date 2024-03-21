@@ -1,5 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-// import 'package:gassho/pages/send_data.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:gassho/pages/send_data.dart';
+import 'package:http/http.dart' as http;
+import 'package:gassho/pages/requesturl.dart' as requesturl;
 
 void main() {
   runApp(
@@ -24,21 +29,23 @@ class _GivePageState extends State<GivePage> {
   TextEditingController first = TextEditingController();
   TextEditingController second = TextEditingController();
   TextEditingController third = TextEditingController();
-  
-  void sendValue(){
-    int result=0;
-    bool flag=true;
-    if(third.text!=""){
-      result=int.parse(third.text);
+
+  void sendValue(int id) {
+    int result = 0;
+    bool flag = true;
+    if (third.text != "") {
+      result = int.parse(third.text);
     }
-    if(second.text!=""){
-      result=int.parse(second.text)*10+result;
-      if(third.text!=""){
-        result=int.parse(first.text)*100+result;
+    if (second.text != "") {
+      result = int.parse(second.text) * 10 + result;
+      if (first.text != "") {
+        result = int.parse(first.text) * 100 + result;
       }
     }
-    if((first.text!="" && (second.text=="" && third.text=="")) || (first.text!="" && (second.text=="" || third.text==""))){
-      flag=false;
+    if ((first.text != "" && (second.text == "" && third.text == "")) ||
+        (first.text != "" && (second.text == "" || third.text == "")) ||
+        (first.text == "" && second.text == "" && third.text == "")) {
+      flag = false;
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -53,104 +60,141 @@ class _GivePageState extends State<GivePage> {
         ),
       );
     }
-  if(result!=0 && flag==true){
-        result=result*100;
-       final String string='このお寺に$result円をお布施しますか？';
-       showDialog(
-      context: context,
-      builder: (_) => Center(
-              // Aligns the container to center
-              child: Container(
-            // A simplified version of dialog.
-            width: 244,
-            height: 111,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              color: const Color.fromRGBO(43, 43, 55, 1),
-            ),
-            child: Column(
-              children: [
-                const Padding(
-                  padding: EdgeInsets.only(top: 15),
-                  child: Text(
-                    'このお寺にご志納をする',
-                    style: TextStyle(
-                      decoration: TextDecoration.none,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'Noto Sans CJK JP',
-                      fontSize: 14,
+    if (result != 0 && flag == true) {
+      result = result * 100;
+      final String string = 'このお寺に$result円をお布施しますか？';
+      showDialog(
+          context: context,
+          builder: (_) => Center(
+                  // Aligns the container to center
+                  child: Container(
+                // A simplified version of dialog.
+                width: 244,
+                height: 111,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  color: const Color.fromRGBO(43, 43, 55, 1),
+                ),
+                child: Column(
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.only(top: 15),
+                      child: Text(
+                        'このお寺にご志納をする',
+                        style: TextStyle(
+                          decoration: TextDecoration.none,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Noto Sans CJK JP',
+                          fontSize: 14,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                 Padding(
-                  padding: const EdgeInsets.only(top: 5),
-                  child: Text(
-                    string,
-                    style: const TextStyle(
-                        decoration: TextDecoration.none,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w400,
-                        fontFamily: 'Noto Sans CJK JP',
-                        fontSize: 13,
-                        letterSpacing: -1),
-                  ),
-                ),
-                Expanded(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.only(top: 15),
-                        decoration: const BoxDecoration(
-                            border: Border(
-                                top: BorderSide(
-                                    color: Colors.white30, width: 0.5))),
-                        child: TextButton(
-                            onPressed: () {
-                              // Navigator.of(content).pop(false);
-                              Navigator.of(context, rootNavigator: true).pop(false);
-                              showAlertDialog_2(context);
-                            },
-                            child: const Text(
-                              'OK',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Color.fromRGBO(95, 134, 222, 1),
-                                  fontWeight: FontWeight.bold),
-                            )),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 5),
+                      child: Text(
+                        string,
+                        style: const TextStyle(
+                            decoration: TextDecoration.none,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w400,
+                            fontFamily: 'Noto Sans CJK JP',
+                            fontSize: 13,
+                            letterSpacing: -1),
                       ),
-                      Container(
-                        margin: const EdgeInsets.only(top: 15),
-                        decoration: const BoxDecoration(
-                            border: Border(
-                                top: BorderSide(
-                                    color: Colors.white30, width: 0.5))),
-                        child: TextButton(
-                            onPressed: () {
-                              // Navigator.of(content).pop(false);
-                              Navigator.of(context, rootNavigator: true).pop(false);
-                            },
-                            child: const Text(
-                              'CANCEL',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Color.fromRGBO(95, 134, 222, 1),
-                                  fontWeight: FontWeight.bold),
-                            )),
+                    ),
+                    Expanded(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.only(top: 15),
+                            decoration: const BoxDecoration(
+                                border: Border(
+                                    top: BorderSide(
+                                        color: Colors.white30, width: 0.5))),
+                            child: TextButton(
+                                onPressed: () {
+                                  giveFunction(id, result);
+                                  Navigator.of(context, rootNavigator: true)
+                                      .pop(false);
+                                },
+                                child: const Text(
+                                  'OK',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Color.fromRGBO(95, 134, 222, 1),
+                                      fontWeight: FontWeight.bold),
+                                )),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(top: 15),
+                            decoration: const BoxDecoration(
+                                border: Border(
+                                    top: BorderSide(
+                                        color: Colors.white30, width: 0.5))),
+                            child: TextButton(
+                                onPressed: () {
+                                  // Navigator.of(content).pop(false);
+                                  Navigator.of(context, rootNavigator: true)
+                                      .pop(false);
+                                },
+                                child: const Text(
+                                  'CANCEL',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Color.fromRGBO(95, 134, 222, 1),
+                                      fontWeight: FontWeight.bold),
+                                )),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                )
-              ],
+                    )
+                  ],
+                ),
+              )));
+    }
+  }
+
+  void giveFunction(int id, int result) async {
+    const storage = FlutterSecureStorage();
+    String? email = await storage.read(key: 'email');
+    String url = "${requesturl.Constants.url}/api/items/addgive";
+    final response = await http.post(
+      Uri.parse(url),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'itemID': id.toString(),
+        'email': email.toString(),
+        'amount': result.toString()
+      }),
+    );
+    if (response.statusCode == 200) {
+      // ignore: use_build_context_synchronously
+      showAlertDialog_1(context);
+    } else {
+      // ignore: use_build_context_synchronously
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Error'),
+          content: const Text('申し訳ございません。サーバーに問題が発生しました。'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('OK'),
             ),
-          ))); 
+          ],
+        ),
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    // final args=ModalRoute.of(context)!.settings.arguments as SendDatas;
+    final args = ModalRoute.of(context)!.settings.arguments as SendDatas;
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
@@ -184,9 +228,9 @@ class _GivePageState extends State<GivePage> {
                       ),
                     )),
               ),
-              Container(
-                margin: const EdgeInsets.only(top: 297.8),
-                child: const Column(
+              const Expanded(
+                // margin: const EdgeInsets.only(top: 297.8),
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
@@ -198,7 +242,7 @@ class _GivePageState extends State<GivePage> {
                           fontWeight: FontWeight.bold),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(top: 17.5),
+                      padding: EdgeInsets.only(top: 17.5, bottom: 21.6),
                       child: ImageIcon(
                         AssetImage("assets/images/flower.png"),
                         color: Color.fromRGBO(138, 86, 172, 1),
@@ -224,104 +268,101 @@ class _GivePageState extends State<GivePage> {
                   ],
                 ),
               ),
-              Expanded(
-                child: Container(
-                  margin: const EdgeInsets.only(top: 32, bottom: 60),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        width: 37,
-                        height: 50,
-                        child: TextFormField(
-                          controller: first,
-                          decoration: InputDecoration(
-                              isDense: true,
-                              filled: true,
-                              fillColor: Colors.white,
-                              // floatingLabelBehavior: FloatingLabelBehavior.always,
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(color: Colors.white),
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                  borderSide:
-                                      const BorderSide(color: Colors.white),
-                                  borderRadius: BorderRadius.circular(5))),
-                        ),
+              Container(
+                margin: const EdgeInsets.only(bottom: 60),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: 37,
+                      height: 50,
+                      child: TextFormField(
+                        controller: first,
+                        decoration: InputDecoration(
+                            isDense: true,
+                            filled: true,
+                            fillColor: Colors.white,
+                            // floatingLabelBehavior: FloatingLabelBehavior.always,
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(color: Colors.white),
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                                borderSide:
+                                    const BorderSide(color: Colors.white),
+                                borderRadius: BorderRadius.circular(5))),
                       ),
-                      const SizedBox(
-                        width: 11,
+                    ),
+                    const SizedBox(
+                      width: 11,
+                    ),
+                    SizedBox(
+                      width: 37,
+                      height: 50,
+                      child: TextFormField(
+                        controller: second,
+                        decoration: InputDecoration(
+                            isDense: true,
+                            filled: true,
+                            fillColor: Colors.white,
+                            // floatingLabelBehavior: FloatingLabelBehavior.always,
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(color: Colors.white),
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                                borderSide:
+                                    const BorderSide(color: Colors.white),
+                                borderRadius: BorderRadius.circular(5))),
                       ),
-                      SizedBox(
-                        width: 37,
-                        height: 50,
-                        child: TextFormField(
-                          controller: second,
-                          decoration: InputDecoration(
-                              isDense: true,
-                              filled: true,
-                              fillColor: Colors.white,
-                              // floatingLabelBehavior: FloatingLabelBehavior.always,
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(color: Colors.white),
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                  borderSide:
-                                      const BorderSide(color: Colors.white),
-                                  borderRadius: BorderRadius.circular(5))),
-                        ),
+                    ),
+                    const SizedBox(
+                      width: 11,
+                    ),
+                    SizedBox(
+                      width: 37,
+                      height: 50,
+                      child: TextFormField(
+                        controller: third,
+                        decoration: InputDecoration(
+                            isDense: true,
+                            filled: true,
+                            fillColor: Colors.white,
+                            // floatingLabelBehavior: FloatingLabelBehavior.always,
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(color: Colors.white),
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                                borderSide:
+                                    const BorderSide(color: Colors.white),
+                                borderRadius: BorderRadius.circular(5))),
                       ),
-                      const SizedBox(
-                        width: 11,
-                      ),
-                      SizedBox(
-                        width: 37,
-                        height: 50,
-                        child: TextFormField(
-                          controller: third,
-                          decoration: InputDecoration(
-                              isDense: true,
-                              filled: true,
-                              fillColor: Colors.white,
-                              // floatingLabelBehavior: FloatingLabelBehavior.always,
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(color: Colors.white),
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                  borderSide:
-                                      const BorderSide(color: Colors.white),
-                                  borderRadius: BorderRadius.circular(5))),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 11,
-                      ),
-                      const Text(
-                        '00円',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: 'Noto Sans JP',
-                            fontSize: 24,
-                            fontWeight: FontWeight.w500,
-                            letterSpacing: 11),
-                      ),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(
+                      width: 11,
+                    ),
+                    const Text(
+                      '00円',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'Noto Sans JP',
+                          fontSize: 24,
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: 11),
+                    ),
+                  ],
                 ),
               ),
               Container(
-                margin: const EdgeInsets.only(bottom: 20),
+                margin: const EdgeInsets.only(bottom: 40),
                 child: SizedBox(
                   width: 354,
                   height: 47,
                   child: ElevatedButton(
                       onPressed: () {
                         // Navigator.of(context).pushNamed('/home');
-                        sendValue();
-                        // showAlertDialog_1(context);
+                        sendValue(args.id);
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color.fromRGBO(138, 86, 172, 1),
@@ -352,99 +393,7 @@ showAlertDialog_1(BuildContext context) {
               // Aligns the container to center
               child: Container(
             // A simplified version of dialog.
-            width: 244,
-            height: 111,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              color: const Color.fromRGBO(43, 43, 55, 1),
-            ),
-            child: Column(
-              children: [
-                const Padding(
-                  padding: EdgeInsets.only(top: 15),
-                  child: Text(
-                    'このお寺にご志納をする',
-                    style: TextStyle(
-                      decoration: TextDecoration.none,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'Noto Sans CJK JP',
-                      fontSize: 14,
-                    ),
-                  ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.only(top: 5),
-                  child: Text(
-                    'このお寺に〇〇円をお布施しますか？',
-                    style: TextStyle(
-                        decoration: TextDecoration.none,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w400,
-                        fontFamily: 'Noto Sans CJK JP',
-                        fontSize: 13,
-                        letterSpacing: -1),
-                  ),
-                ),
-                Expanded(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.only(top: 15),
-                        decoration: const BoxDecoration(
-                            border: Border(
-                                top: BorderSide(
-                                    color: Colors.white30, width: 0.5))),
-                        child: TextButton(
-                            onPressed: () {
-                              // Navigator.of(content).pop(false);
-                              Navigator.of(context, rootNavigator: true).pop(false);
-                              showAlertDialog_2(context);
-                            },
-                            child: const Text(
-                              'OK',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Color.fromRGBO(95, 134, 222, 1),
-                                  fontWeight: FontWeight.bold),
-                            )),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(top: 15),
-                        decoration: const BoxDecoration(
-                            border: Border(
-                                top: BorderSide(
-                                    color: Colors.white30, width: 0.5))),
-                        child: TextButton(
-                            onPressed: () {
-                              // Navigator.of(content).pop(false);
-                              Navigator.of(context, rootNavigator: true)
-                                  .pop(false);
-                            },
-                            child: const Text(
-                              'CANCEL',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Color.fromRGBO(95, 134, 222, 1),
-                                  fontWeight: FontWeight.bold),
-                            )),
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
-          )));
-}
-
-showAlertDialog_2(BuildContext context) {
-  showDialog(
-      context: context,
-      builder: (_) => Center(
-              // Aligns the container to center
-              child: Container(
-            // A simplified version of dialog.
+            margin: const EdgeInsets.all(10),
             width: 244,
             height: 111,
             decoration: BoxDecoration(
@@ -456,7 +405,7 @@ showAlertDialog_2(BuildContext context) {
                 const Padding(
                   padding: EdgeInsets.only(top: 20),
                   child: Text(
-                    '正確に献金しました！',
+                    'ご志納しました、ありがとうございました！',
                     style: TextStyle(
                         decoration: TextDecoration.none,
                         color: Colors.white,

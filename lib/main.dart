@@ -71,7 +71,7 @@ void initState() {
 Future<void> initPlatform() async{
    const storage = FlutterSecureStorage();
    var noti= await storage.read(key: 'notification');
-   await OneSignal.shared.setAppId("60e87cd5-8d05-48d7-ad50-7c36f424ef29");
+   await OneSignal.shared.setAppId("068f1fe0-6f33-46d5-a8fe-169906b59d30");
    await OneSignal.shared.getDeviceState().then((value) => {
     // ignore: avoid_print
     print(value!.userId)

@@ -136,7 +136,7 @@ class TitleSection extends StatelessWidget {
                     ),
                     Expanded(
                         child: Container(
-                      margin: const EdgeInsets.only(left: 180),
+                      margin: const EdgeInsets.only(left: 160),
                       padding: const EdgeInsets.only(right: 10),
                       color: Colors.red,
                       child: const Text(

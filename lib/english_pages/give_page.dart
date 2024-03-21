@@ -1,4 +1,9 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:gassho/pages/send_data.dart';
+import 'package:http/http.dart' as http;
+import 'package:gassho/pages/requesturl.dart' as requesturl;
 
 void main() {
   runApp(
@@ -24,7 +29,7 @@ class _EnGivePageState extends State<EnGivePage> {
   TextEditingController second = TextEditingController();
   TextEditingController third = TextEditingController();
   
-  void sendValue(){
+  void sendValue(int id){
     int result=0;
     bool flag=true;
     if(third.text!=""){
@@ -32,11 +37,11 @@ class _EnGivePageState extends State<EnGivePage> {
     }
     if(second.text!=""){
       result=int.parse(second.text)*10+result;
-      if(third.text!=""){
+      if(first.text!=""){
         result=int.parse(first.text)*100+result;
       }
     }
-    if((first.text!="" && (second.text=="" && third.text=="")) || (first.text!="" && (second.text=="" || third.text==""))){
+    if((first.text!="" && (second.text=="" && third.text=="")) || (first.text!="" && (second.text=="" || third.text=="")) || (first.text=="" && second.text=="" && third.text=="")){
       flag=false;
       showDialog(
         context: context,
@@ -91,8 +96,8 @@ class _EnGivePageState extends State<EnGivePage> {
                         color: Colors.white,
                         fontWeight: FontWeight.w400,
                         fontFamily: 'Nato',
-                        fontSize: 13,
-                        letterSpacing: -1),
+                        fontSize: 13
+                      ),
                   ),
                 ),
                 Expanded(
@@ -107,9 +112,9 @@ class _EnGivePageState extends State<EnGivePage> {
                                     color: Colors.white30, width: 0.5))),
                         child: TextButton(
                             onPressed: () {
-                              // Navigator.of(content).pop(false);
+                              giveFunction(id, result);
                               Navigator.of(context, rootNavigator: true).pop(false);
-                              showAlertDialog_2(context);
+                              // showAlertDialog_2(context);
                             },
                             child: const Text(
                               'OK',
@@ -147,8 +152,45 @@ class _EnGivePageState extends State<EnGivePage> {
     }
   }
 
+  void giveFunction(int id, int result) async{
+      const storage = FlutterSecureStorage();
+      String? email = await storage.read(key: 'email');
+      String url ="${requesturl.Constants.url}/api/items/addgive";
+      final response = await http.post(
+        Uri.parse(url),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'itemID': id.toString(),
+          'email': email.toString(),
+          'amount': result.toString()
+        }),
+      );
+      if(response.statusCode==200){
+          // ignore: use_build_context_synchronously
+          showAlertDialog_1(context);
+      }else{
+        // ignore: use_build_context_synchronously
+        showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Error'),
+          content: const Text('申し訳ございません。サーバーに問題が発生しました。'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+      }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments as SendDatas;
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
@@ -182,9 +224,9 @@ class _EnGivePageState extends State<EnGivePage> {
                       ),
                     )),
               ),
-              Container(
-                margin: const EdgeInsets.only(top: 280.8),
-                child: const Column(
+              const Expanded(
+                // margin: const EdgeInsets.only(top: 280.8),
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
@@ -222,103 +264,101 @@ class _EnGivePageState extends State<EnGivePage> {
                   ],
                 ),
               ),
-              Expanded(
-                child: Container(
-                  margin: const EdgeInsets.only(top: 32, bottom: 60),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        width: 37,
-                        height: 50,
-                        child: TextFormField(
-                          controller: first,
-                          decoration: InputDecoration(
-                              isDense: true,
-                              filled: true,
-                              fillColor: Colors.white,
-                              // floatingLabelBehavior: FloatingLabelBehavior.always,
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(color: Colors.white),
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                  borderSide:
-                                      const BorderSide(color: Colors.white),
-                                  borderRadius: BorderRadius.circular(5))),
-                        ),
+              Container(
+                margin: const EdgeInsets.only( bottom: 60),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: 37,
+                      height: 50,
+                      child: TextFormField(
+                        controller: first,
+                        decoration: InputDecoration(
+                            isDense: true,
+                            filled: true,
+                            fillColor: Colors.white,
+                            // floatingLabelBehavior: FloatingLabelBehavior.always,
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(color: Colors.white),
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                                borderSide:
+                                    const BorderSide(color: Colors.white),
+                                borderRadius: BorderRadius.circular(5))),
                       ),
-                      const SizedBox(
-                        width: 11,
+                    ),
+                    const SizedBox(
+                      width: 11,
+                    ),
+                    SizedBox(
+                      width: 37,
+                      height: 50,
+                      child: TextFormField(
+                        controller: second,
+                        decoration: InputDecoration(
+                            isDense: true,
+                            filled: true,
+                            fillColor: Colors.white,
+                            // floatingLabelBehavior: FloatingLabelBehavior.always,
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(color: Colors.white),
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                                borderSide:
+                                    const BorderSide(color: Colors.white),
+                                borderRadius: BorderRadius.circular(5))),
                       ),
-                      SizedBox(
-                        width: 37,
-                        height: 50,
-                        child: TextFormField(
-                          controller: second,
-                          decoration: InputDecoration(
-                              isDense: true,
-                              filled: true,
-                              fillColor: Colors.white,
-                              // floatingLabelBehavior: FloatingLabelBehavior.always,
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(color: Colors.white),
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                  borderSide:
-                                      const BorderSide(color: Colors.white),
-                                  borderRadius: BorderRadius.circular(5))),
-                        ),
+                    ),
+                    const SizedBox(
+                      width: 11,
+                    ),
+                    SizedBox(
+                      width: 37,
+                      height: 50,
+                      child: TextFormField(
+                        controller: third,
+                        decoration: InputDecoration(
+                            isDense: true,
+                            filled: true,
+                            fillColor: Colors.white,
+                            // floatingLabelBehavior: FloatingLabelBehavior.always,
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(color: Colors.white),
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                                borderSide:
+                                    const BorderSide(color: Colors.white),
+                                borderRadius: BorderRadius.circular(5))),
                       ),
-                      const SizedBox(
-                        width: 11,
-                      ),
-                      SizedBox(
-                        width: 37,
-                        height: 50,
-                        child: TextFormField(
-                          controller: third,
-                          decoration: InputDecoration(
-                              isDense: true,
-                              filled: true,
-                              fillColor: Colors.white,
-                              // floatingLabelBehavior: FloatingLabelBehavior.always,
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(color: Colors.white),
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                  borderSide:
-                                      const BorderSide(color: Colors.white),
-                                  borderRadius: BorderRadius.circular(5))),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 11,
-                      ),
-                      const Text(
-                        '00円',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: 'Nato',
-                            fontSize: 24,
-                            fontWeight: FontWeight.w500,
-                            letterSpacing: 11),
-                      ),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(
+                      width: 11,
+                    ),
+                    const Text(
+                      '00円',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'Nato',
+                          fontSize: 24,
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: 11),
+                    ),
+                  ],
                 ),
               ),
               Container(
-                margin: const EdgeInsets.only(bottom: 20),
+                margin: const EdgeInsets.only(bottom: 40),
                 child: SizedBox(
                   width: 354,
                   height: 47,
                   child: ElevatedButton(
                       onPressed: () {
                         // Navigator.of(context).pushNamed('/home');
-                        sendValue();
+                        sendValue(args.id);
                         // showAlertDialog_1(context);
                       },
                       style: ElevatedButton.styleFrom(
@@ -344,12 +384,13 @@ class _EnGivePageState extends State<EnGivePage> {
 }
 
 
-showAlertDialog_2(BuildContext context) {
+showAlertDialog_1(BuildContext context) {
   showDialog(
       context: context,
       builder: (_) => Center(
               // Aligns the container to center
-              child: Container(
+          child: Container(
+                margin: const EdgeInsets.all(10),
             // A simplified version of dialog.
             width: 244,
             height: 111,
@@ -369,7 +410,7 @@ showAlertDialog_2(BuildContext context) {
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Nato',
                         fontSize: 14,
-                        letterSpacing: -1),
+                        ),
                   ),
                 ),
                 Expanded(

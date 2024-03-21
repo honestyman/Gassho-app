@@ -160,29 +160,55 @@ class _SettingsPageAppState extends State<SettingsPageApp> {
     context: context,
     builder: (_) => Center( // Aligns the container to center
       child: Container( // A simplified version of dialog. 
-        width: 244,
-        height: 150,
+        width: 300,
+        height: 200,
+        transformAlignment:Alignment.center,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
           color: const Color.fromRGBO(43, 43, 55, 1),
         ),
         child: Column(
+          // crossAxisAlignment: CrossAxisAlignment.center,
+          // mainAxisAlignment: MainAxisAlignment.center,,
           children: [
             const Padding(
               padding: EdgeInsets.only(top:20, left: 20, right: 20),
-              child: Text(
-                'アカウントを削除してもよろしいですか？',
-                style: TextStyle(
-                  decoration: TextDecoration.none,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Noto Sans CJK JP',
-                  fontSize:14 ,
-                ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment:CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    'GASSHOを退会しますか？',
+                    style: TextStyle(
+                      decoration: TextDecoration.none,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Noto Sans CJK JP',
+                      fontSize:16 ,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.only(top:20, left: 20, right: 20),
+              child: Column(
+                children: [
+                  Text(
+                    'サブスクリプションの解約は別の手続きになりますのでご注意ください。',
+                    style: TextStyle(
+                      decoration: TextDecoration.none,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Noto Sans CJK JP',
+                      fontSize:12 ,
+                    ),
+                  ),
+                ],
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(bottom:10),
+              padding: const EdgeInsets.only(top:10, bottom:10),
               child: Text(
                 email.toString(),
                 style: const TextStyle(
@@ -195,13 +221,9 @@ class _SettingsPageAppState extends State<SettingsPageApp> {
               ),
             ),
             Container(
-              width: 244,
+              width: 300,
               padding: const EdgeInsets.all(5),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container( 
-                    decoration: const BoxDecoration(
+              decoration: const BoxDecoration(
                       border:Border(
                         top: BorderSide(
                           color: Colors.white30,
@@ -209,12 +231,19 @@ class _SettingsPageAppState extends State<SettingsPageApp> {
                         )
                       )
                     ),
+              // padding: const EdgeInsets.only(top: 5, bottom: 5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container( 
+                    padding: const EdgeInsets.only(right:10),
                     child: TextButton(
                       onPressed: (){
                         DeleteOnly();
+                        Navigator.of(context, rootNavigator: true).pop(false);
                       },
                       child: const Text(
-                        '確認',
+                        '退会',
                         textAlign: TextAlign.center,
                          style: TextStyle(
                            color: Color.fromRGBO(95, 134, 222, 1),
@@ -224,14 +253,8 @@ class _SettingsPageAppState extends State<SettingsPageApp> {
                     ),
                   ),
                   Container(
-                    decoration: const BoxDecoration(
-                      border:Border(
-                        top: BorderSide(
-                          color: Colors.white30,
-                          width: 0.5
-                        )
-                      )
-                    ),
+                    padding: const EdgeInsets.only(left:10),
+
                     child: TextButton(
                       onPressed: (){
                         Navigator.of(context, rootNavigator: true).pop(false);
@@ -270,10 +293,96 @@ class _SettingsPageAppState extends State<SettingsPageApp> {
         // ignore: use_build_context_synchronously
         storage.deleteAll();
         // ignore: use_build_context_synchronously
-        Navigator.of(context, rootNavigator: true).pop(false);
-        // ignore: use_build_context_synchronously
-        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => const LoginPage()));
+        showDialog(
+        context: context,
+        builder: (_) => Center( // Aligns the container to center
+          child: Container( // A simplified version of dialog. 
+            width: 300,
+            height: 180,
+            transformAlignment:Alignment.center,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              color: const Color.fromRGBO(43, 43, 55, 1),
+            ),
+            child: Column(
+              // crossAxisAlignment: CrossAxisAlignment.center,
+              // mainAxisAlignment: MainAxisAlignment.center,,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(top:20, left: 20, right: 20),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment:CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        '退会しました',
+                        style: TextStyle(
+                          decoration: TextDecoration.none,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Noto Sans CJK JP',
+                          fontSize:16 ,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(top:20, left: 20, right: 20, bottom: 20),
+                  child: Column(
+                    children: [
+                      Text(
+                        'また機会がありましたらご利用いただけますと幸いです。',
+                        style: TextStyle(
+                          decoration: TextDecoration.none,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Noto Sans CJK JP',
+                          fontSize:14 ,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  width: 300,
+                  decoration: const BoxDecoration(
+                          border:Border(
+                            top: BorderSide(
+                              color: Colors.white30,
+                              width: 0.5
+                            )
+                          )
+                        ),
+                  // padding: const EdgeInsets.only(top: 5, bottom: 5),
+                  child: Container(
+                    padding: const EdgeInsets.only(left:10),
+                  
+                    child: TextButton(
+                      onPressed: (){
+                        // ignore: use_build_context_synchronously
+                        Navigator.of(context, rootNavigator: true).pop(false);
+                        // ignore: use_build_context_synchronously
+                        Navigator.push(context,
+                                            MaterialPageRoute(builder: (context) => const LoginPage()));
+                      },
+                      child: const Text(
+                        'OK',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Color.fromRGBO(95, 134, 222, 1),
+                          fontWeight: FontWeight.bold
+                        ),
+                      )
+                    ),
+                  ),
+                )
+              ],
+            ),
+            )
+          )
+        );
+        
         // exit(0);
       } 
   }

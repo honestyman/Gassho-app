@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:gassho/pages/give_page.dart';
+import 'package:gassho/pages/like_page.dart';
 import 'package:gassho/pages/send_data.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -11,9 +12,9 @@ import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:gassho/pages/requesturl.dart' as requesturl;
 import 'package:path_provider/path_provider.dart';
 
-void main() async{
+void main() async {
   // WidgetsFlutterBinding.ensureInitialized();
-  // await FlutterDownloader.initialize(debug: true); 
+  // await FlutterDownloader.initialize(debug: true);
   runApp(
     const MaterialApp(
       home: AudioPlayPage(),
@@ -45,13 +46,13 @@ class _AudioPlayPageState extends State<AudioPlayPage> {
 
   bool playing = false;
 
-  void loadMusic() async{
+  void loadMusic() async {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       final file = ModalRoute.of(context)?.settings.arguments as SendDatas;
       await player.setUrl("${requesturl.Constants.url}/sound/${file.filename}");
-      fileUrl="${requesturl.Constants.url}/sound/${file.filename}";
+      fileUrl = "${requesturl.Constants.url}/sound/${file.filename}";
       // ignore: unnecessary_string_interpolations
-      fileName="${file.filename}"; 
+      fileName = "${file.filename}";
       //  WidgetsFlutterBinding.ensureInitialized();
       // await FlutterDownloader.initialize(debug: true);
     });
@@ -75,25 +76,101 @@ class _AudioPlayPageState extends State<AudioPlayPage> {
   }
 
   @override
-  void initState(){
+  void initState() {
     loadMusic();
     super.initState();
   }
 
-//   static void downloadCallback(
-//   String id,
-//   DownloadTaskStatus status,
-//   int progress,
-// ) {
-//   if (status == DownloadTaskStatus.complete) {
-//     print('Download completed');
-//   }
-// }
+  Future<bool> isLike() async {
+    final file = ModalRoute.of(context)?.settings.arguments as SendDatas;
+    const storage = FlutterSecureStorage();
+    String? email = await storage.read(key: 'email');
+    String url =
+        "${requesturl.Constants.url}/api/items/getonelike?email=$email&id=${file.id}";
+    final response = await http.get(Uri.parse(url));
+    var reasonData = json.decode(response.body);
+    // var str="";
+    // return "hello";
+    if (reasonData == "yes") {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
   @override
   void dispose() {
     player.dispose();
     super.dispose();
+  }
+
+  Widget _writeBtn() {
+    final file = ModalRoute.of(context)?.settings.arguments as SendDatas;
+    return Row(
+      children: [
+        Column(
+          children: [
+            FutureBuilder(
+              future: isLike(),
+              builder: (BuildContext ctx, AsyncSnapshot snapshot) {
+                if (snapshot.data == null) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else {
+                  return CircleAvatar(
+                    backgroundColor: Colors.white30.withOpacity(0.2),
+                    // foregroundColor: Colors.red,
+                    foregroundColor: snapshot.data ? Colors.red : Colors.grey,
+                    radius: 16,
+                    child: IconButton(
+                      onPressed: () {
+                        addLike(file.id);
+                      },
+                      icon:
+                          const ImageIcon(AssetImage("assets/images/like.png")),
+                    ),
+                  );
+                }
+              },
+            ),
+            const SizedBox(height: 8),
+            const Text(
+              'お気に入り',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontFamily: 'Noto Sans JP',
+                  fontSize: 11,
+                  fontWeight: FontWeight.w400),
+            )
+          ],
+        ),
+        Expanded(
+          child: Column(
+            children: [
+              CircleAvatar(
+                backgroundColor: Colors.white30.withOpacity(0.2),
+                foregroundColor: Colors.white,
+                radius: 16,
+                child: IconButton(
+                  onPressed: () {},
+                  icon: const ImageIcon(AssetImage("assets/images/share.png")),
+                ),
+              ),
+              const SizedBox(height: 8),
+              const Text(
+                '共有',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'Noto Sans JP',
+                    fontSize: 11,
+                    fontWeight: FontWeight.w400),
+              )
+            ],
+          ),
+        )
+      ],
+    );
   }
 
   Future<List<Item>> getTab(int id) async {
@@ -163,6 +240,11 @@ class _AudioPlayPageState extends State<AudioPlayPage> {
                               // Navigator.of(content).pop(false);
                               Navigator.of(context, rootNavigator: true)
                                   .pop(false);
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const LikePageApp()));
                             },
                             child: const Text(
                               'OK',
@@ -179,13 +261,13 @@ class _AudioPlayPageState extends State<AudioPlayPage> {
     }
   }
 
-   Future<void> _startDownload() async {
+  Future<void> _startDownload() async {
     // ignore: unused_local_variable
 
     final appDir = await getApplicationDocumentsDirectory();
     // ignore: unused_local_variable
     final savedDir = appDir.path;
-    
+
     // ignore: unused_local_variable
     final taskId = await FlutterDownloader.enqueue(
       url: fileUrl,
@@ -194,8 +276,8 @@ class _AudioPlayPageState extends State<AudioPlayPage> {
       showNotification: true,
       openFileFromNotification: true,
     );
-    
   }
+
   Future<void> addDownload(int id) async {
     const storage = FlutterSecureStorage();
     String? email = await storage.read(key: 'email');
@@ -310,7 +392,8 @@ class _AudioPlayPageState extends State<AudioPlayPage> {
                     ),
                   ],
                 ),
-                Expanded(
+                SizedBox(
+                  height: 150,
                   child: Padding(
                     padding:
                         const EdgeInsets.only(top: 10, left: 18, right: 18),
@@ -363,7 +446,7 @@ class _AudioPlayPageState extends State<AudioPlayPage> {
                     ),
                   ),
                 ),
-                SingleChildScrollView(
+                Expanded(
                   child: SizedBox(
                     width: 354,
                     height: 114,
@@ -478,7 +561,7 @@ class _AudioPlayPageState extends State<AudioPlayPage> {
                               if (loaded) {
                                 if (snapshot2.data != null) {
                                   bufferedDuration = snapshot2.data as Duration;
-                                }else{
+                                } else {
                                   bufferedDuration = const Duration(seconds: 0);
                                 }
                               } else {
@@ -519,63 +602,9 @@ class _AudioPlayPageState extends State<AudioPlayPage> {
                   height: 20,
                 ),
                 Container(
-                  margin: const EdgeInsets.only(
-                      top: 0, left: 121, right: 118, bottom: 28.2),
-                  child: Row(
-                    children: [
-                      Column(
-                        children: [
-                          CircleAvatar(
-                            backgroundColor: Colors.white30.withOpacity(0.2),
-                            foregroundColor: Colors.red,
-                            radius: 16,
-                            child: IconButton(
-                              onPressed: () {
-                                addLike(args.id);
-                              },
-                              icon: const ImageIcon(
-                                  AssetImage("assets/images/like.png")),
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          const Text(
-                            'お気に入り',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'Noto Sans JP',
-                                fontSize: 11,
-                                fontWeight: FontWeight.w400),
-                          )
-                        ],
-                      ),
-                      Expanded(
-                        child: Column(
-                          children: [
-                            CircleAvatar(
-                              backgroundColor: Colors.white30.withOpacity(0.2),
-                              foregroundColor: Colors.white,
-                              radius: 16,
-                              child: IconButton(
-                                onPressed: () {},
-                                icon: const ImageIcon(
-                                    AssetImage("assets/images/share.png")),
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            const Text(
-                              '共有',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontFamily: 'Noto Sans JP',
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w400),
-                            )
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                ),
+                    margin: const EdgeInsets.only(
+                        top: 0, left: 121, right: 118, bottom: 28.2),
+                    child: _writeBtn()),
                 Container(
                   width: 354,
                   height: 44,
@@ -592,6 +621,7 @@ class _AudioPlayPageState extends State<AudioPlayPage> {
                       Navigator.pushNamed(context, GivePage.routeName,
                           arguments: SendDatas(args.id, args.title, args.time,
                               args.description, args.filename));
+
                       // Navigator.pushNamed(context, GivePage.routeName,
                       // arguments: null);
                     },

@@ -138,7 +138,7 @@ class _NotificationAppState extends State<NotificationApp> {
                                 ),   
                                 const Expanded(
                                   child: Text(
-                                    'アカウント情報を編集',
+                                    '最新情報',
                                     textAlign: TextAlign.left,
                                     style: TextStyle(
                                       color: Colors.white,
